@@ -1,0 +1,6 @@
+*.config
+*.swp
+*.csproj
+bin/
+obj/
+Properties/
