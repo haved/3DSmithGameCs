@@ -11,9 +11,8 @@ namespace Smith2D
 			AddVertexShaderFromFile ("../../res/BasicVS.glslvs");
 			AddFragmentShaderFromFile ("../../res/BasicFS.glslfs");
 			Compile ();
-			AddUniform ("projectionMatrix");
-			AddUniform ("viewMatrix");
 			AddUniform ("modelspaceMatrix");
+			AddUniform ("MVP");
 		}
 
 		public static BasicShader GetInstance()

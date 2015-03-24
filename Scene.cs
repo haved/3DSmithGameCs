@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK;
 
 namespace Smith2D
 {
@@ -28,10 +29,10 @@ namespace Smith2D
 			}
 		}
 
-		public void Render()
+		public void Render(Matrix4 VP)
 		{
 			foreach (Entity e in entities)
-				e.Render (this);
+				e.Render (this, VP);
 		}
 
 		public List<Entity> GetEntities()

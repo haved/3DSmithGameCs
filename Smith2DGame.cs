@@ -26,12 +26,10 @@ namespace Smith2D
 		{
 			currentScene.Update ();
 		}
-			
+
 		public void Render()
 		{
-			BasicShader.GetInstance ().SetMatrix4 ("projectionMatrix", projectionMatrix);
-			BasicShader.GetInstance ().SetMatrix4 ("viewMatrix", Matrix4.LookAt(new Vector3(player.pos.X, player.pos.Y-20, 60), new Vector3(player.pos.X, player.pos.Y, 6.6f), new Vector3(0, 1, 0)));
-			currentScene.Render ();
+			currentScene.Render (Matrix4.LookAt (new Vector3 (player.pos.X, player.pos.Y - 20, 60), new Vector3 (player.pos.X, player.pos.Y, 6.6f), new Vector3 (0, 1, 0))*projectionMatrix);
 		}
 
 		public void OnResize(int width, int height)
