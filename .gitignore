@@ -1,6 +1,8 @@
 *.config
 *.swp
 *.csproj
+*.dll
+*.exe
 bin/
 obj/
 Properties/
