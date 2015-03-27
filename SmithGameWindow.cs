@@ -11,7 +11,7 @@ namespace Smith2D
 		public static SmithGameWindow instance;
 
 		Smith2DGame game;
-		public SmithGameWindow () : base(1600, 900, new GraphicsMode(new ColorFormat(), 32, 32, 4), "Smith")
+		public SmithGameWindow () : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
 		{
 			game = new Smith2DGame ();
 			GL.Enable (EnableCap.CullFace);

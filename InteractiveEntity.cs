@@ -8,8 +8,8 @@ namespace Smith2D
 		private float ySize;
 		public InteractiveEntity (Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z)
 		{
-			this.xSize = xSize / 2;
-			this.ySize = ySize / 2;
+			this.xSize = xSize / 2f;
+			this.ySize = ySize / 2f;
 		}
 
 		public override bool IsSolid()

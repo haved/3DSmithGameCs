@@ -19,6 +19,7 @@ namespace Smith2D
 			currentScene.AddEntity (player);
 			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/floor.ply")));
 			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/table.ply"), -4, 3, 0, 3, 2));
+			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/anvil.ply"), 5, 3, 0, 3, 1));
 			BasicShader.GetInstance ().Bind ();
 		}
 

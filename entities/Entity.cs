@@ -42,13 +42,13 @@ namespace Smith2D
 			foreach (Entity e in s.GetEntities()) {
 				if (e.IsSolid () && e != this) {
 					if (GetSolidX1 () + xMove < e.GetSolidX2 () & GetSolidX2 () > e.GetSolidX1 () & GetSolidY1 () < e.GetSolidY2 () & GetSolidY2 () > e.GetSolidY1 ())
-						xMove = e.GetSolidX2 () - GetSolidX1 ();
+						xMove = e.GetSolidX2 () - GetSolidX1 ()+0.01f;
 					if (GetSolidY1 () + yMove < e.GetSolidY2 () & GetSolidY2 () > e.GetSolidY1 () & GetSolidX1 () < e.GetSolidX2 () & GetSolidX2 () > e.GetSolidX1 ())
-						yMove = e.GetSolidY2 () - GetSolidY1 ();
+						yMove = e.GetSolidY2 () - GetSolidY1 ()+0.01f;
 					if (GetSolidX2 () + xMove > e.GetSolidX1 () & GetSolidX1 () < e.GetSolidX2 () & GetSolidY1 () < e.GetSolidY2 () & GetSolidY2 () > e.GetSolidY1 ())
-						xMove = e.GetSolidX1 () - GetSolidX2 ();
+						xMove = e.GetSolidX1 () - GetSolidX2 ()-0.01f;
 					if (GetSolidY2 () + yMove > e.GetSolidY1 () & GetSolidY1 () < e.GetSolidY2 () & GetSolidX1 () < e.GetSolidX2 () & GetSolidX2 () > e.GetSolidX1 ())
-						yMove = e.GetSolidY1 () - GetSolidY2 ();
+						yMove = e.GetSolidY1 () - GetSolidY2 ()-0.01f;
 				}
 			}
 
