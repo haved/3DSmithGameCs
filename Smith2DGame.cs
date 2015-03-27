@@ -6,7 +6,8 @@ namespace Smith2D
 {
 	public class Smith2DGame
 	{
-		private const float fov = (float)(30f / 180f * Math.PI);
+		private const float PI = (float)Math.PI;
+		private const float fov = (30f / 180f * PI);
 		Matrix4 projectionMatrix;
 
 		Scene currentScene;
@@ -18,8 +19,12 @@ namespace Smith2D
 			player = new PlayerEntity (new Mesh ("../../res/player.ply"), 2.6f, 1.7f);
 			currentScene.AddEntity (player);
 			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/floor.ply")));
-			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/table.ply"), -4, 3, 0, 3, 2));
-			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/anvil.ply"), 5, 3, 0, 3, 1));
+			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/wall.ply"), 0, 15, 0, 0, 0, 0, 40, 1));
+			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/wall.ply"), 0, -15, 0, 0, 0, PI, 40, 1));
+			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/wall.ply"), 20, 0, 0, 0, 0, -PI/2, 1, 30));
+			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/wall.ply"), -20, 0, 0, 0, 0, PI/2, 1, 30));
+			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/table.ply"), -3, 14, 0, 3, 2));
+			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/anvil.ply"), 3, 14, 0, 3, 1));
 			BasicShader.GetInstance ().Bind ();
 		}
 
