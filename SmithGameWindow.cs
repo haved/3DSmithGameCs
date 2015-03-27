@@ -8,12 +8,11 @@ namespace Smith2D
 {
 	public class SmithGameWindow : GameWindow
 	{
-		public static SmithGameWindow instance;
-
 		Smith2DGame game;
-		public SmithGameWindow () : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
+		public SmithGameWindow (Smith2DGame game) : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
 		{
-			game = new Smith2DGame ();
+			this.game = game;
+			game.Init ();
 			GL.Enable (EnableCap.CullFace);
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.DepthTest);
@@ -33,12 +32,6 @@ namespace Smith2D
 		protected override void OnResize(EventArgs e)
 		{
 			game.OnResize (Width, Height);
-		}
-
-		public static void Main (string[] args)
-		{
-			using (instance = new SmithGameWindow ())
-				instance.Run (60.00);
 		}
 	}
 }

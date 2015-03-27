@@ -13,7 +13,7 @@ namespace Smith2D
 		Scene currentScene;
 		PlayerEntity player;
 
-		public Smith2DGame ()
+		public void Init ()
 		{
 			currentScene = new Scene ();
 			player = new PlayerEntity (new Mesh ("../../res/player.ply"), 2.6f, 1.7f);
@@ -42,6 +42,13 @@ namespace Smith2D
 		{
 			GL.Viewport (0, 0, width, height);
 			projectionMatrix = Matrix4.CreatePerspectiveFieldOfView (fov, width / (float)height, 0.1f, 100);
+		}
+
+		public static void Main(string[] args)
+		{
+			using (SmithGameWindow gw = new SmithGameWindow(new Smith2DGame())) {
+				gw.Run (60.00);
+			}
 		}
 	}
 }
