@@ -25,11 +25,22 @@ namespace Smith2D
 			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/wall.ply"), -20, 0, 0, 0, 0, PI/2, 1, 30));
 			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/table.ply"), -3, 14, 0, 3, 2));
 			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/anvil.ply"), 3, 14, 0, 3, 1));
+			currentScene.AddEntity(new InteractiveEntity(new Mesh("../../res/forge.ply"), 16.5f, 15-3.5f, 0, 7.3f, 7.3f));
 			BasicShader.GetInstance ().Bind ();
 		}
 
+		int frames;
+		float timeTotal;
 		public void Update()
 		{
+			timeTotal += Time.delta ();
+			frames++;
+
+			if (timeTotal > 2) {
+				Console.WriteLine ("FPS:" + (frames / 2));
+				frames = 0;
+				timeTotal = 0;
+			}
 			currentScene.Update ();
 		}
 

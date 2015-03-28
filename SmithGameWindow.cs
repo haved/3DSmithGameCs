@@ -20,7 +20,8 @@ namespace Smith2D
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			Time.SetDelta ((float)e.Time);
+			if(e.Time < 0.1f)
+				Time.SetDelta ((float)e.Time);
 			Input.SetMousePos (Mouse.X*2f/Width-1, Mouse.Y*2f/Height-1);
 			game.Update ();
 			GL.ClearColor (Color.Aqua);
