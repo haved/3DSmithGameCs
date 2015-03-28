@@ -107,7 +107,6 @@ namespace Smith2D
 		{
 			int loc = GL.GetUniformLocation (programID, name);
 			uniforms.Add (name, loc);
-			Console.Out.WriteLine ("loc:" + loc + "  name:" + name + "   uniforms["+name+"]:" + uniforms[name]);
 		}
 
 		public void SetFloat(string name, float value)
