@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class MeshEntity : Entity
 	{

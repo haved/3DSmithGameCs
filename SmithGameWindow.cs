@@ -5,7 +5,7 @@ using OpenTK.Input;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class SmithGameWindow : GameWindow
 	{

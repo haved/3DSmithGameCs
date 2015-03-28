@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Input;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class PlayerEntity : Entity
 	{

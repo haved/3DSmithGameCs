@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OpenTK;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class Scene
 	{

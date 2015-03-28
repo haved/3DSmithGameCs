@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class Smith2DGame
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public abstract class Entity
 	{

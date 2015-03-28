@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using System;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class Vertex
 	{

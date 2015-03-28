@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Smith2D
+namespace DSmithGameCs
 {
 	public class BasicShader : Shader
 	{
-		private static BasicShader instance = new BasicShader();
+		private static readonly BasicShader instance = new BasicShader();
 
 		public BasicShader ()
 		{
