@@ -1,26 +1,31 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Input;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
 	public class PlayerEntity : Entity
 	{
-		private float walkSpeed = 100f;
-		private float friction = 8f;
+		private readonly float walkSpeed = 100f;
+		private readonly float friction = 8f;
 		private Vector2 speed = new Vector2();
 
 		Mesh mesh;
+		Mesh shadow;
+		Vector4 shadowColor;
 		private float xSize, ySize;
-		public PlayerEntity(Mesh mesh, float xSize, float ySize)
+		public PlayerEntity(Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
 		{
 			this.mesh = mesh;
+			this.shadow = shadow;
+			this.shadowColor = shadowColor;
 			this.xSize = xSize/2;
 			this.ySize = ySize/2;
 		}
 
 		Vector2 accel = new Vector2 (0, 0);
-		public override void Update(Scene scene)
+		public override void Update(Scene s)
 		{
 			accel.X = 0;
 			accel.Y = 0;
@@ -43,7 +48,7 @@ namespace DSmithGameCs
 				speed.Normalize();
 				l -= l * friction * Time.delta ();
 				speed *= l;
-				MoveAsSolid (scene, speed.X * Time.delta (), speed.Y * Time.delta ());
+				MoveAsSolid (s, speed.X * Time.delta (), speed.Y * Time.delta ());
 			}
 
 			rot.Z = (float)Math.Atan2 (-Input.GetMouseY(),Input.GetMouseX());
@@ -51,8 +56,20 @@ namespace DSmithGameCs
 			UpdateModelspaceMatrix ();
 		}
 
-		public override void Draw(Scene scene)
+		public override void Render(Scene s, Matrix4 VP)
 		{
+			Matrix4 MVP = modelspace * VP;
+			ColorShader.GetInstance ().Bind ();
+			ColorShader.GetInstance ().SetMVP (MVP);
+			ColorShader.GetInstance ().SetColor (shadowColor);
+			GL.Disable (EnableCap.DepthTest);
+			GL.Enable (EnableCap.Blend);
+			shadow.Draw ();
+			GL.Disable (EnableCap.Blend);
+			GL.Enable (EnableCap.DepthTest);
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			BasicShader.GetInstance ().SetMVP (MVP);
 			mesh.Draw ();
 		}
 

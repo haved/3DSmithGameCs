@@ -102,33 +102,35 @@ namespace DSmithGameCs
 		}
 
 
-		private Dictionary<string, int> uniforms = new Dictionary<string, int>();
-		protected void AddUniform(string name)
+		protected int AddUniform(string name)
 		{
-			int loc = GL.GetUniformLocation (programID, name);
-			uniforms.Add (name, loc);
+			return GL.GetUniformLocation (programID, name);
 		}
 
-		public void SetFloat(string name, float value)
+		protected void SetFloat(int id, float value)
 		{
-			GL.Uniform1 (uniforms [name], value);
+			GL.Uniform1 (id, value);
 		}
 
-		public void SetVector2(string name, Vector2 value)
+		protected void SetVector2(int id, Vector2 value)
 		{
-			GL.Uniform2 (uniforms[name], ref value);
+			GL.Uniform2 (id, ref value);
 		}
 
-		public void SetVector3(string name, Vector3 value)
+		protected void SetVector3(int id, Vector3 value)
 		{
-			GL.Uniform3 (uniforms[name], ref value);
+			GL.Uniform3 (id, ref value);
 		}
 
-		public void SetMatrix4(string name, Matrix4 matrix)
+		protected void SetVector4(int id, Vector4 value)
 		{
-			GL.UniformMatrix4 (uniforms [name], false, ref matrix);
+			GL.Uniform4 (id, ref value);
 		}
 
+		protected void SetMatrix4(int id, Matrix4 matrix)
+		{
+			GL.UniformMatrix4 (id, false, ref matrix);
+		}
 
 		public static void UseNoShader()
 		{

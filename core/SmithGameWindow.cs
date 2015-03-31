@@ -10,13 +10,14 @@ namespace DSmithGameCs
 	public class SmithGameWindow : GameWindow
 	{
 		readonly Smith2DGame game;
-		public SmithGameWindow (Smith2DGame game) : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
+		public SmithGameWindow (Smith2DGame game) : base(1100, 750, new GraphicsMode(32, 24, 0, 8), "Smith")
 		{
 			this.game = game;
 			game.Init ();
 			GL.Enable (EnableCap.CullFace);
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.DepthTest);
+			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			Keyboard.KeyDown += (sender, e) => 
 			{

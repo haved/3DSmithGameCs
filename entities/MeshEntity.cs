@@ -30,9 +30,9 @@ namespace DSmithGameCs
 			UpdateModelspaceMatrix ();
 		}
 
-		public override void Update(Scene scene){}
+		public override void Update(Scene s){}
 
-		public override void Draw(Scene scene)
+		public override void Draw(Scene s)
 		{
 			mesh.Draw ();
 		}

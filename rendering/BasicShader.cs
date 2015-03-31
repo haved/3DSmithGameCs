@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK;
 
 namespace DSmithGameCs
 {
@@ -6,13 +7,25 @@ namespace DSmithGameCs
 	{
 		private static readonly BasicShader instance = new BasicShader();
 
+		private int modelspaceID, MVP_id;
+
 		public BasicShader ()
 		{
-			AddVertexShaderFromFile ("../../res/BasicVS.glslvs");
-			AddFragmentShaderFromFile ("../../res/BasicFS.glslfs");
+			AddVertexShaderFromFile ("../../res/shaders/BasicVS.glslvs");
+			AddFragmentShaderFromFile ("../../res/shaders/BasicFS.glslfs");
 			Compile ();
-			AddUniform ("modelspaceMatrix");
-			AddUniform ("MVP");
+			modelspaceID = AddUniform("modelspaceMatrix");
+			MVP_id = AddUniform ("MVP");
+		}
+
+		public void SetModelspaceMatrix(Matrix4 modelspace)
+		{
+			SetMatrix4 (modelspaceID, modelspace);
+		}
+
+		public void SetMVP(Matrix4 MVP)
+		{
+			SetMatrix4 (MVP_id, MVP);
 		}
 
 		public static BasicShader GetInstance()

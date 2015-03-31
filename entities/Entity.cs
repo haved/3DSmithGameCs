@@ -15,17 +15,17 @@ namespace DSmithGameCs
 
 		public void UpdateModelspaceMatrix()
 		{
-			modelspace = Matrix4.CreateRotationZ (rot.Z) * Matrix4.CreateRotationX (rot.X) * Matrix4.CreateRotationY (rot.Y) * Matrix4.CreateTranslation (pos);
+			modelspace = Matrix4.CreateRotationX (rot.X) * Matrix4.CreateRotationY (rot.Y) * Matrix4.CreateRotationZ (rot.Z) * Matrix4.CreateTranslation (pos);
 		}
 
-		public void Render(Scene s, Matrix4 VP)
+		public virtual void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetMatrix4 ("modelspaceMatrix", modelspace);
-			BasicShader.GetInstance ().SetMatrix4 ("MVP", modelspace * VP);
+			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
+			BasicShader.GetInstance ().SetMVP(modelspace * VP);
 			Draw (s);
 		}
 
-		public abstract void Draw(Scene s);
+		public virtual void Draw(Scene s){}
 
 		public void Kill()
 		{
