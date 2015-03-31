@@ -7,6 +7,8 @@ namespace DSmithGameCs
 {
 	public class PlayerEntity : Entity
 	{
+		private const bool touchControlls = true;
+
 		private readonly float walkSpeed = 100f;
 		private readonly float friction = 8f;
 		private Vector2 speed = new Vector2();
@@ -38,6 +40,11 @@ namespace DSmithGameCs
 				accel.Y += 1;
 			if (Keyboard.GetState () [Key.S])
 				accel.Y -= 1;
+
+			if (touchControlls && Mouse.GetState().LeftButton==ButtonState.Pressed && accel.Length <= 0) {
+				accel.X = Input.GetMouseX ();
+				accel.Y = -Input.GetMouseY ();
+			}
 
 			if (accel.Length > 0) {
 				accel.Normalize ();
