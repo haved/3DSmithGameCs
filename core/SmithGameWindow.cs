@@ -19,19 +19,13 @@ namespace DSmithGameCs
 			GL.Enable (EnableCap.DepthTest);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-			Keyboard.KeyDown += (sender, e) => 
-			{
-				if(e.Key == Key.Escape)
-					Close();
-			};
+			Input.AddToWindow (this);
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			
 			if(e.Time < 0.1f)
 				Time.SetDelta ((float)e.Time);
-			Input.SetMousePos (Mouse.X*2f/Width-1, Mouse.Y*2f/Height-1);
 			game.Update ();
 			GL.ClearColor (Color.Aqua);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

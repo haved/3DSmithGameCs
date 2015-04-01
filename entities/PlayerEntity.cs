@@ -32,18 +32,18 @@ namespace DSmithGameCs
 			accel.X = 0;
 			accel.Y = 0;
 
-			if (Keyboard.GetState () [Key.A])
+			if (Input.leftKey)
 				accel.X -= 1;
-			if (Keyboard.GetState () [Key.D])
+			if (Input.rightKey)
 				accel.X += 1;
-			if (Keyboard.GetState () [Key.W])
+			if (Input.upKey)
 				accel.Y += 1;
-			if (Keyboard.GetState () [Key.S])
+			if (Input.downKey)
 				accel.Y -= 1;
 
 			if (touchControlls && Mouse.GetState().LeftButton==ButtonState.Pressed && accel.Length <= 0) {
-				accel.X = Input.GetMouseX ();
-				accel.Y = -Input.GetMouseY ();
+				accel.X = Input.mouseX;
+				accel.Y = -Input.mouseY;
 			}
 
 			if (accel.Length > 0) {
@@ -58,7 +58,7 @@ namespace DSmithGameCs
 				MoveAsSolid (s, speed.X * Time.delta (), speed.Y * Time.delta ());
 			}
 
-			rot.Z = (float)Math.Atan2 (-Input.GetMouseY(),Input.GetMouseX());
+			rot.Z = (float)Math.Atan2 (-Input.mouseY,Input.mouseX);
 
 			UpdateModelspaceMatrix ();
 		}
