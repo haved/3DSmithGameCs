@@ -19,7 +19,7 @@ namespace DSmithGameCs
 			currentScene = new Scene ();
 			currentScene.AddEntity(new MeshEntity(new Mesh("../../res/floor.ply")));
 			currentScene.AddEntity (new HatchEntity (new Mesh ("../../res/hatchHole.ply"), new Mesh ("../../res/hatch.ply"), new Vector3 (-2.85f, 0, 0), -1, 0, 0, 4, 4));
-			player = new PlayerEntity (new Mesh ("../../res/player.ply"), new Mesh("../../res/shadow.ply"), new Vector4(1, 1, 1, 0.5f), 4, 3);
+			player = new PlayerEntity (4, 0, new Mesh ("../../res/player.ply"), new Mesh("../../res/shadow.ply"), new Vector4(1, 1, 1, 0.5f), 4, 3);
 			currentScene.AddEntity (player);
 			Mesh wallMesh = new Mesh("../../res/wall.ply");
 			currentScene.AddEntity(new MeshEntity(wallMesh, 0, 10, 0, -0.2f, 0, 0, 30, 1));

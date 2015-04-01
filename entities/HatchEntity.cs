@@ -9,7 +9,7 @@ namespace DSmithGameCs
 		readonly Mesh hatchHole;
 		readonly Mesh hatch;
 		readonly Matrix4 hatchTranslation;
-		float hatchRotation = -(float)Math.PI/2;
+		float hatchRotation = 0;
 		float hatchSpeed = 0;
 		public HatchEntity (Mesh hatchHole, Mesh hatch, Vector3 hatchTranslation, float x, float y, float z, float xSize, float ySize) : base(hatchHole, x, y, z, xSize, ySize)
 		{
@@ -22,11 +22,11 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			if (hatchRotation < 0 | hatchSpeed < 0) {
-				hatchSpeed += Time.delta ()*2;
+				hatchSpeed += Time.delta () * 2;
 				hatchRotation += hatchSpeed * Time.delta ();
 				if (hatchRotation > 0) {
 					hatchRotation = 0;
-					hatchSpeed = -1;
+					hatchSpeed = 0;
 				}
 			}
 		}

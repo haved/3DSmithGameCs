@@ -17,8 +17,10 @@ namespace DSmithGameCs
 		Mesh shadow;
 		Vector4 shadowColor;
 		private float xSize, ySize;
-		public PlayerEntity(Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
+		public PlayerEntity(float x, float y, Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
 		{
+			this.pos.X = x;
+			this.pos.Y = y;
 			this.mesh = mesh;
 			this.shadow = shadow;
 			this.shadowColor = shadowColor;
