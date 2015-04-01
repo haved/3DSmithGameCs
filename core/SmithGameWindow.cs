@@ -26,6 +26,7 @@ namespace DSmithGameCs
 		{
 			if(e.Time < 0.1f)
 				Time.SetDelta ((float)e.Time);
+			Input.Update ();
 			game.Update ();
 			GL.ClearColor (Color.Aqua);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

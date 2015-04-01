@@ -27,9 +27,16 @@ namespace DSmithGameCs
 			this.xSize = xSize/2;
 			this.ySize = ySize/2;
 		}
+			
+		public override void Update(Scene s)
+		{
+			Move (s);
+			if (Input.interactKey)
+				Interact (s);
+		}
 
 		Vector2 accel = new Vector2 (0, 0);
-		public override void Update(Scene s)
+		private void Move(Scene s)
 		{
 			accel.X = 0;
 			accel.Y = 0;
@@ -63,6 +70,17 @@ namespace DSmithGameCs
 			rot.Z = (float)Math.Atan2 (-Input.mouseY,Input.mouseX);
 
 			UpdateModelspaceMatrix ();
+		}
+
+		private void Interact(Scene s)
+		{
+			foreach (Entity e in s.GetEntities()) {
+				if(e is InteractiveEntity)
+				{
+					if ((pos + new Vector3 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z), 0) * 3 - e.pos).Length < 4)
+						((InteractiveEntity)e).Interact (this);
+				}
+			}
 		}
 
 		public override void Render(Scene s, Matrix4 VP)
