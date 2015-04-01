@@ -23,7 +23,7 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			if (hatchRotation < 0 | hatchSpeed < 0) {
-				hatchSpeed += Time.delta () * 2;
+				hatchSpeed += Time.delta () * 10;
 				hatchRotation += hatchSpeed * Time.delta ();
 				if (hatchRotation > 0) {
 					hatchRotation = 0;
@@ -47,7 +47,7 @@ namespace DSmithGameCs
 		public void OnInteract(InteractiveEntity entity, object source)
 		{
 			if(hatchRotation >= 0)
-				hatchSpeed = -3;
+				hatchSpeed = -6;
 		}
 	}
 }
