@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class HatchEntity : InteractiveEntity, EntityEvent
+	public class HatchEntity : InteractiveEntity, EntityEventListener
 	{
 		readonly Mesh hatchHole;
 		readonly Mesh hatch;
@@ -44,7 +44,7 @@ namespace DSmithGameCs
 			hatch.Draw ();
 		}
 
-		public void OnInteract(InteractiveEntity entity, object source)
+		public void InteractionPerformed(InteractiveEntity entity, object source)
 		{
 			if(hatchRotation >= 0)
 				hatchSpeed = -6;

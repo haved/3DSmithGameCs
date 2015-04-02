@@ -16,6 +16,7 @@ namespace DSmithGameCs
 			Compile ();
 			MVP_id = AddUniform ("MVP");
 			colorId = AddUniform("color");
+			SetColor (new Vector4(1, 1, 1, 1));
 		}
 
 		public void SetColor(Vector4 color)

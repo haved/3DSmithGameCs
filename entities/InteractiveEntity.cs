@@ -4,9 +4,9 @@ namespace DSmithGameCs
 {
 	public class InteractiveEntity : MeshEntity
 	{
-		protected EntityEvent eventHandler;
+		protected EntityEventListener eventHandler;
 
-		public InteractiveEntity (EntityEvent eventHandler, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, 0, 0, 0, xSize, ySize)
+		public InteractiveEntity (EntityEventListener eventHandler, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, 0, 0, 0, xSize, ySize)
 		{
 			this.eventHandler = eventHandler;
 		}
@@ -15,7 +15,7 @@ namespace DSmithGameCs
 
 		public void Interact(object source)
 		{
-			eventHandler.OnInteract (this, source);
+			eventHandler.InteractionPerformed (this, source);
 		}
 	}
 }
