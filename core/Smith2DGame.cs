@@ -18,6 +18,9 @@ namespace DSmithGameCs
 		public void Init ()
 		{
 			Console.WriteLine("GL version: " + GL.GetString(StringName.Version));
+
+			currentView = new SmithingView (this);
+
 			currentScene = new Scene ();
 			currentScene.AddEntity (new MeshEntity (new Mesh ("../../res/floor.ply")));
 			currentScene.AddEntity (new HatchEntity (new Mesh ("../../res/hatchHole.ply"), new Mesh ("../../res/hatch.ply"), new Vector3 (-2.85f, 0, 0), -1, 0, 0, 4, 4));
@@ -30,6 +33,7 @@ namespace DSmithGameCs
 			currentScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
 			currentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 5.5f, -8, 0, 7, 4));
 			currentScene.AddEntity (new AnvilEntity (this, new Mesh ("../../res/anvil.ply"), -15 + 9, 9, 0, 8, 3));
+
 			BasicShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ();
 		}
@@ -46,24 +50,17 @@ namespace DSmithGameCs
 				frames = 0;
 				timeTotal = 0;
 			}
-
-			if (currentView != null) {
-				if (currentView.ShouldUpdateScene ())
-					currentScene.Update ();
-				currentView.UpdateView (currentScene);
-			} else
+				
+			if (currentView.ShouldUpdateScene ())
 				currentScene.Update ();
+			currentView.UpdateView (currentScene);
 		}
 
 		public void Render()
 		{
-			if (currentView != null) {
-				if (currentView.ShouldRenderScene ())
-					currentScene.Render (currentView.GetViewMatrix () * projectionMatrix);
-				currentView.RenderView (currentScene);
-			}
-			else
-				currentScene.Render (Matrix4.LookAt (new Vector3 (player.pos.X, player.pos.Y - 10, 40), new Vector3 (player.pos.X, player.pos.Y, 1.73f), new Vector3 (0, 1, 0))*projectionMatrix);
+			if(currentView.ShouldRenderScene())
+				currentScene.Render (Matrix4.LookAt (currentView.GetEyePos(), currentView.GetEyeTarget(), currentView.GetEyeUp())*projectionMatrix);
+			currentView.RenderView (currentScene);
 		}
 
 		public void OnResize (int width, int height)

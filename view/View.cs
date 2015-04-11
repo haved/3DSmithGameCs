@@ -11,7 +11,11 @@ namespace DSmithGameCs
 
 		bool ShouldRenderScene ();
 
-		Matrix4 GetViewMatrix();
+		Vector3 GetEyePos();
+
+		Vector3 GetEyeTarget();
+
+		Vector3 GetEyeUp();
 
 		void RenderView(Scene s);
 	}
