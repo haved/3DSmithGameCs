@@ -5,9 +5,7 @@ namespace DSmithGameCs
 {
 	public class AnvilEntity : InteractiveEntity, EntityEventListener, View
 	{
-		private Vector3 prevEyePos, prevEyeTarget, prevEyeUp;
-		private float transition;
-		private Smith2DGame game;
+		private readonly Smith2DGame game;
 
 		public AnvilEntity(Smith2DGame game, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, xSize, ySize){
 			this.game = game;
@@ -16,11 +14,20 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed(InteractiveEntity entity, object source)
 		{
-			this.transition = 0;
-			this.prevEyePos = game.currentView.GetEyePos ();
-			this.prevEyeTarget= game.currentView.GetEyeTarget ();
-			this.prevEyeUp = game.currentView.GetEyeUp ();
 			game.SetView (this);
+		}
+
+		//Stuff related to the view
+		private Vector3 prevEyePos, prevEyeTarget, prevEyeUp;
+		private View prevView;
+		private float transition;
+		public void OnViewUsed(View prevView)
+		{
+			this.transition = 0;
+			this.prevEyePos = prevView.GetEyePos ();
+			this.prevEyeTarget= prevView.GetEyeTarget ();
+			this.prevEyeUp = prevView.GetEyeUp ();
+			this.prevView = prevView;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -31,8 +38,12 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			if (transition < 1) {
-				transition += Time.delta ();
+				transition += Time.delta ()*2;
 				transition = Math.Min (1, transition);
+			}
+
+			if (Input.closeKeyPressed) {
+				game.SetView (prevView);
 			}
 		}
 

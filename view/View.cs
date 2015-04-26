@@ -5,6 +5,8 @@ namespace DSmithGameCs
 {
 	public interface View
 	{
+		void OnViewUsed(View prevView);
+
 		bool ShouldUpdateScene();
 
 		void UpdateView(Scene s);

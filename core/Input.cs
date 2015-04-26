@@ -11,9 +11,12 @@ namespace DSmithGameCs
 		private const Key LEFT_KEY = Key.A;
 		private const Key RIGHT_KEY = Key.D;
 		private const Key INTERACT_KEY = Key.E;
+		private const Key CLOSE_KEY = Key.Escape;
 
 		public static float mouseX, mouseY;
-		public static bool mouseDown, leftKey, rightKey, upKey, downKey, interactKey;
+		public static bool mouseDown, leftKey, rightKey, upKey, downKey;
+		public static bool interactKeyPressed, closeKeyPressed;
+		private static bool closeKeyHasBeenPressed, interactKeyHasBeenPressed;
 
 		public static void AddToWindow(GameWindow window)
 		{
@@ -21,30 +24,29 @@ namespace DSmithGameCs
 			{
 				if(e.IsRepeat)
 					return;
-				if(e.Key == Key.Escape)
-					window.Close();
-				else if(e.Key == LEFT_KEY)
-					leftKey = true;
-				else if(e.Key == RIGHT_KEY)
-					rightKey = true;
-				else if(e.Key == UP_KEY)
-					upKey = true;
-				else if(e.Key == DOWN_KEY)
-					downKey = true;
-				else if(e.Key == INTERACT_KEY)
-					interactKey = true;
+				
+				switch(e.Key)
+				{
+				case CLOSE_KEY: closeKeyHasBeenPressed = true; break;
+				case LEFT_KEY: leftKey = true; break;
+				case RIGHT_KEY: rightKey = true; break;
+				case UP_KEY: upKey = true; break;
+				case DOWN_KEY: downKey = true; break;
+				case INTERACT_KEY: interactKeyHasBeenPressed = true; break;
+				default: break;
+				}
 			};
 
 			window.Keyboard.KeyUp += (sender, e) => 
 			{
-				if(e.Key == Key.A)
-					leftKey = false;
-				else if(e.Key == Key.D)
-					rightKey = false;
-				else if(e.Key == Key.W)
-					upKey = false;
-				else if(e.Key == Key.S)
-					downKey = false;
+				switch(e.Key)
+				{
+				case LEFT_KEY: leftKey = false; break;
+				case RIGHT_KEY: rightKey = false; break;
+				case UP_KEY: upKey = false; break;
+				case DOWN_KEY: downKey = false; break;
+				default: break;
+				}
 			};
 
 			window.Mouse.ButtonDown += (sender, e) => {
@@ -63,12 +65,14 @@ namespace DSmithGameCs
 			};
 		}
 
-		static bool prevTickInteractKeyDown = false;
 		public static void Update()
 		{
-			if (prevTickInteractKeyDown)
-				interactKey = false;
-			prevTickInteractKeyDown = interactKey;
+			if (closeKeyPressed)
+				closeKeyHasBeenPressed = false;
+			if (interactKeyPressed)
+				interactKeyHasBeenPressed = false;
+			closeKeyPressed = closeKeyHasBeenPressed;
+			interactKeyPressed = interactKeyHasBeenPressed;
 		}
 
 		public static void SetMousePos(float mousePosX, float mousePosY)

@@ -23,7 +23,7 @@ namespace DSmithGameCs
 
 			currentScene = new Scene ();
 			currentScene.AddEntity (new MeshEntity (new Mesh ("../../res/floor.ply")));
-			currentScene.AddEntity (new HatchEntity (new Mesh ("../../res/hatchHole.ply"), new Mesh ("../../res/hatch.ply"), new Vector3 (-2.85f, 0, 0), -1, 0, 0, 4, 4));
+			currentScene.AddEntity (new HatchEntity (this, new Mesh ("../../res/hatchHole.ply"), new Mesh ("../../res/hatch.ply"), new Vector3 (-2.85f, 0, 0), -1, 0, 0, 4, 4));
 			player = new PlayerEntity (4, 0, new Mesh ("../../res/player.ply"), new Mesh ("../../res/shadow.ply"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
 			currentScene.AddEntity (player);
 			Mesh wallMesh = new Mesh ("../../res/wall.ply");
@@ -33,6 +33,7 @@ namespace DSmithGameCs
 			currentScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
 			currentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 5.5f, -8, 0, 7, 4));
 			currentScene.AddEntity (new AnvilEntity (this, new Mesh ("../../res/anvil.ply"), -15 + 9, 9, 0, 8, 3));
+			currentScene.AddEntity (new CoalTableEntity (new Mesh("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), -5, -8.5f, 0, 6, 3));
 
 			BasicShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ();
@@ -50,7 +51,7 @@ namespace DSmithGameCs
 				frames = 0;
 				timeTotal = 0;
 			}
-				
+
 			if (currentView.ShouldUpdateScene ())
 				currentScene.Update ();
 			currentView.UpdateView (currentScene);
@@ -71,7 +72,9 @@ namespace DSmithGameCs
 
 		public void SetView(View v)
 		{
+			v.OnViewUsed (this.currentView);
 			this.currentView = v;
+
 		}
 
 		public static void Main (string[] args)

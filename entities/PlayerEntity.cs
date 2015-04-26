@@ -31,7 +31,7 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			Move (s);
-			if (Input.interactKey)
+			if (Input.interactKeyPressed)
 				Interact (s);
 		}
 
@@ -70,6 +70,11 @@ namespace DSmithGameCs
 			rot.Z = (float)Math.Atan2 (-Input.mouseY,Input.mouseX);
 
 			UpdateModelspaceMatrix ();
+		}
+
+		public void LookAt(float x, float y)
+		{
+			rot.Z = (float)Math.Atan2 (y-pos.Y,x-pos.X);
 		}
 
 		private void Interact(Scene s)
