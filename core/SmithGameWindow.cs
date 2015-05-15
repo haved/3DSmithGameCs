@@ -17,6 +17,8 @@ namespace DSmithGameCs
 			GL.Enable (EnableCap.CullFace);
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.DepthTest);
+			GL.DepthFunc (DepthFunction.Lequal);
+			GL.Enable (EnableCap.Blend);
 			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			Input.AddToWindow (this);

@@ -19,7 +19,7 @@ namespace DSmithGameCs
 			this.hatch = hatch;
 			this.hatchTranslation = Matrix4.CreateTranslation(hatchTranslation);
 			this.solid = false;
-			this.eventHandler = this;
+			this.EventHandler = this;
 		}
 
 		public override void Update(Scene s)
@@ -49,11 +49,11 @@ namespace DSmithGameCs
 		public void InteractionPerformed(InteractiveEntity entity, object source)
 		{
 			game.SetView (this);
-			if (game.player.GetSolidX1 () < GetSolidX2 () & game.player.GetSolidX2 () > GetSolidX1 () & game.player.GetSolidY1 () < GetSolidY2 () & game.player.GetSolidY2 () > GetSolidY1 ()) {
-				game.player.LookAt (pos.X, pos.Y);
-				game.player.pos.X = pos.X - (float)Math.Cos (game.player.rot.Z) * 5;
-				game.player.pos.Y = pos.Y - (float)Math.Sin (game.player.rot.Z) * 5;
-				game.player.UpdateModelspaceMatrix ();
+			if (game.Player.GetSolidX1 () < GetSolidX2 () & game.Player.GetSolidX2 () > GetSolidX1 () & game.Player.GetSolidY1 () < GetSolidY2 () & game.Player.GetSolidY2 () > GetSolidY1 ()) {
+				game.Player.LookAt (pos.X, pos.Y);
+				game.Player.pos.X = pos.X - (float)Math.Cos (game.Player.rot.Z) * 5;
+				game.Player.pos.Y = pos.Y - (float)Math.Sin (game.Player.rot.Z) * 5;
+				game.Player.UpdateModelspaceMatrix ();
 			}
 		}
 

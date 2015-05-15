@@ -7,7 +7,6 @@ namespace DSmithGameCs
 	{
 		readonly Mesh table, coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
-		float coalValue = 1;
 		float coalSpeed = 0;
 		public CoalTableEntity (Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize) : base(null, x,y,z,xSize,ySize)
 		{
@@ -23,15 +22,8 @@ namespace DSmithGameCs
 			else
 				coalSpeed -= Time.delta ();
 
-			//coalValue += coalSpeed * Time.delta();
-
-			if (coalValue > 2)
-				coalSpeed = -0.1f;
-			else if (coalValue < 0)
-				coalSpeed = 0.1f;
-
-			flickr += Time.delta ()*3*Util.NextFloat();
-			coalColor.X = coalColor.Y = coalColor.Z = coalValue + (float)Math.Sin(flickr)/4;
+			flickr += Time.delta ()*2*Util.NextFloat();
+			coalColor.X = coalColor.Y = coalColor.Z = 1 + (float)Math.Sin(flickr)/6;
 		}
 
 		public override void Render(Scene s, Matrix4 VP)

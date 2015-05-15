@@ -9,7 +9,7 @@ namespace DSmithGameCs
 
 		public AnvilEntity(Smith2DGame game, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, xSize, ySize){
 			this.game = game;
-			this.eventHandler = this;
+			this.EventHandler = this;
 		}
 
 		public void InteractionPerformed(InteractiveEntity entity, object source)

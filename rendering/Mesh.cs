@@ -50,9 +50,9 @@ namespace DSmithGameCs
 					vertices [j] = new Vertex(Convert.ToSingle(numbers[0], CultureInfo.InvariantCulture), Convert.ToSingle(numbers[1], CultureInfo.InvariantCulture), Convert.ToSingle(numbers[2], CultureInfo.InvariantCulture));
 					if(normals)
 					{
-						vertices[j].normal.X = Convert.ToSingle(numbers[3], CultureInfo.InvariantCulture);
-						vertices[j].normal.Y = Convert.ToSingle(numbers[4], CultureInfo.InvariantCulture);
-						vertices[j].normal.Z = Convert.ToSingle(numbers[5], CultureInfo.InvariantCulture);
+						vertices[j].Normal.X = Convert.ToSingle(numbers[3], CultureInfo.InvariantCulture);
+						vertices[j].Normal.Y = Convert.ToSingle(numbers[4], CultureInfo.InvariantCulture);
+						vertices[j].Normal.Z = Convert.ToSingle(numbers[5], CultureInfo.InvariantCulture);
 					}
 					if(colors)
 					{
@@ -103,9 +103,12 @@ namespace DSmithGameCs
 			}
 		}
 
-		public Mesh (Vertex[] vertices, uint[] indices)
+		public Mesh (Vertex[] vertices, uint[] indices) : this(vertices, indices, true){}
+
+		public Mesh (Vertex[] vertices, uint[] indices, bool calcNormals)
 		{
-			CalcNormals (vertices, indices);
+			if(calcNormals)
+				CalcNormals (vertices, indices);
 			LoadMeshData (vertices, indices);
 		}
 
@@ -124,7 +127,7 @@ namespace DSmithGameCs
 			indicesCount = indices.Length;
 
 			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
-			GL.BufferData (BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vertex.VERTEX_BYTE_AMOUNT), 
+			GL.BufferData (BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vertex.VERTEXBYTEAMOUNT), 
 				Vertex.VertexArrayToFloatArray(vertices), BufferUsageHint.StaticDraw);
 
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
@@ -139,9 +142,9 @@ namespace DSmithGameCs
 
 			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
 
-			GL.VertexAttribPointer (0, 3, VertexAttribPointerType.Float, false, Vertex.VERTEX_BYTE_AMOUNT, 0);
-			GL.VertexAttribPointer (1, 3, VertexAttribPointerType.Float, false, Vertex.VERTEX_BYTE_AMOUNT, 3 * sizeof(float));
-			GL.VertexAttribPointer (2, 3, VertexAttribPointerType.Float, false, Vertex.VERTEX_BYTE_AMOUNT, 6 * sizeof(float));
+			GL.VertexAttribPointer (0, 3, VertexAttribPointerType.Float, false, Vertex.VERTEXBYTEAMOUNT, 0);
+			GL.VertexAttribPointer (1, 3, VertexAttribPointerType.Float, false, Vertex.VERTEXBYTEAMOUNT, 3 * sizeof(float));
+			GL.VertexAttribPointer (2, 3, VertexAttribPointerType.Float, false, Vertex.VERTEXBYTEAMOUNT, 6 * sizeof(float));
 
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
 			GL.DrawElements (PrimitiveType.Triangles, indicesCount, DrawElementsType.UnsignedInt, IntPtr.Zero);
@@ -159,18 +162,18 @@ namespace DSmithGameCs
 				uint i1 = indices[i + 1];
 				uint i2 = indices[i + 2];
 
-				Vector3 v1 = new Vector3(vertices[i1].x - vertices[i0].x, vertices[i1].y - vertices[i0].y, vertices[i1].z - vertices[i0].z);
-				Vector3 v2 = new Vector3(vertices[i2].x - vertices[i0].x, vertices[i2].y - vertices[i0].y, vertices[i2].z - vertices[i0].z);
+				Vector3 v1 = new Vector3(vertices[i1].X - vertices[i0].X, vertices[i1].y - vertices[i0].y, vertices[i1].z - vertices[i0].z);
+				Vector3 v2 = new Vector3(vertices[i2].X - vertices[i0].X, vertices[i2].y - vertices[i0].y, vertices[i2].z - vertices[i0].z);
 
 				Vector3 normal = Vector3.Cross(v1, v2).Normalized();
 
-				vertices[i0].normal = vertices[i0].normal + normal;
-				vertices[i1].normal = vertices[i1].normal + normal;
-				vertices[i2].normal = vertices[i2].normal + normal;
+				vertices[i0].Normal = vertices[i0].Normal + normal;
+				vertices[i1].Normal = vertices[i1].Normal + normal;
+				vertices[i2].Normal = vertices[i2].Normal + normal;
 			}
 
 			for (int i = 0; i < vertices.Length; i++)
-				vertices [i].normal.Normalize ();
+				vertices [i].Normal.Normalize ();
 		}
 	}
 }

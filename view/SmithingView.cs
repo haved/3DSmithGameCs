@@ -17,10 +17,10 @@ namespace DSmithGameCs
 
 		public void OnViewUsed(View prevView)
 		{
-			this.transition = 0;
 			this.prevEyePos = prevView.GetEyePos ();
 			this.prevEyeTarget= prevView.GetEyeTarget ();
 			this.prevEyeUp = prevView.GetEyeUp ();
+			this.transition = 0;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -36,7 +36,7 @@ namespace DSmithGameCs
 			}
 
 			if (Input.closeKeyPressed) {
-				Console.Out.WriteLine ("TODO: Make a menu");
+				game.SetView (new PauseMenuView (game));
 			}
 		}
 
@@ -47,12 +47,12 @@ namespace DSmithGameCs
 
 		public Vector3 GetEyePos()
 		{
-			return transition < 1 ? new Vector3 (game.player.pos.X, game.player.pos.Y - 10, 40) * transition + prevEyePos*(1-transition) : new Vector3 (game.player.pos.X, game.player.pos.Y - 10, 40);
+			return transition < 1 ? new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40) * transition + prevEyePos*(1-transition) : new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40);
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition < 1 ? new Vector3 (game.player.pos.X, game.player.pos.Y, 1.73f) * transition + prevEyeTarget*(1-transition) : new Vector3 (game.player.pos.X, game.player.pos.Y, 1.73f);
+			return transition < 1 ? new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f) * transition + prevEyeTarget*(1-transition) : new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f);
 		}
 
 		public Vector3 GetEyeUp()

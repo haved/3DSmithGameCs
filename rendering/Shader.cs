@@ -107,6 +107,11 @@ namespace DSmithGameCs
 			return GL.GetUniformLocation (programID, name);
 		}
 
+		protected void SetInteger(int id, int value)
+		{
+			GL.Uniform1 (id, value);
+		}
+
 		protected void SetFloat(int id, float value)
 		{
 			GL.Uniform1 (id, value);
@@ -115,6 +120,11 @@ namespace DSmithGameCs
 		protected void SetVector2(int id, Vector2 value)
 		{
 			GL.Uniform2 (id, ref value);
+		}
+
+		protected void SetVector2(int id, float v0, float v1)
+		{
+			GL.Uniform2 (id, v0, v1);
 		}
 
 		protected void SetVector3(int id, Vector3 value)

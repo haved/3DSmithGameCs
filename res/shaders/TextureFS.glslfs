@@ -1,0 +1,12 @@
+#version 330 core
+
+in vec4 vertexColor0;
+in vec2 texCoord0;
+
+uniform sampler2D diffuse;
+
+out vec4 fragColor;
+
+void main(){
+    fragColor = vertexColor0 * texture(diffuse,texCoord0);
+}

@@ -50,7 +50,7 @@ namespace DSmithGameCs
 			if (Input.downKey)
 				accel.Y -= 1;
 
-			if (touchControlls && Mouse.GetState().LeftButton==ButtonState.Pressed && accel.Length <= 0) {
+			if (touchControlls && Input.mouseDown && accel.Length <= 0) {
 				accel.X = Input.mouseX;
 				accel.Y = -Input.mouseY;
 			}
@@ -80,10 +80,11 @@ namespace DSmithGameCs
 		private void Interact(Scene s)
 		{
 			foreach (Entity e in s.GetEntities()) {
-				if(e is InteractiveEntity)
+				var interactiveEntity = e as InteractiveEntity;
+				if(interactiveEntity != null)
 				{
 					if ((pos + new Vector3 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z), 0) * 3 - e.pos).Length < 4)
-						((InteractiveEntity)e).Interact (this);
+						interactiveEntity.Interact (this);
 				}
 			}
 		}
@@ -95,9 +96,7 @@ namespace DSmithGameCs
 			ColorShader.GetInstance ().SetMVP (MVP);
 			ColorShader.GetInstance ().SetColor (shadowColor);
 			GL.Disable (EnableCap.DepthTest);
-			GL.Enable (EnableCap.Blend);
 			shadow.Draw ();
-			GL.Disable (EnableCap.Blend);
 			GL.Enable (EnableCap.DepthTest);
 			BasicShader.GetInstance ().Bind ();
 			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
