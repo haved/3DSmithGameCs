@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class BasicShader : Shader
 	{
-		private static readonly BasicShader instance = new BasicShader();
+		private static BasicShader instance;
 
 		private int modelspaceID, MVP_id;
 
@@ -26,6 +26,13 @@ namespace DSmithGameCs
 		public void SetMVP(Matrix4 MVP)
 		{
 			SetMatrix4 (MVP_id, MVP);
+		}
+			
+		public static BasicShader MakeInstance()
+		{
+			if (instance == null)
+				instance = new BasicShader ();
+			return instance;
 		}
 
 		public static BasicShader GetInstance()

@@ -6,7 +6,7 @@ namespace DSmithGameCs
 {
 	public class TextureShader : Shader
 	{
-		private static readonly TextureShader instance = new TextureShader();
+		private static TextureShader instance;
 
 		private int MVP_id, colorId, diffuseId, sampleUV_id, sampleSizeId;
 
@@ -59,6 +59,13 @@ namespace DSmithGameCs
 		public void SetSampleSize(Vector2 sampleSize)
 		{
 			SetVector2 (sampleSizeId, sampleSize);
+		}
+
+		public static TextureShader MakeInstance()
+		{
+			if (instance == null)
+				instance = new TextureShader ();
+			return instance;
 		}
 
 		public static TextureShader GetInstance()

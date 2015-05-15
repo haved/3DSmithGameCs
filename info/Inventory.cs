@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class Inventory
 	{
-		const uint SIZE = 4;
+		public const uint SIZE = 4;
 		readonly List<Item> items;
 		uint freeSpace = SIZE;
 

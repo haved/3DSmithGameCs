@@ -4,8 +4,8 @@ namespace DSmithGameCs
 {
 	public class ItemType
 	{
-		private readonly ItemType[] types = new ItemType[256];
-		public ItemType Iron = new ItemType(0, 0);
+		static readonly ItemType[] types = new ItemType[256];
+		public static ItemType Iron = new ItemType(0, 0);
 
 		private readonly uint texture;
 

@@ -17,14 +17,14 @@ namespace DSmithGameCs
 
 		public static void Init()
 		{
-			flat = new Mesh(new Vertex[]{new Vertex(0, 0, 0, 0, 0, 0, 1, 1, 1), new Vertex(1, 0, 0, 1, 0, 0, 1, 1, 1), new Vertex(1, 1, 0, 1, 1, 0, 1, 1, 1), new Vertex(0, 1, 0, 0, 1, 0, 1, 1, 1)}, new uint[]{0,1,2, 0,2,3}, false);
+			flat = new Mesh(new Vertex[]{new Vertex(0, 0, 0, 0, 0, 0, 1, 1, 1), new Vertex(1, 0, 0, 1, 0, 0, 1, 1, 1), new Vertex(1, 1, 0, 1, 1, 0, 1, 1, 1), new Vertex(0, 1, 0, 0, 1, 0, 1, 1, 1)}, new uint[]{0,2,1, 0,3,2}, false);
 		}
 
 		public static void OnResize(int width, int height)
 		{
 			orthoWidth = width;
 			orthoHeight = height;
-			orthoMatrix = Matrix4.CreateOrthographicOffCenter (0, width, 0, height, 0, 1);
+			orthoMatrix = Matrix4.CreateOrthographicOffCenter (0, width, height, 0, 0, 1);
 			allScreen = Matrix4.CreateScale (width, height, 1);
 		}
 
@@ -68,6 +68,11 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().Bind ();
 		}
 
+		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height)
+		{
+			DrawColoredTexturedBox (White, texture, x, y, width, height);
+		}
+
 		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height)
 		{
 			TextureShader.GetInstance ().Bind ();
@@ -78,6 +83,11 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetSampleSize (X1Y1);
 			flat.Draw ();
 			BasicShader.GetInstance ().Bind ();
+		}
+
+		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
+		{
+			DrawColoredTexturedBox (White, texture, x, y, width, height, texX, texY, texXSize, texYSize);
 		}
 
 		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)

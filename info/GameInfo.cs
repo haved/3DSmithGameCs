@@ -11,7 +11,7 @@ namespace DSmithGameCs
 		{
 			PlayerInventory = new Inventory ();
 			HatchInv = new HatchInventory ();
-			PlayerInventory.AddItem (null);
+			PlayerInventory.AddItem (new StaticItem(ItemType.Iron));
 		}
 	}
 }

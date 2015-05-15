@@ -12,16 +12,17 @@ namespace DSmithGameCs
 
 		public View CurrentView;
 
-		public GameInfo GameInfo;
+		public GameInfo GameStats;
 		public Scene CurrentScene;
 		public PlayerEntity Player;
 
 		public void Init ()
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
-			BasicShader.GetInstance ().Bind ();
-			ColorShader.GetInstance ();
-			TextureShader.GetInstance ();
+			TextureCollection.Load ();
+			BasicShader.MakeInstance ().Bind ();
+			ColorShader.MakeInstance ();
+			TextureShader.MakeInstance ();
 			OrthoRenderEngine.Init ();
 
 			NewGame ();
@@ -30,7 +31,8 @@ namespace DSmithGameCs
 		private void NewGame()
 		{
 			CurrentView = new SmithingView (this);
-			GameInfo = new GameInfo ();
+			GameStats = new GameInfo ();
+			GameStats.NewGame ();
 
 			CurrentScene = new Scene ();
 			CurrentScene.AddEntity (new MeshEntity (new Mesh ("../../res/floor.ply")));
@@ -47,19 +49,9 @@ namespace DSmithGameCs
 			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), -5, -8.5f, 0, 6, 3));
 		}
 
-		int frames;
-		float timeTotal;
-
 		public void Update ()
 		{
-			timeTotal += Time.delta ();
-			frames++;
-
-			if (timeTotal > 2) {
-				Console.WriteLine ("FPS:" + (frames / 2));
-				frames = 0;
-				timeTotal = 0;
-			}
+			CountFPS ();
 
 			if (CurrentView.ShouldUpdateScene ())
 				CurrentScene.Update ();
@@ -85,6 +77,21 @@ namespace DSmithGameCs
 			v.OnViewUsed (this.CurrentView);
 			this.CurrentView = v;
 
+		}
+
+		int frames;
+		float timeTotal;
+
+		private void CountFPS()
+		{
+			timeTotal += Time.delta ();
+			frames++;
+
+			if (timeTotal > 2) {
+				Console.WriteLine ("FPS:" + (frames / 2));
+				frames = 0;
+				timeTotal = 0;
+			}
 		}
 
 		public static void Main (string[] args)

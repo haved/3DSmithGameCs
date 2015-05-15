@@ -60,9 +60,18 @@ namespace DSmithGameCs
 			return transition < 1 ? Vector3.UnitY * transition + prevEyeUp * (1 - transition) : Vector3.UnitY;
 		}
 
+		const uint iconSize = 64;
 		public void RenderView (Scene s)
 		{
-
+			OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, OrthoRenderEngine.GetCanvasWidth()-iconSize-20, 20, iconSize, iconSize*Inventory.SIZE, 0, 0, 1, 4);
+			for (int i = 0; i < Inventory.SIZE; i++)
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, OrthoRenderEngine.GetCanvasWidth () - iconSize - 20 + 2, 20 + iconSize * i + 2, 10, 10, i / 4f, 0, 0.25f, 1);
+			uint l=0;
+			for (int i = 0; i < game.GameStats.PlayerInventory.GetItemAmount (); i++) {
+				Item item = game.GameStats.PlayerInventory.GetItem(i);
+				item.Render (OrthoRenderEngine.GetCanvasWidth()-iconSize-20, iconSize*l+20, iconSize, iconSize*item.GetSize());
+				l += item.GetSize ();
+			}
 		}
 	}
 }

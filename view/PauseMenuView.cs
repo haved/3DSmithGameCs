@@ -52,9 +52,9 @@ namespace DSmithGameCs
 			return prevView.GetEyeUp ();
 		}
 
-		Texture t = new Texture("../../res/textures/button.png");
 		public void RenderView (Scene s)
 		{
+			prevView.RenderView (s);
 			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
 		}
 

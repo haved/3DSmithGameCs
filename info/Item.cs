@@ -13,7 +13,7 @@ namespace DSmithGameCs
 			return 1;
 		}
 
-		public virtual void Render()
+		public virtual void Render(float x, float y, float width, float height)
 		{
 			
 		}
