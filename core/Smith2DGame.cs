@@ -20,6 +20,7 @@ namespace DSmithGameCs
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
 			TextureCollection.Load ();
+			MeshCollection.Load ();
 			BasicShader.MakeInstance ().Bind ();
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();

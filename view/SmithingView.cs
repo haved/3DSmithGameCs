@@ -7,7 +7,7 @@ namespace DSmithGameCs
 	{
 		private Vector3 prevEyePos, prevEyeTarget, prevEyeUp;
 		private float transition;
-		private Smith2DGame game;
+		private readonly Smith2DGame game;
 
 		public SmithingView(Smith2DGame game)
 		{
@@ -17,10 +17,10 @@ namespace DSmithGameCs
 
 		public void OnViewUsed(View prevView)
 		{
-			this.prevEyePos = prevView.GetEyePos ();
-			this.prevEyeTarget= prevView.GetEyeTarget ();
-			this.prevEyeUp = prevView.GetEyeUp ();
-			this.transition = 0;
+			prevEyePos = prevView.GetEyePos ();
+			prevEyeTarget= prevView.GetEyeTarget ();
+			prevEyeUp = prevView.GetEyeUp ();
+			transition = 0;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -63,14 +63,28 @@ namespace DSmithGameCs
 		const uint iconSize = 64;
 		public void RenderView (Scene s)
 		{
-			OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, OrthoRenderEngine.GetCanvasWidth()-iconSize-20, 20, iconSize, iconSize*Inventory.SIZE, 0, 0, 1, 4);
-			for (int i = 0; i < Inventory.SIZE; i++)
-				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, OrthoRenderEngine.GetCanvasWidth () - iconSize - 20 + 2, 20 + iconSize * i + 2, 10, 10, i / 4f, 0, 0.25f, 1);
+			var cW = OrthoRenderEngine.GetCanvasWidth ();
+			var cH = OrthoRenderEngine.GetCanvasHeight ();
+			//OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*Inventory.SIZE-20, iconSize, iconSize*Inventory.SIZE, 0, 0, 1, 4);
+
 			uint l=0;
-			for (int i = 0; i < game.GameStats.PlayerInventory.GetItemAmount (); i++) {
+			for (int i = 0; i < game.GameStats.PlayerInventory.GetItemAmount(); i++) {
 				Item item = game.GameStats.PlayerInventory.GetItem(i);
-				item.Render (OrthoRenderEngine.GetCanvasWidth()-iconSize-20, iconSize*l+20, iconSize, iconSize*item.GetSize());
-				l += item.GetSize ();
+
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*(l+0.5f)-20, iconSize, iconSize/2, 0, 0, 1, 0.5f);
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - 20 + 2, cH - iconSize * l - 20 - 12, 10, 10, l / 4f, 0, 0.25f, 1);
+				uint oldL = l;
+				for (l++; l < oldL + item.GetSize (); l++) {
+					OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*l-20, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
+					OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*(l+0.5f)-20, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
+				}
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*l-20, iconSize, iconSize/2, 0, 0.5f, 1, 0.5f);
+				item.Render (cW-iconSize-20, cH-iconSize*l-20, iconSize, iconSize*item.GetSize());
+			}
+
+			for (uint i = l; i < Inventory.SIZE; i++) {
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*(i+1)-20, iconSize, iconSize, 0, 0, 1, 1);
+				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - 20 + 2, cH - iconSize * i - 20 - 12, 10, 10, i / 4f, 0, 0.25f, 1);
 			}
 		}
 	}

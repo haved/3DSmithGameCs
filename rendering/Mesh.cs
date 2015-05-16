@@ -28,15 +28,15 @@ namespace DSmithGameCs
 				uint i = 0;
 				for (; i < lines.Length; i++)
 				{
-					if(lines[i].StartsWith("element vertex "))
-						vertexAmount = UInt32.Parse(lines[i].Substring(15));
-					if(lines[i].StartsWith("element face "))
-						faceAmount = UInt32.Parse(lines[i].Substring(13));
-					if(lines[i].StartsWith("property float nx"))
+					if (lines [i].StartsWith ("element vertex ", StringComparison.Ordinal))
+						vertexAmount = UInt32.Parse (lines [i].Substring (15));
+					if (lines [i].StartsWith ("element face ", StringComparison.Ordinal))
+						faceAmount = UInt32.Parse (lines [i].Substring (13));
+					if (lines [i].StartsWith ("property float nx", StringComparison.Ordinal))
 						normals = true;
-					if(lines[i].StartsWith("property uchar red"))
+					if (lines [i].StartsWith ("property uchar red", StringComparison.Ordinal))
 						colors = true; 
-					if(lines[i].StartsWith("end_header"))
+					if (lines [i].StartsWith ("end_header", StringComparison.Ordinal))
 						break;
 				}
 				i++;
@@ -56,9 +56,9 @@ namespace DSmithGameCs
 					}
 					if(colors)
 					{
-						vertices[j].red = Byte.Parse(numbers[6])/255f;
-						vertices[j].green = Byte.Parse(numbers[7])/255f;
-						vertices[j].blue = Byte.Parse(numbers[8])/255f;
+						vertices[j].Red = Byte.Parse(numbers[6])/255f;
+						vertices[j].Green = Byte.Parse(numbers[7])/255f;
+						vertices[j].Blue = Byte.Parse(numbers[8])/255f;
 					}
 
 					i++;
@@ -162,8 +162,8 @@ namespace DSmithGameCs
 				uint i1 = indices[i + 1];
 				uint i2 = indices[i + 2];
 
-				Vector3 v1 = new Vector3(vertices[i1].X - vertices[i0].X, vertices[i1].y - vertices[i0].y, vertices[i1].z - vertices[i0].z);
-				Vector3 v2 = new Vector3(vertices[i2].X - vertices[i0].X, vertices[i2].y - vertices[i0].y, vertices[i2].z - vertices[i0].z);
+				Vector3 v1 = new Vector3(vertices[i1].X - vertices[i0].X, vertices[i1].Y - vertices[i0].Y, vertices[i1].Z - vertices[i0].Z);
+				Vector3 v2 = new Vector3(vertices[i2].X - vertices[i0].X, vertices[i2].Y - vertices[i0].Y, vertices[i2].Z - vertices[i0].Z);
 
 				Vector3 normal = Vector3.Cross(v1, v2).Normalized();
 
