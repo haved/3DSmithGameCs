@@ -19,6 +19,16 @@ namespace DSmithGameCs
 			OrthoRenderEngine.DrawColoredMesh (mesh, Matrix4.CreateRotationY(0.2f), color, x+4, y+4, width-8, height-8, -1, -2, 2, 4);
 		}
 
+		public Mesh GetMesh()
+		{
+			return mesh;
+		}
+
+		public Vector4 GetColor()
+		{
+			return color;
+		}
+
 		public override uint GetSize()
 		{
 			return 2;

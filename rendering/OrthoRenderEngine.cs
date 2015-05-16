@@ -6,9 +6,6 @@ namespace DSmithGameCs
 {
 	public static class OrthoRenderEngine
 	{
-		public static Vector4 White = new Vector4 (1, 1, 1, 1);
-		public static Vector2 X1Y1 = new Vector2 (1, 1);
-
 		static float orthoWidth, orthoHeight;
 
 		static Matrix4 orthoMatrix;
@@ -54,7 +51,7 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetColor (color);
 			TextureShader.GetInstance ().SetTexture (texture);
 			TextureShader.GetInstance ().SetSampleUV (Vector2.Zero);
-			TextureShader.GetInstance ().SetSampleSize (X1Y1);
+			TextureShader.GetInstance ().SetSampleSize (Util.X1Y1);
 			flat.Draw ();
 			BasicShader.GetInstance ().Bind ();
 		}
@@ -70,7 +67,7 @@ namespace DSmithGameCs
 
 		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height)
 		{
-			DrawColoredTexturedBox (White, texture, x, y, width, height);
+			DrawColoredTexturedBox (Util.White, texture, x, y, width, height);
 		}
 
 		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height)
@@ -80,14 +77,14 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetColor (color);
 			TextureShader.GetInstance ().SetTexture (texture);
 			TextureShader.GetInstance ().SetSampleUV (Vector2.Zero);
-			TextureShader.GetInstance ().SetSampleSize (X1Y1);
+			TextureShader.GetInstance ().SetSampleSize (Util.X1Y1);
 			flat.Draw ();
 			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
 		{
-			DrawColoredTexturedBox (White, texture, x, y, width, height, texX, texY, texXSize, texYSize);
+			DrawColoredTexturedBox (Util.White, texture, x, y, width, height, texX, texY, texXSize, texYSize);
 		}
 
 		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)

@@ -7,7 +7,7 @@ namespace DSmithGameCs
 	{
 		private static BasicShader instance;
 
-		private int modelspaceID, MVP_id;
+		private int modelspaceID, MVP_id, colorId;
 
 		public BasicShader ()
 		{
@@ -16,6 +16,8 @@ namespace DSmithGameCs
 			Compile ();
 			modelspaceID = AddUniform("modelspaceMatrix");
 			MVP_id = AddUniform ("MVP");
+			colorId = AddUniform ("color");
+			SetColor (Util.White);
 		}
 
 		public void SetModelspaceMatrix(Matrix4 modelspace)
@@ -27,7 +29,17 @@ namespace DSmithGameCs
 		{
 			SetMatrix4 (MVP_id, MVP);
 		}
-			
+
+		public void SetColor(Vector4 color)
+		{
+			SetVector4 (colorId, color);
+		}
+
+		public void ResetColor()
+		{
+			SetColor (Util.White);
+		}
+
 		public static BasicShader MakeInstance()
 		{
 			if (instance == null)

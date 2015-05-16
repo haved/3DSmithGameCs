@@ -48,6 +48,11 @@ namespace DSmithGameCs
 			CurrentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 5.5f, -8, 0, 7, 4));
 			CurrentScene.AddEntity (new AnvilEntity (this, new Mesh ("../../res/anvil.ply"), -15 + 9, 9, 0, 8, 3));
 			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), -5, -8.5f, 0, 6, 3));
+			CurrentScene.AddEntity (new MeshEntity (new Mesh ("../../res/foundry.ply"), -11.5f, -6.5f, 0, 0, 0, 0, 7, 7));
+			var e = new CastingTableEntity (this, new Mesh ("../../res/castingTable.ply"), -11.5f, -1f, 1.85f, 6.25f, 3.3f);
+			e.SetCast (new CastItem (MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
+			CurrentScene.AddEntity (e);
+
 		}
 
 		public void Update ()

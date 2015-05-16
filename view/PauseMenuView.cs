@@ -55,7 +55,9 @@ namespace DSmithGameCs
 		public void RenderView (Scene s)
 		{
 			prevView.RenderView (s);
+			GL.Disable (EnableCap.DepthTest);
 			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
+			GL.Enable (EnableCap.DepthTest);
 		}
 
 		#endregion
