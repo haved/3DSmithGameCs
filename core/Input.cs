@@ -12,11 +12,15 @@ namespace DSmithGameCs
 		private const Key RIGHT_KEY = Key.D;
 		private const Key INTERACT_KEY = Key.E;
 		private const Key CLOSE_KEY = Key.Escape;
+		private static Key[] ITEM_KEYS = {Key.Number1, Key.Number2, Key.Number3, Key.Number4};
 
-		public static float mouseX, mouseY;
-		public static bool mouseDown, leftKey, rightKey, upKey, downKey;
-		public static bool interactKeyPressed, closeKeyPressed;
+		public static float MouseX, MouseY;
+		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
+		public static bool InteractKeyPressed, CloseKeyPressed;
+		public static bool[] ItemKeys = new bool[ITEM_KEYS.Length];
 		private static bool closeKeyHasBeenPressed, interactKeyHasBeenPressed;
+		private static bool[] pressedItemKeys = new bool[ITEM_KEYS.Length];
+
 
 		public static void AddToWindow (GameWindow window)
 		{
@@ -29,16 +33,16 @@ namespace DSmithGameCs
 					closeKeyHasBeenPressed = true;
 					break;
 				case LEFT_KEY:
-					leftKey = true;
+					LeftKey = true;
 					break;
 				case RIGHT_KEY:
-					rightKey = true;
+					RightKey = true;
 					break;
 				case UP_KEY:
-					upKey = true;
+					UpKey = true;
 					break;
 				case DOWN_KEY:
-					downKey = true;
+					DownKey = true;
 					break;
 				case INTERACT_KEY:
 					interactKeyHasBeenPressed = true;
@@ -46,21 +50,28 @@ namespace DSmithGameCs
 				default:
 					break;
 				}
+					
+				for(uint i = 0; i < ITEM_KEYS.Length; i++)
+					if(e.Key == ITEM_KEYS[i])
+					{
+						pressedItemKeys[i] = true;
+						break;
+					}
 			};
 
 			window.Keyboard.KeyUp += (sender, e) => {
 				switch (e.Key) {
 				case LEFT_KEY:
-					leftKey = false;
+					LeftKey = false;
 					break;
 				case RIGHT_KEY:
-					rightKey = false;
+					RightKey = false;
 					break;
 				case UP_KEY:
-					upKey = false;
+					UpKey = false;
 					break;
 				case DOWN_KEY:
-					downKey = false;
+					DownKey = false;
 					break;
 				default:
 					break;
@@ -69,32 +80,36 @@ namespace DSmithGameCs
 
 			window.Mouse.ButtonDown += (sender, e) => {
 				if (e.Button == MouseButton.Left)
-					mouseDown = true;
+					MouseDown = true;
 			};
 
 			window.Mouse.ButtonUp += (sender, e) => {
 				if (e.Button == MouseButton.Left)
-					mouseDown = false;
+					MouseDown = false;
 			};
 
 			window.Mouse.Move += (sender, e) => {
-				mouseX = e.X * 2f / window.Width - 1;
-				mouseY = e.Y * 2f / window.Height - 1;
+				MouseX = e.X * 2f / window.Width - 1;
+				MouseY = e.Y * 2f / window.Height - 1;
 			};
 		}
 
 		public static void Update ()
 		{
-			closeKeyHasBeenPressed &= !closeKeyPressed; //If close key is pressed, set closeKeyhasBeenPressed to false
-			interactKeyHasBeenPressed &= !interactKeyPressed;
-			closeKeyPressed = closeKeyHasBeenPressed;
-			interactKeyPressed = interactKeyHasBeenPressed;
+			closeKeyHasBeenPressed &= !CloseKeyPressed; //If close key is pressed, set closeKeyhasBeenPressed to false
+			interactKeyHasBeenPressed &= !InteractKeyPressed;
+			CloseKeyPressed = closeKeyHasBeenPressed;
+			InteractKeyPressed = interactKeyHasBeenPressed;
+			for (uint i = 0; i < pressedItemKeys.Length; i++) {
+				pressedItemKeys[i] &= !ItemKeys [i];
+				ItemKeys [i] = pressedItemKeys [i];
+			}
 		}
 
 		public static void SetMousePos (float mousePosX, float mousePosY)
 		{
-			Input.mouseX = mousePosX;
-			Input.mouseY = mousePosY;
+			Input.MouseX = mousePosX;
+			Input.MouseY = mousePosY;
 		}
 	}
 }

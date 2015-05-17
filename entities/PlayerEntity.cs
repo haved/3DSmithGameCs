@@ -31,7 +31,7 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			Move (s);
-			if (Input.interactKeyPressed)
+			if (Input.InteractKeyPressed)
 				Interact (s);
 		}
 
@@ -41,18 +41,18 @@ namespace DSmithGameCs
 			accel.X = 0;
 			accel.Y = 0;
 
-			if (Input.leftKey)
+			if (Input.LeftKey)
 				accel.X -= 1;
-			if (Input.rightKey)
+			if (Input.RightKey)
 				accel.X += 1;
-			if (Input.upKey)
+			if (Input.UpKey)
 				accel.Y += 1;
-			if (Input.downKey)
+			if (Input.DownKey)
 				accel.Y -= 1;
 
-			if (touchControlls && Input.mouseDown && accel.Length <= 0) {
-				accel.X = Input.mouseX;
-				accel.Y = -Input.mouseY;
+			if (touchControlls && Input.MouseDown && accel.Length <= 0) {
+				accel.X = Input.MouseX;
+				accel.Y = -Input.MouseY;
 			}
 
 			if (accel.Length > 0) {
@@ -67,7 +67,7 @@ namespace DSmithGameCs
 				MoveAsSolid (s, speed.X * Time.delta (), speed.Y * Time.delta ());
 			}
 
-			rot.Z = (float)Math.Atan2 (-Input.mouseY,Input.mouseX);
+			rot.Z = (float)Math.Atan2 (-Input.MouseY,Input.MouseX);
 
 			UpdateModelspaceMatrix ();
 		}

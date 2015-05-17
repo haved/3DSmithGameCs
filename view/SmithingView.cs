@@ -35,7 +35,7 @@ namespace DSmithGameCs
 				transition = Math.Min (1, transition);
 			}
 
-			if (Input.closeKeyPressed) {
+			if (Input.CloseKeyPressed) {
 				game.SetView (new PauseMenuView (game));
 			}
 		}

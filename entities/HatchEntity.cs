@@ -88,7 +88,7 @@ namespace DSmithGameCs
 				hatchSpeed -= 4*hatchSpeed*Time.delta ();
 			hatchRotation += hatchSpeed * Time.delta ();
 
-			if (Input.closeKeyPressed) {
+			if (Input.CloseKeyPressed) {
 				game.SetView (prevView);
 			}
 		}

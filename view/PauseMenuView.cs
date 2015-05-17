@@ -28,7 +28,7 @@ namespace DSmithGameCs
 
 		public void UpdateView (Scene s)
 		{
-			if (Input.closeKeyPressed)
+			if (Input.CloseKeyPressed)
 				game.SetView (prevView);
 		}
 
