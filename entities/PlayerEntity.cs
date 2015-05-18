@@ -57,14 +57,14 @@ namespace DSmithGameCs
 
 			if (accel.Length > 0) {
 				accel.Normalize ();
-				speed += accel * walkSpeed * Time.delta ();
+				speed += accel * walkSpeed * Time.Delta ();
 			}
 			float l = speed.Length;
 			if (l > 0) {
 				speed.Normalize();
-				l -= l * friction * Time.delta ();
+				l -= l * friction * Time.Delta ();
 				speed *= l;
-				MoveAsSolid (s, speed.X * Time.delta (), speed.Y * Time.delta ());
+				MoveAsSolid (s, speed.X * Time.Delta (), speed.Y * Time.Delta ());
 			}
 
 			rot.Z = (float)Math.Atan2 (-Input.MouseY,Input.MouseX);

@@ -25,8 +25,8 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			if (hatchRotation < 0) {
-				hatchSpeed += Time.delta () * 8;
-				hatchRotation += hatchSpeed * Time.delta ();
+				hatchSpeed += Time.Delta () * 8;
+				hatchRotation += hatchSpeed * Time.Delta ();
 				if (hatchRotation > 0) {
 					hatchRotation = 0;
 					hatchSpeed = 0;
@@ -78,15 +78,15 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			if (transition < 1) {
-				transition += Time.delta ()*2;
+				transition += Time.Delta ()*2;
 				transition = Math.Min (1, transition);
 			}
 
 			if (hatchRotation > -1.5f)
-				hatchSpeed -= Time.delta () * 8;
+				hatchSpeed -= Time.Delta () * 8;
 			else 
-				hatchSpeed -= 4*hatchSpeed*Time.delta ();
-			hatchRotation += hatchSpeed * Time.delta ();
+				hatchSpeed -= 4*hatchSpeed*Time.Delta ();
+			hatchRotation += hatchSpeed * Time.Delta ();
 
 			if (Input.CloseKeyPressed) {
 				game.SetView (prevView);

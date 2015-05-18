@@ -18,11 +18,11 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			if (coalSpeed > 0)
-				coalSpeed += Time.delta ();
+				coalSpeed += Time.Delta ();
 			else
-				coalSpeed -= Time.delta ();
+				coalSpeed -= Time.Delta ();
 
-			flickr += Time.delta ()*2*Util.NextFloat();
+			flickr += Time.Delta ()*2*Util.NextFloat();
 			coalColor.X = coalColor.Y = coalColor.Z = 1 + (float)Math.Sin(flickr)/6;
 		}
 

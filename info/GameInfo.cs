@@ -7,6 +7,7 @@ namespace DSmithGameCs
 	{
 		public Inventory PlayerInventory;
 		public HatchInventory HatchInv;
+		public CastItem CurrentCast;
 
 		public void NewGame()
 		{

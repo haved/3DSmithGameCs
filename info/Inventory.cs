@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK;
 
 namespace DSmithGameCs
 {
 	public class Inventory
 	{
-		public const uint SIZE = 4;
+		public const int SIZE = 4;
 		readonly List<Item> items;
 		uint freeSpace = SIZE;
 
 		public Inventory ()
 		{
-			items = new List<Item> ((int)SIZE);
+			items = new List<Item> (SIZE);
 		}
 
 		public bool AddItem(Item i)
@@ -44,8 +45,27 @@ namespace DSmithGameCs
 			return freeSpace >= i.GetSize();
 		}
 
+		int selectedItem = -1;
+		public void HandleInput()
+		{
+			if (Input.PressedItemKey == -1)
+				return;
+
+			uint box = 0;
+			int index = 0;
+			for (; index < GetItemAmount (); index++) {
+				box += GetItem (index).GetSize();
+				if (box > Input.PressedItemKey)
+					break;
+			}
+
+			selectedItem = (selectedItem != index & index < GetItemAmount ()) ? index : -1;
+		}
+
 		const uint iconSize = 64;
 		const uint overscan = 20;
+		static Vector4 selected = new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1);
+		static Vector4 unSelected = Util.White;
 		public void Render ()
 		{
 			var cW = OrthoRenderEngine.GetCanvasWidth ();
@@ -55,15 +75,18 @@ namespace DSmithGameCs
 			for (int i = 0; i < GetItemAmount(); i++) {
 				Item item = GetItem(i);
 
-				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*(l+0.5f)-overscan, iconSize, iconSize/2, 0, 0, 1, 0.5f);
-				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - overscan + 2, cH - iconSize * l - overscan - 12, 10, 10, l / 4f, 0, 0.25f, 1);
+				Vector4 boxColor = i == selectedItem ? selected : Util.White;
+
+				OrthoRenderEngine.DrawColoredTexturedBox (boxColor, TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*(l+0.5f)-overscan, iconSize, iconSize/2, 0, 0, 1, 0.5f);
+				OrthoRenderEngine.DrawColoredTexturedBox (boxColor, TextureCollection.Numbers, cW - iconSize - overscan + 2, cH - iconSize * l - overscan - 12, 10, 10, l / 4f, 0, 0.25f, 1);
 				uint oldL = l;
 				for (l++; l < oldL + item.GetSize (); l++) {
-					OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*l-overscan, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
-					OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*(l+0.5f)-overscan, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
+					OrthoRenderEngine.DrawColoredTexturedBox (boxColor, TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*l-overscan, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
+					OrthoRenderEngine.DrawColoredTexturedBox (boxColor, TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*(l+0.5f)-overscan, iconSize, iconSize/2, 0, 0.25f, 1, 0.5f);
 				}
-				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*l-overscan, iconSize, iconSize/2, 0, 0.5f, 1, 0.5f);
-				item.Render (cW-iconSize-overscan, cH - iconSize * l - overscan, iconSize, iconSize*item.GetSize());
+				OrthoRenderEngine.DrawColoredTexturedBox (boxColor, TextureCollection.Button, cW-iconSize-overscan, cH-iconSize*l-overscan, iconSize, iconSize/2, 0, 0.5f, 1, 0.5f);
+				float bob = i == selectedItem ? (float) Math.Sin(Time.CurrentTime()*5)*4+2 : 0;
+				item.Render (cW-iconSize-overscan-bob, cH - iconSize * l - overscan-bob, iconSize+bob*2, iconSize*item.GetSize()+bob*2);
 			}
 
 			for (uint i = l; i < Inventory.SIZE; i++) {

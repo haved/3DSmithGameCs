@@ -31,13 +31,15 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			if (transition < 1) {
-				transition += Time.delta ()*2;
+				transition += Time.Delta ()*2;
 				transition = Math.Min (1, transition);
 			}
 
 			if (Input.CloseKeyPressed) {
 				game.SetView (new PauseMenuView (game));
 			}
+
+			game.GameStats.PlayerInventory.HandleInput ();
 		}
 
 		public bool ShouldRenderScene ()

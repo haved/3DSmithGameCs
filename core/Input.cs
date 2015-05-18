@@ -16,10 +16,10 @@ namespace DSmithGameCs
 
 		public static float MouseX, MouseY;
 		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
-		public static bool InteractKeyPressed, CloseKeyPressed;
-		public static bool[] ItemKeys = new bool[ITEM_KEYS.Length];
-		private static bool closeKeyHasBeenPressed, interactKeyHasBeenPressed;
-		private static bool[] pressedItemKeys = new bool[ITEM_KEYS.Length];
+		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed;
+		public static int PressedItemKey = -1;
+		private static bool closeKeyBuffered, interactKeyBuffered, mousePressBuffered;
+		private static int bufferedItemKey = -1;
 
 
 		public static void AddToWindow (GameWindow window)
@@ -30,7 +30,7 @@ namespace DSmithGameCs
 				
 				switch (e.Key) {
 				case CLOSE_KEY:
-					closeKeyHasBeenPressed = true;
+					closeKeyBuffered = true;
 					break;
 				case LEFT_KEY:
 					LeftKey = true;
@@ -45,16 +45,16 @@ namespace DSmithGameCs
 					DownKey = true;
 					break;
 				case INTERACT_KEY:
-					interactKeyHasBeenPressed = true;
+					interactKeyBuffered = true;
 					break;
 				default:
 					break;
 				}
 					
-				for(uint i = 0; i < ITEM_KEYS.Length; i++)
+				for(int i = 0; i < ITEM_KEYS.Length; i++)
 					if(e.Key == ITEM_KEYS[i])
 					{
-						pressedItemKeys[i] = true;
+						bufferedItemKey = i;
 						break;
 					}
 			};
@@ -80,7 +80,10 @@ namespace DSmithGameCs
 
 			window.Mouse.ButtonDown += (sender, e) => {
 				if (e.Button == MouseButton.Left)
+				{
 					MouseDown = true;
+					mousePressBuffered = true;
+				}
 			};
 
 			window.Mouse.ButtonUp += (sender, e) => {
@@ -96,14 +99,17 @@ namespace DSmithGameCs
 
 		public static void Update ()
 		{
-			closeKeyHasBeenPressed &= !CloseKeyPressed; //If close key is pressed, set closeKeyhasBeenPressed to false
-			interactKeyHasBeenPressed &= !InteractKeyPressed;
-			CloseKeyPressed = closeKeyHasBeenPressed;
-			InteractKeyPressed = interactKeyHasBeenPressed;
-			for (uint i = 0; i < pressedItemKeys.Length; i++) {
-				pressedItemKeys[i] &= !ItemKeys [i];
-				ItemKeys [i] = pressedItemKeys [i];
-			}
+			closeKeyBuffered &= !CloseKeyPressed; //If close key is pressed from the previos tick, set closeKeyBuffered to false
+			CloseKeyPressed = closeKeyBuffered;
+
+			interactKeyBuffered &= !InteractKeyPressed; //Same as the above
+			InteractKeyPressed = interactKeyBuffered;
+
+			mousePressBuffered &= !MousePressed;
+			MousePressed = mousePressBuffered;
+			if (PressedItemKey != -1)
+				bufferedItemKey = -1;
+			PressedItemKey = bufferedItemKey;
 		}
 
 		public static void SetMousePos (float mousePosX, float mousePosY)

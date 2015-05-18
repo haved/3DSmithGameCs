@@ -38,7 +38,7 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			if (transition < 1) {
-				transition += Time.delta ()*2;
+				transition += Time.Delta ()*2;
 				transition = Math.Min (1, transition);
 			}
 
