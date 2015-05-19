@@ -34,7 +34,16 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed (InteractiveEntity entity, object source)
 		{
-			Console.Out.WriteLine ("Yo!");
+			if (game.GameStats.CurrentCast == null & game.GameStats.PlayerInventory.HasSelectedItem ()) {
+				CastItem cast = game.GameStats.PlayerInventory.GetSelectedItem () as CastItem;
+				if (cast != null) {
+					game.GameStats.CurrentCast = cast;
+					game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
+				}
+			} else if (game.GameStats.CurrentCast != null && !game.GameStats.PlayerInventory.HasSelectedItem () & game.GameStats.PlayerInventory.CanFitItem(game.GameStats.CurrentCast)) {
+				game.GameStats.PlayerInventory.AddItem (game.GameStats.CurrentCast);
+				game.GameStats.CurrentCast = null;
+			}
 		}
 
 		#endregion

@@ -38,6 +38,7 @@ namespace DSmithGameCs
 		{
 			freeSpace += items [index].GetSize ();
 			items.RemoveAt (index);
+			selectedItem = -1;
 		}
 
 		public bool CanFitItem(Item i)
@@ -48,18 +49,41 @@ namespace DSmithGameCs
 		int selectedItem = -1;
 		public void HandleInput()
 		{
-			if (Input.PressedItemKey == -1)
+			int pressedBox = -1;
+
+			if (Input.PressedItemKey != -1)
+				pressedBox = Input.PressedItemKey;
+			else if (Input.MousePressed && Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-overscan & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-iconSize-overscan &
+			Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight()-overscan & Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight()-iconSize*SIZE-overscan)
+				pressedBox = (int)((OrthoRenderEngine.GetCanvasHeight () - Input.OrthoMouseY - overscan) / iconSize);
+
+			if (pressedBox == -1)
 				return;
 
 			uint box = 0;
 			int index = 0;
 			for (; index < GetItemAmount (); index++) {
 				box += GetItem (index).GetSize();
-				if (box > Input.PressedItemKey)
+				if (box > pressedBox)
 					break;
 			}
 
 			selectedItem = (selectedItem != index & index < GetItemAmount ()) ? index : -1;
+		}
+
+		public bool HasSelectedItem()
+		{
+			return selectedItem != -1;
+		}
+
+		public int GetSelectedItemIndex()
+		{
+			return selectedItem;
+		}
+
+		public Item GetSelectedItem()
+		{
+			return items [selectedItem];
 		}
 
 		const uint iconSize = 64;

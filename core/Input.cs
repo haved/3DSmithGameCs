@@ -15,6 +15,7 @@ namespace DSmithGameCs
 		private static Key[] ITEM_KEYS = {Key.Number1, Key.Number2, Key.Number3, Key.Number4};
 
 		public static float MouseX, MouseY;
+		public static float OrthoMouseX, OrthoMouseY;
 		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
 		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed;
 		public static int PressedItemKey = -1;
@@ -94,6 +95,8 @@ namespace DSmithGameCs
 			window.Mouse.Move += (sender, e) => {
 				MouseX = e.X * 2f / window.Width - 1;
 				MouseY = e.Y * 2f / window.Height - 1;
+				OrthoMouseX = (float)e.X / window.Width * OrthoRenderEngine.GetCanvasWidth();
+				OrthoMouseY = (1-(float)e.Y / window.Height) * OrthoRenderEngine.GetCanvasHeight();
 			};
 		}
 
