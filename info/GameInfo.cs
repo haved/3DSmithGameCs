@@ -9,6 +9,8 @@ namespace DSmithGameCs
 		public HatchInventory HatchInv;
 		public CastItem CurrentCast;
 
+		public Item[] FoundryContents = new Item[4];
+
 		public void NewGame()
 		{
 			PlayerInventory = new Inventory ();
