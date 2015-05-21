@@ -81,7 +81,7 @@ namespace DSmithGameCs
 				var interactiveEntity = e as InteractiveEntity;
 				if(interactiveEntity != null)
 				{
-					if ((pos + new Vector3 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z), 0) * 3 - e.pos).Length < 4)
+					if(interactiveEntity.IsInField (pos.Xy + new Vector2((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z))*3))
 						interactiveEntity.Interact (this);
 				}
 			}

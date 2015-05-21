@@ -5,9 +5,8 @@ namespace DSmithGameCs
 {
 	public class CastingTableEntity : InteractiveEntity, EntityEventListener
 	{
-		Smith2DGame game;
-
-		Matrix4 castModelspace;
+		readonly Smith2DGame game;
+		readonly Matrix4 castModelspace;
 
 		public CastingTableEntity (Smith2DGame game, Mesh m, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
 		{

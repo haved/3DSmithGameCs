@@ -19,11 +19,13 @@ namespace DSmithGameCs
 			OrthoRenderEngine.DrawColoredMesh (type.GetSolidMesh(), ItemMatrix, type.GetColor(), x+4, y+4, width-8, height-8, -1, -2, 2, 4);
 		}
 
-		public void RenderMesh(Matrix4 location, float width, float height)
+		public void RenderMesh(Matrix4 location, Matrix4 VP)
 		{
 			BasicShader.GetInstance ().SetColor (type.GetColor ());
 			BasicShader.GetInstance ().SetModelspaceMatrix (location);
+			BasicShader.GetInstance ().SetMVP (location*VP);
 			type.GetSolidMesh ().Draw();
+			BasicShader.GetInstance ().ResetColor ();
 		}
 
 		public override uint GetSize()

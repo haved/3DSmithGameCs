@@ -9,7 +9,7 @@ namespace DSmithGameCs
 		public HatchInventory HatchInv;
 		public CastItem CurrentCast;
 
-		public Item[] FoundryContents = new Item[4];
+		public IngotItem[] FoundryContents = new IngotItem[FoundryMeshInfo.IngotAmount];
 
 		public void NewGame()
 		{
