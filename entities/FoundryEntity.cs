@@ -52,10 +52,10 @@ namespace DSmithGameCs
 		{
 			Matrix4 ingotMatrix = Matrix4.CreateRotationZ((float)Math.PI/2)*Matrix4.CreateScale (1.4f);
 			Matrix4[] output = new Matrix4[IngotAmount];
-			output [0] = ingotMatrix*Matrix4.CreateTranslation (2.45f, 1.26f, 3);//*ingotMatrix;
-			output [1] = ingotMatrix*Matrix4.CreateTranslation (1.65f, -1.65f, 3)*ingotMatrix;
-			output [2] = ingotMatrix*Matrix4.CreateTranslation (0.44f, 1.26f, 3)*ingotMatrix;
-			output [3] = ingotMatrix*Matrix4.CreateTranslation (-0.83f, -1.65f, 3)*ingotMatrix;
+			output [0] = ingotMatrix*Matrix4.CreateTranslation (2.45f, 1.26f, 3);
+			output [1] = ingotMatrix*Matrix4.CreateTranslation (1.65f, -1.65f, 3);
+			output [2] = ingotMatrix*Matrix4.CreateTranslation (0.44f, 1.26f, 3);
+			output [3] = ingotMatrix*Matrix4.CreateTranslation (-0.83f, -1.65f, 3);
 			return output;
 		}
 	}
