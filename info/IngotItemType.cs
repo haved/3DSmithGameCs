@@ -3,17 +3,19 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class MeltableItemType : ItemType
+	public class IngotItemType
 	{
-		private Vector4 color;
-		public MeltableItemType (uint id, uint texture, Vector4 color) : base(id, texture)
+		public static IngotItemType Iron = new IngotItemType(new Vector4(0.7f, 0.7f, 0.7f, 1f));
+
+		Vector4 color;
+		public IngotItemType (Vector4 color)
 		{
 			this.color = color;
 		}
 
 		public virtual Mesh GetSolidMesh()
 		{
-			MeshCollection.Ingot;
+			return MeshCollection.Ingot;
 		}
 
 		public Vector4 GetColor()

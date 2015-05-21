@@ -2,21 +2,15 @@
 
 namespace DSmithGameCs
 {
-	public class Item
+	public abstract class Item
 	{
 		public Item ()
 		{
 		}
 
-		public virtual uint GetSize()
-		{
-			return 1;
-		}
+		public abstract uint GetSize ();
 
-		public virtual void Render(float x, float y, float width, float height)
-		{
-			
-		}
+		public abstract void RenderItem (float x, float y, float width, float height);
 	}
 }
 
