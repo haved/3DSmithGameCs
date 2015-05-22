@@ -5,22 +5,18 @@ namespace DSmithGameCs
 {
 	public class SmithingView : View
 	{
-		private Vector3 prevEyePos, prevEyeTarget, prevEyeUp;
-		private float transition;
+		Transition transition;
 		private readonly Smith2DGame game;
 
 		public SmithingView(Smith2DGame game)
 		{
 			this.game = game;
-			transition = 1;
+			transition = new Transition ();
 		}
 
 		public void OnViewUsed(View prevView)
 		{
-			prevEyePos = prevView.GetEyePos ();
-			prevEyeTarget= prevView.GetEyeTarget ();
-			prevEyeUp = prevView.GetEyeUp ();
-			transition = 0;
+			transition.SetStart (prevView.GetEyePos(), prevView.GetEyeTarget(), prevView.GetEyeUp());
 		}
 
 		public bool ShouldUpdateScene ()
@@ -30,10 +26,7 @@ namespace DSmithGameCs
 
 		public void UpdateView (Scene s)
 		{
-			if (transition < 1) {
-				transition += Time.Delta ()*2;
-				transition = Math.Min (1, transition);
-			}
+			transition.UpdateTransition (Time.Delta () * 2);
 
 			if (Input.CloseKeyPressed) {
 				game.SetView (new PauseMenuView (game));
@@ -49,17 +42,17 @@ namespace DSmithGameCs
 
 		public Vector3 GetEyePos()
 		{
-			return transition < 1 ? new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40) * transition + prevEyePos*(1-transition) : new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40);
+			return transition.GetEyePos (new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40));
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition < 1 ? new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f) * transition + prevEyeTarget*(1-transition) : new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f);
+			return transition.GetEyeTarget (new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f));
 		}
 
 		public Vector3 GetEyeUp()
 		{
-			return transition < 1 ? Vector3.UnitY * transition + prevEyeUp * (1 - transition) : Vector3.UnitY;
+			return transition.GetEyeUp (Vector3.UnitY);
 		}
 
 		public void RenderView (Scene s)

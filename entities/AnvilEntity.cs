@@ -18,15 +18,11 @@ namespace DSmithGameCs
 		}
 
 		//Stuff related to the view
-		private Vector3 prevEyePos, prevEyeTarget, prevEyeUp;
-		private View prevView;
-		private float transition;
+		Transition transition = new Transition();
+		View prevView;
 		public void OnViewUsed(View prevView)
 		{
-			this.transition = 0;
-			this.prevEyePos = prevView.GetEyePos ();
-			this.prevEyeTarget= prevView.GetEyeTarget ();
-			this.prevEyeUp = prevView.GetEyeUp ();
+			transition.SetStart (prevView);
 			this.prevView = prevView;
 		}
 
@@ -37,10 +33,7 @@ namespace DSmithGameCs
 
 		public void UpdateView (Scene s)
 		{
-			if (transition < 1) {
-				transition += Time.Delta ()*2;
-				transition = Math.Min (1, transition);
-			}
+			transition.UpdateTransition (Time.Delta()*2);
 
 			if (Input.CloseKeyPressed) {
 				game.SetView (prevView);
@@ -52,24 +45,25 @@ namespace DSmithGameCs
 			return true;
 		}
 
+		static Vector3 eyeOffset = new Vector3(0, 0, 10);
 		public Vector3 GetEyePos()
 		{
-			return transition < 1 ? (pos + new Vector3 (0, 0, 10)) * transition + prevEyePos * (1 - transition) : pos + new Vector3 (0, 0, 10);
+			return transition.GetEyePos (pos+eyeOffset);
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition < 1 ? pos*transition + prevEyeTarget*(1-transition) : pos;
+			return transition.GetEyeTarget (pos);
 		}
 
 		public Vector3 GetEyeUp()
 		{
-			return transition < 1 ? Vector3.UnitY*transition+prevEyeUp*(1-transition) : Vector3.UnitY;
+			return transition.GetEyeUp (Vector3.UnitY);
 		}
 
 		public void RenderView (Scene s)
 		{
-			
+			game.GameStats.PlayerInventory.Render ();
 		}
 	}
 }
