@@ -86,6 +86,11 @@ namespace DSmithGameCs
 			return items [selectedItem];
 		}
 
+		public void Deselect()
+		{
+			selectedItem = -1;
+		}
+
 		const uint iconSize = 64;
 		const uint overscan = 20;
 		static Vector4 selected = new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1);
@@ -117,6 +122,11 @@ namespace DSmithGameCs
 				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*(i+1)-20, iconSize, iconSize, 0, 0, 1, 1);
 				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - 20 + 2, cH - iconSize * i - 20 - 12, 10, 10, i / 4f, 0, 0.25f, 1);
 			}
+		}
+
+		public void InventoryTooFull(Item item)
+		{
+			Console.Out.WriteLine ("The inventory can't fit that item!");
 		}
 	}
 }

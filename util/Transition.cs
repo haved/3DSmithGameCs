@@ -41,6 +41,11 @@ namespace DSmithGameCs
 			smoothTransition = Util.GetSmoothTransition (transition);
 		}
 
+		public bool IsDone()
+		{
+			return transition >= 1;
+		}
+
 		public Vector3 GetEyePos(Vector3 newEyePos)
 		{
 			return smoothTransition < 1 ? newEyePos * smoothTransition + prevEyePos*(1-smoothTransition) : newEyePos;

@@ -49,8 +49,8 @@ namespace DSmithGameCs
 				accel.Y -= 1;
 
 			/*if (touchControlls && Input.MouseDown && accel.Length <= 0) { //Wonkey touch controlls
-				accel.X = Input.MouseX;
-				accel.Y = -Input.MouseY;
+				accel.X = Input.RelativeMouseX;
+				accel.Y = -Input.RelativeMouseY;
 			}*/
 
 			if (accel.Length > 0) {
@@ -65,7 +65,7 @@ namespace DSmithGameCs
 				MoveAsSolid (s, speed.X * Time.Delta (), speed.Y * Time.Delta ());
 			}
 
-			rot.Z = (float)Math.Atan2 (-Input.MouseY,Input.MouseX);
+			rot.Z = (float)Math.Atan2 (-Input.RelativeMouseY,Input.RelativeMouseX);
 
 			UpdateModelspaceMatrix ();
 		}

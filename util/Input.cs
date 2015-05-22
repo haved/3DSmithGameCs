@@ -14,7 +14,7 @@ namespace DSmithGameCs
 		private const Key CLOSE_KEY = Key.Escape;
 		private static Key[] ITEM_KEYS = {Key.Number1, Key.Number2, Key.Number3, Key.Number4};
 
-		public static float MouseX, MouseY;
+		public static float RelativeMouseX, RelativeMouseY;
 		public static float OrthoMouseX, OrthoMouseY;
 		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
 		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed;
@@ -93,8 +93,8 @@ namespace DSmithGameCs
 			};
 
 			window.Mouse.Move += (sender, e) => {
-				MouseX = e.X * 2f / window.Width - 1;
-				MouseY = e.Y * 2f / window.Height - 1;
+				RelativeMouseX = e.X * 2f / window.Width - 1;
+				RelativeMouseY = e.Y * 2f / window.Height - 1;
 				OrthoMouseX = (float)e.X / window.Width * OrthoRenderEngine.GetCanvasWidth();
 				OrthoMouseY = (1-(float)e.Y / window.Height) * OrthoRenderEngine.GetCanvasHeight();
 			};
@@ -117,8 +117,8 @@ namespace DSmithGameCs
 
 		public static void SetMousePos (float mousePosX, float mousePosY)
 		{
-			Input.MouseX = mousePosX;
-			Input.MouseY = mousePosY;
+			Input.RelativeMouseX = mousePosX;
+			Input.RelativeMouseY = mousePosY;
 		}
 	}
 }
