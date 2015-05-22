@@ -7,7 +7,6 @@ namespace DSmithGameCs
 	{
 		protected EntityEventListener EventHandler;
 
-
 		public InteractiveEntity (EntityEventListener eventHandler, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, 0, 0, 0, xSize, ySize)
 		{
 			this.EventHandler = eventHandler;
@@ -22,7 +21,7 @@ namespace DSmithGameCs
 
 		public bool IsInField(Vector2 point)
 		{
-			return ((point - pos.Xy) * new Vector2 (1 / xSize, 1 / ySize)).Length < 1;
+			return ((point - pos.Xy) * new Vector2 (1 / xSize, 1 / ySize)).Length < 1.4f;
 		}
 	}
 }

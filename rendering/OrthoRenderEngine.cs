@@ -107,6 +107,7 @@ namespace DSmithGameCs
 		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height, float meshX1, float meshY1, float meshWidth, float meshHeight)
 		{
 			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateTranslation(-meshX1, -meshY1, 0)*Matrix4.CreateScale(width/meshWidth, height/meshHeight, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
+			BasicShader.GetInstance ().SetModelspaceMatrix (Matrix4.Identity);
 			BasicShader.GetInstance ().SetColor (color);
 			mesh.Draw ();
 			BasicShader.GetInstance ().ResetColor ();

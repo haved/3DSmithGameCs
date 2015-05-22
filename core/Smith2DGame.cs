@@ -50,6 +50,7 @@ namespace DSmithGameCs
 			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), -5, -8.5f, 0, 6, 3));
 			CurrentScene.AddEntity (new FoundryEntity (this, new Mesh ("../../res/foundry.ply"), -11.5f, -6.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			CurrentScene.AddEntity (new CastingTableEntity (this, new Mesh ("../../res/castingTable.ply"), -11.5f, -1f, 1.85f, 6.25f, 3.3f));
+			CurrentScene.AddEntity (new MailboxEntity(this, new Mesh("../../res/mailboxBox.ply"),new Mesh("../../res/mailboxLid.ply"), Matrix4.CreateTranslation(0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
 		}
 
 		public void Update ()
