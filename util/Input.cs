@@ -85,6 +85,8 @@ namespace DSmithGameCs
 					MouseDown = true;
 					mousePressBuffered = true;
 				}
+				else if(e.Button == MouseButton.Right)
+					interactKeyBuffered = true;
 			};
 
 			window.Mouse.ButtonUp += (sender, e) => {
