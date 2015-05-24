@@ -12,7 +12,7 @@ namespace DSmithGameCs
 		{
 			this.game = game;
 			EventHandler = this;
-			castModelspace = Matrix4.CreateScale(1.5f)*Matrix4.CreateTranslation (0, 0, height)*Matrix4.CreateRotationZ((float)Math.PI/2);
+			castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (0, 0, height);
 		}
 
 		public override void Render(Scene s, Matrix4 VP)

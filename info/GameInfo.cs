@@ -9,7 +9,7 @@ namespace DSmithGameCs
 		public HatchInventory HatchInv;
 		public CastItem CurrentCast;
 
-		public List<IngotItem> FoundryIngots = new List<IngotItem> (FoundryMeshInfo.IngotAmount);
+		public SolidList<IngotItem> FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
 		public Alloy FoundryAlloy = new Alloy();
 
 		public float AirQuality = 25;
@@ -22,6 +22,7 @@ namespace DSmithGameCs
 			HatchInv = new HatchInventory ();
 			PlayerInventory.AddItem (new IngotItem(BasicMetal.Iron));
 			HatchInv.AddItem (new CastItem (MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
+			HatchInv.AddItem (new CastItem (MeshCollection.IngotCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Iron));

@@ -35,10 +35,10 @@ namespace DSmithGameCs
 			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
 				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();
 
-			Console.Out.WriteLine ("*C: " + game.GameStats.FoundryTemprature + " Air%: " + game.GameStats.AirQuality + "Coal%: " + game.GameStats.CoalPercent);
-
-			for (int i = 0; i < game.GameStats.FoundryIngots.Count; i++) {
+			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
 				IngotItem ingot = game.GameStats.FoundryIngots [i];
+				if (ingot == null)
+					continue;
 				game.GameStats.FoundryAlloy.AddMetal (ingot.GetMetal (), ingot.Melt (game.GameStats.FoundryTemprature));
 				if (ingot.GetSolidProgress () <= 0)
 					game.GameStats.FoundryIngots.RemoveAt (i);
@@ -50,9 +50,9 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
 			BasicShader.GetInstance ().SetMVP(modelspace * VP);
 			Draw (s);
-			for(int i = 0; i < game.GameStats.FoundryIngots.Count; i++)
-				if (game.GameStats.FoundryIngots[i].GetSolidProgress()>0.2f)
-					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale(1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress())*IngotMatrices[i]*modelspace, VP);
+			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++)
+				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
+					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * modelspace, VP);
 
 			if (game.GameStats.FoundryAlloy.GetAmount () < 0.01f)
 				return;
