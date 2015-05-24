@@ -3,15 +3,46 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class FoundryEntity : InteractiveEntity, EntityEventListener
+	public class FoundryEntity : InteractiveEntity, IEntityEventListener
 	{
 		readonly Smith2DGame game;
 		readonly Matrix4[] IngotMatrices;
-		public FoundryEntity (Smith2DGame game, Mesh m, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
+		readonly Mesh molten;
+		readonly Matrix4 liquidTransform;
+		public FoundryEntity (Smith2DGame game, Mesh m, Mesh molten, Matrix4 liquidTransform, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
+			this.molten = molten;
+			this.liquidTransform = liquidTransform;
 			this.EventHandler = this;
 			this.IngotMatrices = ingotMatrices;
+		}
+
+		const float maxTemp = 1927; //The temprature of coal under perfect air conditions
+		public override void Update(Scene s)
+		{
+			float wantedTemprature = game.GameStats.AirQuality / 100 * maxTemp;
+			if (game.GameStats.CoalPercent < 10)
+				wantedTemprature *= game.GameStats.CoalPercent / 10;
+			game.GameStats.CoalPercent -= Time.Delta ()/4;
+			float lowestPossibleAirQuality = (100 - game.GameStats.CoalPercent) / 6 + 15;
+			game.GameStats.AirQuality -= game.GameStats.AirQuality /10 * Time.Delta ();
+				game.GameStats.AirQuality = game.GameStats.AirQuality < lowestPossibleAirQuality ? lowestPossibleAirQuality : game.GameStats.AirQuality;
+
+			if (game.GameStats.FoundryTemprature < wantedTemprature) {
+				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent;
+				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
+			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
+				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();
+
+			Console.Out.WriteLine ("*C: " + game.GameStats.FoundryTemprature + " Air%: " + game.GameStats.AirQuality + "Coal%: " + game.GameStats.CoalPercent);
+
+			for (int i = 0; i < game.GameStats.FoundryIngots.Count; i++) {
+				IngotItem ingot = game.GameStats.FoundryIngots [i];
+				game.GameStats.FoundryAlloy.AddMetal (ingot.GetMetal (), ingot.Melt (game.GameStats.FoundryTemprature));
+				if (ingot.GetSolidProgress () <= 0)
+					game.GameStats.FoundryIngots.RemoveAt (i);
+			}
 		}
 
 		public override void Render(Scene s, Matrix4 VP)
@@ -19,9 +50,19 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
 			BasicShader.GetInstance ().SetMVP(modelspace * VP);
 			Draw (s);
-			for(int i = 0; i < game.GameStats.FoundryContents.Length; i++)
-				if (game.GameStats.FoundryContents[i] != null)
-					game.GameStats.FoundryContents [i].RenderMesh (IngotMatrices[i]*modelspace, VP);
+			for(int i = 0; i < game.GameStats.FoundryIngots.Count; i++)
+				if (game.GameStats.FoundryIngots[i].GetSolidProgress()>0.2f)
+					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale(1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress())*IngotMatrices[i]*modelspace, VP);
+
+			if (game.GameStats.FoundryAlloy.GetAmount () < 0.01f)
+				return;
+			
+			Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * modelspace;
+			BasicShader.GetInstance ().SetModelspaceMatrix (m);
+			BasicShader.GetInstance ().SetMVP (m*VP);
+			BasicShader.GetInstance ().SetColor (game.GameStats.FoundryAlloy.GetColor ());
+			molten.Draw ();
+			BasicShader.GetInstance ().ResetColor ();
 		}
 
 		#region EntityEventListener implementation
@@ -31,13 +72,10 @@ namespace DSmithGameCs
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var ingotItem = game.GameStats.PlayerInventory.GetSelectedItem () as IngotItem;
 				if(ingotItem != null)
-					for (int i = 0; i < game.GameStats.FoundryContents.Length; i++) {
-						if (game.GameStats.FoundryContents [i] == null) {
-							game.GameStats.FoundryContents [i] = ingotItem;
-							game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
-							break;
-						}
-					}
+				if (game.GameStats.FoundryIngots.Count < game.GameStats.FoundryIngots.Capacity) {
+					game.GameStats.FoundryIngots.Add(ingotItem);
+					game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
+				}
 			}
 		}
 
@@ -46,7 +84,7 @@ namespace DSmithGameCs
 
 	public static class FoundryMeshInfo
 	{
-		public const uint IngotAmount = 4;
+		public const int IngotAmount = 4;
 
 		public static Matrix4[] CreateIngotMatrices()
 		{

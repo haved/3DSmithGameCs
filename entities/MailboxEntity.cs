@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class MailboxEntity : InteractiveEntity, EntityEventListener
+	public class MailboxEntity : InteractiveEntity, IEntityEventListener
 	{
 		readonly Smith2DGame game;
 		readonly Mesh box, lid;

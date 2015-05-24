@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class HatchEntity : InteractiveEntity, EntityEventListener, View
+	public class HatchEntity : InteractiveEntity, IEntityEventListener, View
 	{
 		private readonly Smith2DGame game;
 		readonly Mesh hatchHole;

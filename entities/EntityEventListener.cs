@@ -2,7 +2,7 @@
 
 namespace DSmithGameCs
 {
-	public interface EntityEventListener
+	public interface IEntityEventListener
 	{
 		void InteractionPerformed(InteractiveEntity entity, object source);
 	}

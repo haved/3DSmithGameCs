@@ -3,10 +3,10 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BellowEntity : InteractiveEntity, EntityEventListener
+	public class BellowEntity : InteractiveEntity, IEntityEventListener
 	{
 		const float maxBellowSize = 1;
-		const float minBellowSize = 0.3f;
+		const float minBellowSize = 0.4f;
 		float bellowSize = maxBellowSize;
 		float bellowSpeed = 0;
 
@@ -23,6 +23,8 @@ namespace DSmithGameCs
 		public override void Update(Scene s)
 		{
 			bellowSize += bellowSpeed * Time.Delta ();
+			if(bellowSpeed < 0)
+				game.GameStats.AirQuality += Time.Delta () * 20;
 			if (bellowSize > maxBellowSize & bellowSpeed > 0)
 				bellowSpeed -= bellowSpeed * Time.Delta () * 6;
 			if (bellowSize < minBellowSize)
@@ -32,7 +34,7 @@ namespace DSmithGameCs
 		public override void Render(Scene s, Matrix4 VP)
 		{
 			Matrix4 newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * modelspace;
-			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			BasicShader.GetInstance ().SetModelspaceMatrix (newModelspace);
 			BasicShader.GetInstance ().SetMVP (newModelspace * VP);
 			base.Draw (s);
 		}

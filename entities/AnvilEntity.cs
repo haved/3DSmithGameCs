@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class AnvilEntity : InteractiveEntity, EntityEventListener, View
+	public class AnvilEntity : InteractiveEntity, IEntityEventListener, View
 	{
 		private readonly Smith2DGame game;
 

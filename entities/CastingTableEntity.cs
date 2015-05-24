@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class CastingTableEntity : InteractiveEntity, EntityEventListener
+	public class CastingTableEntity : InteractiveEntity, IEntityEventListener
 	{
 		readonly Smith2DGame game;
 		readonly Matrix4 castModelspace;

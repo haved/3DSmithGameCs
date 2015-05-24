@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using System.Collections.Generic;
 
 namespace DSmithGameCs
 {
@@ -8,17 +9,22 @@ namespace DSmithGameCs
 		public HatchInventory HatchInv;
 		public CastItem CurrentCast;
 
-		public IngotItem[] FoundryContents = new IngotItem[FoundryMeshInfo.IngotAmount];
+		public List<IngotItem> FoundryIngots = new List<IngotItem> (FoundryMeshInfo.IngotAmount);
+		public Alloy FoundryAlloy = new Alloy();
+
+		public float AirQuality = 25;
+		public float CoalPercent = 80;
+		public float FoundryTemprature = 25;
 
 		public void NewGame()
 		{
 			PlayerInventory = new Inventory ();
 			HatchInv = new HatchInventory ();
-			PlayerInventory.AddItem (new IngotItem(IngotItemType.Iron));
+			PlayerInventory.AddItem (new IngotItem(BasicMetal.Iron));
 			HatchInv.AddItem (new CastItem (MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
-			HatchInv.AddItem (new IngotItem(IngotItemType.Iron));
-			HatchInv.AddItem (new IngotItem(IngotItemType.Iron));
-			HatchInv.AddItem (new IngotItem(IngotItemType.Iron));
+			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
+			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
+			HatchInv.AddItem (new IngotItem(BasicMetal.Iron));
 		}
 	}
 }
