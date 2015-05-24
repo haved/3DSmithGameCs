@@ -32,12 +32,18 @@ namespace DSmithGameCs
 				foreach (MetalMass mm in alloy.metals)
 					AddMetal (mm.Metal, mm.Amount/alloy.totalAmount*amount);
 			} else {
-				metals.Add (new MetalMass (m, amount));
 				color = totalAmount * color + amount * m.GetColor ();
 				meltingPoint = (int)(totalAmount * meltingPoint + amount * m.GetMeltingPoint ());
 				totalAmount += amount;
 				color /= totalAmount;
 				meltingPoint = (int)(meltingPoint / totalAmount);
+				for (int i = 0; i < metals.Count; i++) {
+					if (metals [i].Metal == m) {
+						metals [i].Amount += amount;
+						return;
+					}
+				}
+				metals.Add (new MetalMass (m, amount));
 			}
 		}
 
