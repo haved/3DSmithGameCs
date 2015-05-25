@@ -10,7 +10,7 @@ namespace DSmithGameCs
 		public static BasicMetal Gold = new BasicMetal(new Vector4(0.7f, 0.7f, 0.7f, 1f), 1063, "Gold");
 		public static BasicMetal Iron = new BasicMetal(new Vector4(0.7f, 0.7f, 0.7f, 1f), 1536, "Iron");
 		public static BasicMetal Lead = new BasicMetal(new Vector4(0.7f, 0.7f, 0.7f, 1f), 327, "Lead");
-		public static BasicMetal Steal = new BasicMetal(new Vector4(0.7f, 0.7f, 0.7f, 1f), 1510, "Steal");
+		public static BasicMetal Steel = new BasicMetal(new Vector4(0.7f, 0.7f, 0.7f, 1f), 1510, "Steel");
 
 		readonly Vector4 color;
 		readonly int meltingPoint;

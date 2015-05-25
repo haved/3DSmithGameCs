@@ -1,14 +1,15 @@
 ﻿using System;
+using OpenTK;
 
 namespace DSmithGameCs
 {
 	public abstract class Item
 	{
-		public Item ()
-		{
-		}
-
 		public abstract uint GetSize ();
+
+		public abstract string GetTooltipName ();
+
+		public abstract Vector4 GetTooltipColor ();
 
 		public abstract void RenderItem (float x, float y, float width, float height);
 	}

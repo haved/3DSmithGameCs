@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK;
 
 namespace DSmithGameCs
 {
@@ -21,6 +22,16 @@ namespace DSmithGameCs
 		public override uint GetSize()
 		{
 			return type.GetSize ();
+		}
+
+		public override string GetTooltipName()
+		{
+			return "!!!StaticItem!!!";
+		}
+
+		public override Vector4 GetTooltipColor()
+		{
+			return Vector4.Zero;
 		}
 	}
 }

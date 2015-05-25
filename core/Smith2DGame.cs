@@ -46,12 +46,13 @@ namespace DSmithGameCs
 			CurrentScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
 			CurrentScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
 			CurrentScene.AddEntity (new AnvilEntity (this, new Mesh ("../../res/anvil.ply"), -15 + 9, 9, 0, 8, 3));
-			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
-			CurrentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 11.5f, -8, 0, 7, 4));
+			CurrentScene.AddEntity (new CastingTableEntity (this, new Mesh ("../../res/castingTable.ply"), -11.5f, -1f, 1.55f, 6.25f, 3.3f));
 			CurrentScene.AddEntity (new FoundryEntity (this, new Mesh ("../../res/foundry.ply"), new Mesh("../../res/foundryMoltenMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.99f), -11.5f, -6.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			CurrentScene.AddEntity (new BellowEntity(this, new Mesh("../../res/bellow.ply"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
-			CurrentScene.AddEntity (new CastingTableEntity (this, new Mesh ("../../res/castingTable.ply"), -11.5f, -1f, 1.55f, 6.25f, 3.3f));
+			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
+			CurrentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 11.5f, -8, 0, 7, 4));
 			CurrentScene.AddEntity (new MailboxEntity(this, new Mesh("../../res/mailboxBox.ply"),new Mesh("../../res/mailboxLid.ply"), Matrix4.CreateTranslation(0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
+
 		}
 
 		public void Update ()

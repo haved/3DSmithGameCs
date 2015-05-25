@@ -40,6 +40,17 @@ namespace DSmithGameCs
 			return metal.GetColor ();
 		}
 
+		public override string GetTooltipName()
+		{
+			return metal.GetName() + " Ingot";
+		}
+
+		public override Vector4 GetTooltipColor()
+		{
+			return metal.GetColor();
+		}
+
+
 		public float Melt(float temprature)
 		{
 			float melt = Time.Delta()*(.1f+(temprature - metal.GetMeltingPoint ())/100);

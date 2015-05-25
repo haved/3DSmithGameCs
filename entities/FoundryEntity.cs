@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
@@ -16,6 +17,7 @@ namespace DSmithGameCs
 			this.liquidTransform = liquidTransform;
 			this.EventHandler = this;
 			this.IngotMatrices = ingotMatrices;
+			MakeDialog ();
 		}
 
 		const float maxTemp = 1927; //The temprature of coal under perfect air conditions
@@ -30,7 +32,7 @@ namespace DSmithGameCs
 				game.GameStats.AirQuality = game.GameStats.AirQuality < lowestPossibleAirQuality ? lowestPossibleAirQuality : game.GameStats.AirQuality;
 
 			if (game.GameStats.FoundryTemprature < wantedTemprature) {
-				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent;
+				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * 0.1f;
 				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
 			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
 				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();
@@ -54,15 +56,54 @@ namespace DSmithGameCs
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
 					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * modelspace, VP);
 
-			if (game.GameStats.FoundryAlloy.GetAmount () < 0.01f)
+			if (game.GameStats.FoundryAlloy.GetAmount () >= 0.01f) {
+				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * modelspace;
+				BasicShader.GetInstance ().SetModelspaceMatrix (m);
+				BasicShader.GetInstance ().SetMVP (m * VP);
+				BasicShader.GetInstance ().SetColor (game.GameStats.FoundryAlloy.GetColor ());
+				molten.Draw ();
+				BasicShader.GetInstance ().ResetColor ();
+			}
+
+			RenderDialog ();
+		}
+
+		TextWriter writer = new TextWriter(new Font(FontFamily.GenericMonospace, 18), 400, 80);
+		void MakeDialog()
+		{
+			writer.AddLine ("Heat: " + (int)game.GameStats.FoundryTemprature + "°C", new PointF(10, 10), Color.Red);
+			writer.AddLine ("Coal: " + (int)game.GameStats.CoalPercent + "%", new PointF(10, 30), Color.Red);
+			writer.RenderLines ();
+		}
+
+		int prevHeat = 0;
+		int prevCoal = 0;
+		void RenderDialog()
+		{
+			if (!(game.CurrentView is SmithingView & game.Player.IsLookingAt (this)))
 				return;
+
+			bool shouldUpdateText = false;
+			if ((int)game.GameStats.FoundryTemprature != prevHeat) {
+				prevHeat = (int)game.GameStats.FoundryTemprature;
+				writer.GetLine (0).Chars = "Heat: " + prevHeat + "°C";
+				shouldUpdateText = true;
+			}
+			else
+				prevHeat = (int)game.GameStats.FoundryTemprature;
+			if ((int)game.GameStats.CoalPercent != prevCoal) {
+				prevCoal = (int)game.GameStats.CoalPercent;
+				writer.GetLine (1).Chars = "Coal: " + prevCoal + "%";
+				shouldUpdateText = true;
+			}
+			else
+				prevCoal = (int)game.GameStats.CoalPercent;
 			
-			Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * modelspace;
-			BasicShader.GetInstance ().SetModelspaceMatrix (m);
-			BasicShader.GetInstance ().SetMVP (m*VP);
-			BasicShader.GetInstance ().SetColor (game.GameStats.FoundryAlloy.GetColor ());
-			molten.Draw ();
-			BasicShader.GetInstance ().ResetColor ();
+			if (shouldUpdateText)
+				writer.RenderLines ();
+
+			DialogRenderer.DrawDialogBox (Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
+			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
 		}
 
 		#region EntityEventListener implementation
@@ -72,7 +113,7 @@ namespace DSmithGameCs
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var ingotItem = game.GameStats.PlayerInventory.GetSelectedItem () as IngotItem;
 				if(ingotItem != null)
-				if (game.GameStats.FoundryIngots.Count < game.GameStats.FoundryIngots.Capacity) {
+				if (game.GameStats.FoundryIngots.Count+game.GameStats.FoundryAlloy.GetAmount() + 1 <= game.GameStats.FoundryIngots.Capacity) {
 					game.GameStats.FoundryIngots.Add(ingotItem);
 					game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
 				}

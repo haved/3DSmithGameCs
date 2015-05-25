@@ -21,11 +21,12 @@ namespace DSmithGameCs
 			PlayerInventory = new Inventory ();
 			HatchInv = new HatchInventory ();
 			PlayerInventory.AddItem (new IngotItem(BasicMetal.Iron));
-			HatchInv.AddItem (new CastItem (MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
-			HatchInv.AddItem (new CastItem (MeshCollection.IngotCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1)));
+			HatchInv.AddItem (new CastItem (MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Greatsword"));
+			HatchInv.AddItem (new CastItem (MeshCollection.IngotCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Ingot"));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Brass));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Iron));
+			HatchInv.AddItem (new IngotItem(BasicMetal.Steel));
 		}
 	}
 }

@@ -9,4 +9,6 @@ out vec4 fragColor;
 
 void main(){
     fragColor = vertexColor0 * texture(diffuse,texCoord0);
+	if(fragColor.w<0.1) //alpha mask
+		discard;
 }

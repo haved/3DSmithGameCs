@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
@@ -24,6 +25,11 @@ namespace DSmithGameCs
 		public static float GetSmoothTransition(float transition)
 		{
 			return (float)Math.Pow(-Math.Cos (transition*PI)/2+0.5f, 1.4f);
+		}
+
+		public static Color GetColorFromVector(Vector4 v)
+		{
+			return Color.FromArgb ((int)(v.W * 255), (int)(v.X * 255), (int)(v.Y * 255) , (int)(v.Z * 255));
 		}
 	}
 }

@@ -22,11 +22,18 @@ namespace DSmithGameCs
 			sampleSizeId = AddUniform ("sampleSize");
 			SetColor (new Vector4(1, 1, 1, 1));
 			SetSampleSize (new Vector2(1, 1));
+			GL.ActiveTexture(TextureUnit.Texture0);
+			SetInteger (diffuseId, 0);
 		}
 
 		public void SetColor(Vector4 color)
 		{
 			SetVector4 (colorId, color);
+		}
+
+		public void ResetColor()
+		{
+			SetColor (Util.White);
 		}
 
 		public void SetMVP(Matrix4 MVP)
@@ -37,8 +44,15 @@ namespace DSmithGameCs
 		public void SetTexture(Texture texture)
 		{
 			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, texture.GetTextureID());
 			SetInteger (diffuseId, 0);
+			GL.BindTexture(TextureTarget.Texture2D, texture.GetTextureID());
+		}
+
+		public void SetTexture(int texture)
+		{
+			GL.ActiveTexture(TextureUnit.Texture0);
+			SetInteger (diffuseId, 0);
+			GL.BindTexture(TextureTarget.Texture2D, texture);
 		}
 
 		public void SetSampleUV(float texX, float texY)

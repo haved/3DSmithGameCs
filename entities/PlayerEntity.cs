@@ -78,16 +78,21 @@ namespace DSmithGameCs
 			rot.Z = (float)Math.Atan2 (y-pos.Y,x-pos.X);
 		}
 
-		private void Interact(Scene s)
+		void Interact(Scene s)
 		{
 			foreach (Entity e in s.GetEntities()) {
 				var interactiveEntity = e as InteractiveEntity;
 				if(interactiveEntity != null)
 				{
-					if(interactiveEntity.IsInField (pos.Xy + new Vector2((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z))*3.5f))
+					if(IsLookingAt(interactiveEntity))
 						interactiveEntity.Interact (this);
 				}
 			}
+		}
+
+		public bool IsLookingAt(InteractiveEntity interactiveEntity)
+		{
+			return interactiveEntity.IsInField (pos.Xy + new Vector2 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z)) * 3.5f);
 		}
 
 		public override void Render(Scene s, Matrix4 VP)

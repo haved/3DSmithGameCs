@@ -39,6 +39,7 @@ namespace DSmithGameCs
 		public void RemoveAt(int index)
 		{
 			items [index] = default(T);
+			count--;
 		}
 
 		public T this[int i]{

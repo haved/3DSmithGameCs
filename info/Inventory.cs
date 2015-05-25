@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -47,15 +49,21 @@ namespace DSmithGameCs
 		}
 
 		int selectedItem = -1;
+		int hoveredItem = -1;
 		public void HandleInput()
 		{
 			int pressedBox = -1;
 
+			if (Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth () - overscan & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth () - iconSize - overscan &
+			   Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight () - overscan & Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight () - iconSize * SIZE - overscan)
+				hoveredItem = (int)((OrthoRenderEngine.GetCanvasHeight () - Input.OrthoMouseY - overscan) / iconSize);
+			else
+				hoveredItem = -1;
+
 			if (Input.PressedItemKey != -1)
 				pressedBox = Input.PressedItemKey;
-			else if (Input.MousePressed && Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-overscan & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-iconSize-overscan &
-			Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight()-overscan & Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight()-iconSize*SIZE-overscan)
-				pressedBox = (int)((OrthoRenderEngine.GetCanvasHeight () - Input.OrthoMouseY - overscan) / iconSize);
+			else if (Input.MousePressed && hoveredItem > -1)
+				pressedBox = hoveredItem;
 
 			if (pressedBox == -1)
 				return;
@@ -122,11 +130,42 @@ namespace DSmithGameCs
 				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, cW-iconSize-20, cH-iconSize*(i+1)-20, iconSize, iconSize, 0, 0, 1, 1);
 				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - 20 + 2, cH - iconSize * i - 20 - 12, 10, 10, i / 4f, 0, 0.25f, 1);
 			}
+
+			if (hoveredItem > -1 & hoveredItem < items.Count && items [hoveredItem] != null)
+				RenderToolTip (items [hoveredItem], OrthoRenderEngine.GetCanvasWidth()-overscan-iconSize-tooltipWidth-32, Input.OrthoMouseY);
 		}
 
 		public void InventoryTooFull(Item item)
 		{
 			Console.Out.WriteLine ("The inventory can't fit that item!");
+		}
+
+		static Item currentTooltipItem;
+		static readonly TextWriter writer;
+		const int tooltipWidth=150;
+		const int tooltipHeight = 35;
+		static Inventory()
+		{
+			writer = new TextWriter(new Font(FontFamily.GenericSansSerif, 18), tooltipWidth, tooltipHeight);
+			writer.AddLine ("", PointF.Empty, Color.Black);
+		}
+		public static void RenderToolTip(Item item, float x, float y)
+		{
+			if (currentTooltipItem != item) {
+				writer.GetLine (0).Chars = item.GetTooltipName ();
+				writer.GetLine (0).UsedColor = new SolidBrush(Util.GetColorFromVector(item.GetTooltipColor ()));
+				writer.RenderLines ();
+			}
+
+			x = Math.Min (x, OrthoRenderEngine.GetCanvasWidth () - tooltipWidth - 32);
+			y = Math.Min (y, OrthoRenderEngine.GetCanvasHeight () - tooltipHeight - 32);
+
+			GL.Disable (EnableCap.DepthTest);
+			DialogRenderer.DrawDialogBox (x-16, y-16, tooltipWidth+32, tooltipHeight+32);
+			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, x, y, tooltipWidth, tooltipHeight);
+			GL.Enable (EnableCap.DepthTest);
+
+			currentTooltipItem = item;
 		}
 	}
 }
