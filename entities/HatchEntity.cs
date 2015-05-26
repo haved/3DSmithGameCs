@@ -148,34 +148,34 @@ namespace DSmithGameCs
 					}//TODO add multiple pages or something 
 				}
 			}
+				
+			if (Input.OrthoMouseX > x & Input.OrthoMouseY > y & Input.OrthoMouseX < x + iconSize * iconsPerRow & Input.OrthoMouseY < y + iconSize * iconsPerRow) {
+				int xIndex = (int)(Input.OrthoMouseX - x) / (int)iconSize;
+				int yIndex = (int)(Input.OrthoMouseY - y) / (int)iconSize;
 
-			if (Input.MousePressed) {
-				if (Input.OrthoMouseX > x & Input.OrthoMouseY > y & Input.OrthoMouseX < x + iconSize * iconsPerRow & Input.OrthoMouseY < y + iconSize * iconsPerRow) {
-					int xIndex = (int)(Input.OrthoMouseX - x) / (int)iconSize;
-					int yIndex = (int)(Input.OrthoMouseY - y) / (int)iconSize;
+				int iconIndex = yIndex + xIndex * iconsPerRow;
+				uint box = 0;
+				int itemIndex = 0;
 
-					int iconIndex = yIndex + xIndex * iconsPerRow;
-					uint box = 0;
-					int itemIndex = 0;
+				for (; itemIndex < hatchInv.GetItemAmount (); itemIndex++) {
+					box += hatchInv.GetItem (itemIndex).GetSize ();
+					if (box > iconIndex)
+						break;
+				}
 
-					for (; itemIndex < hatchInv.GetItemAmount (); itemIndex++) {
-						box += hatchInv.GetItem (itemIndex).GetSize ();
-						if (box > iconIndex)
-							break;
-					}
+				if (itemIndex >= hatchInv.GetItemAmount ())
+					return;
 
-					if (itemIndex >= hatchInv.GetItemAmount ())
-						return;
+				Item item = hatchInv.GetItem (itemIndex);
 
-					Item item = hatchInv.GetItem (itemIndex);
+				Inventory.RenderToolTip (item, Input.OrthoMouseX+30, Input.OrthoMouseY);
 
+				if(Input.MousePressed)
 					if (playerInv.CanFitItem (item)) {
 						playerInv.AddItem (item);
 						hatchInv.RemoveItem (itemIndex);
-					} else {
+					} else
 						playerInv.InventoryTooFull (item);
-					}
-				}
 			}
 		}
 	}

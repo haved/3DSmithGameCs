@@ -6,6 +6,14 @@ namespace DSmithGameCs
 {
 	public class Alloy : IMetal
 	{
+		public static Alloy Steel = new Alloy();
+
+		static Alloy()
+		{
+			Steel.AddMetal (BasicMetal.Iron, 0.90f);
+			Steel.AddMetal (BasicMetal.Carbon, 0.1f);
+		}
+
 		class MetalMass
 		{
 			public IMetal Metal;
