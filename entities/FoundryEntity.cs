@@ -32,7 +32,7 @@ namespace DSmithGameCs
 				game.GameStats.AirQuality = game.GameStats.AirQuality < lowestPossibleAirQuality ? lowestPossibleAirQuality : game.GameStats.AirQuality;
 
 			if (game.GameStats.FoundryTemprature < wantedTemprature) {
-				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * 0.1f;
+				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * 0.4f;
 				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
 			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
 				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();

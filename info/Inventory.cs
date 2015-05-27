@@ -154,6 +154,11 @@ namespace DSmithGameCs
 			if (currentTooltipItem != item) {
 				writer.GetLine (0).Chars = item.GetTooltipName ();
 				writer.GetLine (0).UsedColor = new SolidBrush(Util.GetColorFromVector(item.GetTooltipColor ()));
+				int width = (int)writer.GetLineWidth (writer.GetLine (0).Chars);
+				if (width > tooltipWidth)
+					writer.Resize (width, tooltipHeight);
+				else if(width != writer.Width)
+					writer.Resize (tooltipWidth, tooltipHeight);
 				writer.RenderLines ();
 			}
 
@@ -161,8 +166,8 @@ namespace DSmithGameCs
 			y = Math.Min (y, OrthoRenderEngine.GetCanvasHeight () - tooltipHeight - 32);
 
 			GL.Disable (EnableCap.DepthTest);
-			DialogRenderer.DrawDialogBox (x-16, y-16, tooltipWidth+32, tooltipHeight+32);
-			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, x, y, tooltipWidth, tooltipHeight);
+			DialogRenderer.DrawDialogBox (x-16, y-16, writer.Width+32, writer.Height+32);
+			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, x, y, writer.Width, writer.Height);
 			GL.Enable (EnableCap.DepthTest);
 
 			currentTooltipItem = item;

@@ -54,8 +54,7 @@ namespace DSmithGameCs
 			bitmap = new Bitmap (width, height);
 
 			GL.BindTexture (TextureTarget.Texture2D, textureID);
-			GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bitmap.Width, bitmap.Height,
-				OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
 		}
 
 		public void AddLine(string s, PointF pos, Color color)
@@ -71,6 +70,18 @@ namespace DSmithGameCs
 		public Text GetLine(int index)
 		{
 			return lines [index];
+		}
+
+		public float GetLineHeight()
+		{
+			return UsedFont.Height;
+		}
+
+		public float GetLineWidth(string text)
+		{
+			using (Graphics gfx = Graphics.FromImage (bitmap)) {
+				return gfx.MeasureString (text, UsedFont).Width;
+			}
 		}
 
 		public void RenderLines()
