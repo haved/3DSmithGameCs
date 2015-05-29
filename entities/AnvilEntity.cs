@@ -63,7 +63,7 @@ namespace DSmithGameCs
 
 		public void RenderView (Scene s)
 		{
-			game.GameStats.PlayerInventory.Render ();
+			game.GameStats.PlayerInventory.Render (game);
 		}
 	}
 }

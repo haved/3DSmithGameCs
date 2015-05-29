@@ -71,40 +71,43 @@ namespace DSmithGameCs
 		TextWriter writer = new TextWriter(new Font(FontFamily.GenericMonospace, 18), 400, 80);
 		void MakeDialog()
 		{
-			writer.AddLine ("Heat: " + (int)game.GameStats.FoundryTemprature + "°C", new PointF(10, 10), Color.Red);
-			writer.AddLine ("Coal: " + (int)game.GameStats.CoalPercent + "%", new PointF(10, 30), Color.Red);
-			writer.RenderLines ();
+			/*writer.AddLine ("Heat: " + 0 + "°C", new PointF(10, 10), Color.Orange);
+			writer.AddLine ("Coal: " + 0 + "%", new PointF(10, 30), Color.White);
+			writer.AddLine ("Air: " + 0 + "%", new PointF(10, 50), Color.Aqua);
+			writer.RenderLines ();*/
 		}
 
-		int prevHeat = 0;
-		int prevCoal = 0;
+		/*int prevHeat;
+		int prevCoal;
+		int prevAir;*/
 		void RenderDialog()
 		{
-			if (!(game.CurrentView is SmithingView & game.Player.IsLookingAt (this)))
+			/*if (!(game.CurrentView is SmithingView & game.Player.IsLookingAt (this)))
 				return;
 
 			bool shouldUpdateText = false;
-			if ((int)game.GameStats.FoundryTemprature != prevHeat) {
-				prevHeat = (int)game.GameStats.FoundryTemprature;
+
+			if (prevHeat != (prevHeat=(int)game.GameStats.FoundryTemprature)) {
 				writer.GetLine (0).Chars = "Heat: " + prevHeat + "°C";
 				shouldUpdateText = true;
 			}
-			else
-				prevHeat = (int)game.GameStats.FoundryTemprature;
-			if ((int)game.GameStats.CoalPercent != prevCoal) {
-				prevCoal = (int)game.GameStats.CoalPercent;
+
+			if (prevCoal != (prevCoal=(int)game.GameStats.CoalPercent)) {
 				writer.GetLine (1).Chars = "Coal: " + prevCoal + "%";
 				shouldUpdateText = true;
 			}
-			else
-				prevCoal = (int)game.GameStats.CoalPercent;
+
+			if (prevAir != (prevAir=(int)game.GameStats.AirQuality)) {
+				writer.GetLine (2).Chars = "Air: " + prevAir + "%";
+				shouldUpdateText = true;
+			}
 			
 			if (shouldUpdateText)
 				writer.RenderLines ();
 
 			DialogRenderer.DrawDialogBox (Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
 			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
-		}
+		*/}
 
 		#region EntityEventListener implementation
 

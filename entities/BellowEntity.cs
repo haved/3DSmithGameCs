@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
@@ -37,6 +38,10 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().SetModelspaceMatrix (newModelspace);
 			BasicShader.GetInstance ().SetMVP (newModelspace * VP);
 			base.Draw (s);
+			/*if (game.Player.IsLookingAt (this)) {
+				airText.Chars = "Air: " + (int)game.GameStats.AirQuality + "%";
+				TooltipHelper.Instance.RenderToolTip (airText, Input.OrthoMouseX, Input.OrthoMouseY);
+			}*/
 		}
 
 		#region EntityEventListener implementation

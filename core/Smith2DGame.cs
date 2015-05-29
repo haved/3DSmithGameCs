@@ -16,6 +16,9 @@ namespace DSmithGameCs
 		public Scene CurrentScene;
 		public PlayerEntity Player;
 
+		public TooltipHelper TooltipHelper;
+		public TooltipHelper ErrortipHelper;
+
 		public void Init ()
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
@@ -25,6 +28,8 @@ namespace DSmithGameCs
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
 			OrthoRenderEngine.Init ();
+			TooltipHelper = new TooltipHelper ();
+			ErrortipHelper = new TooltipHelper ();
 
 			NewGame ();
 		}

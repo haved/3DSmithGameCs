@@ -10,31 +10,17 @@ namespace DSmithGameCs
 {
 	public class TextWriter
 	{
-		public class Text
-		{
-			public Brush UsedColor;
-			public PointF Position;
-			public string Chars;
-
-			public Text(String text, PointF position, Color color)
-			{
-				Chars = text;
-				Position = position;
-				UsedColor = new SolidBrush(color);
-			}
-		}
-
 		readonly Font UsedFont;
-		readonly List<Text> lines;
 		Bitmap bitmap;
+		Graphics gfx;
 		readonly int textureID;
 
 		public TextWriter(Font font, int width, int height)
 		{
 			UsedFont = font;
-			lines = new List<Text> ();
 
 			bitmap = new Bitmap (width, height);
+			gfx = Graphics.FromImage (bitmap);
 			textureID = GL.GenTexture ();
 			GL.BindTexture (TextureTarget.Texture2D, textureID);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
@@ -46,30 +32,17 @@ namespace DSmithGameCs
 		{
 			if(GraphicsContext.CurrentContext != null)
 				GL.DeleteTexture (textureID);
+			bitmap.Dispose ();
 		}
 
 		public void Resize(int width, int height)
 		{
 			bitmap.Dispose ();
 			bitmap = new Bitmap (width, height);
+			gfx = Graphics.FromImage (bitmap);
 
 			GL.BindTexture (TextureTarget.Texture2D, textureID);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-		}
-
-		public void AddLine(string s, PointF pos, Color color)
-		{
-			lines.Add (new Text(s, pos, color));
-		}
-
-		public void AddLine(Text text)
-		{
-			lines.Add (text);
-		}
-
-		public Text GetLine(int index)
-		{
-			return lines [index];
 		}
 
 		public float GetLineHeight()
@@ -79,28 +52,37 @@ namespace DSmithGameCs
 
 		public float GetLineWidth(string text)
 		{
-			using (Graphics gfx = Graphics.FromImage (bitmap)) {
-				return gfx.MeasureString (text, UsedFont).Width;
-			}
+			return gfx.MeasureString (text, UsedFont).Width;
 		}
 
-		public void RenderLines()
+		bool textureChanged;
+
+		public void Clear()
 		{
-			using (Graphics gfx = Graphics.FromImage (bitmap)) {
-				gfx.Clear(Color.Transparent);
-				foreach (Text line in lines) {
-					gfx.DrawString (line.Chars, UsedFont, line.UsedColor, line.Position);
-				}
-			}
-
-			BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			GL.BindTexture (TextureTarget.Texture2D, textureID);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0,
-				OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0); 
-			bitmap.UnlockBits(data);
+			gfx.Clear (Color.Transparent);
+			textureChanged = true;
 		}
 
-		public int TextureID { get { return textureID; } }
+		SolidBrush brush = new SolidBrush (Color.Black);
+		public void DrawString(string text, float x, float y, Color color)
+		{
+			brush.Color = color;
+			gfx.DrawString (text, UsedFont, brush, x, y);
+			textureChanged = true;
+		}
+
+		public int GetTextureID()
+		{
+			if (textureChanged) {
+				BitmapData data = bitmap.LockBits (new Rectangle (0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+				GL.BindTexture (TextureTarget.Texture2D, textureID);
+				GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0,
+					OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0); 
+				bitmap.UnlockBits (data);
+			}
+
+			return textureID;
+		}
 
 		public int Width{ get { return bitmap.Width; } }
 		public int Height{ get { return bitmap.Height; } }

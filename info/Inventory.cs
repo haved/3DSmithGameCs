@@ -99,11 +99,13 @@ namespace DSmithGameCs
 			selectedItem = -1;
 		}
 
+		float tooFull = 0;
+
 		const uint iconSize = 64;
 		const uint overscan = 20;
 		static Vector4 selected = new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1);
 		static Vector4 unSelected = Util.White;
-		public void Render ()
+		public void Render (Smith2DGame game)
 		{
 			var cW = OrthoRenderEngine.GetCanvasWidth ();
 			var cH = OrthoRenderEngine.GetCanvasHeight ();
@@ -131,46 +133,33 @@ namespace DSmithGameCs
 				OrthoRenderEngine.DrawTexturedBox (TextureCollection.Numbers, cW - iconSize - 20 + 2, cH - iconSize * i - 20 - 12, 10, 10, i / 4f, 0, 0.25f, 1);
 			}
 
-			if (hoveredItem > -1 & hoveredItem < items.Count && items [hoveredItem] != null)
-				RenderToolTip (items [hoveredItem], OrthoRenderEngine.GetCanvasWidth()-overscan-iconSize-tooltipWidth-32, Input.OrthoMouseY);
+			if (hoveredItem > -1 & hoveredItem < items.Count && items [hoveredItem] != null){
+				game.TooltipHelper.ClaimIfPossible (this);
+				if (game.TooltipHelper.GetOwner()==this)
+					game.TooltipHelper.RenderItemTooltip (items [hoveredItem], OrthoRenderEngine.GetCanvasWidth () - overscan - iconSize - game.TooltipHelper.Writer.Width - 32, Input.OrthoMouseY);
+			}
+			else if (game.TooltipHelper.GetOwner () == this)
+					game.TooltipHelper.UnClaim ();
+
+			if (tooFull > 0) {
+				if (game.ErrortipHelper.ClaimIfPossible(this)) {
+					game.ErrortipHelper.Writer.Resize (300, 30);
+					game.ErrortipHelper.Writer.Clear ();
+					game.ErrortipHelper.Writer.DrawString ("The inventory is too full!", 0, 0, Color.White);
+				}
+				if (game.ErrortipHelper.GetOwner () == this)
+					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-iconSize-game.ErrortipHelper.Writer.Width-32, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32, Util.LightRed);
+				else
+					tooFull = 0;
+				tooFull -= Time.Delta ();
+			}
+			else if(game.ErrortipHelper.GetOwner()==this)
+				game.ErrortipHelper.UnClaim();
 		}
 
 		public void InventoryTooFull(Item item)
 		{
-			Console.Out.WriteLine ("The inventory can't fit that item!");
-		}
-
-		static Item currentTooltipItem;
-		static readonly TextWriter writer;
-		const int tooltipWidth=150;
-		const int tooltipHeight = 35;
-		static Inventory()
-		{
-			writer = new TextWriter(new Font(FontFamily.GenericSansSerif, 18), tooltipWidth, tooltipHeight);
-			writer.AddLine ("", PointF.Empty, Color.Black);
-		}
-		public static void RenderToolTip(Item item, float x, float y)
-		{
-			if (currentTooltipItem != item) {
-				writer.GetLine (0).Chars = item.GetTooltipName ();
-				writer.GetLine (0).UsedColor = new SolidBrush(Util.GetColorFromVector(item.GetTooltipColor ()));
-				int width = (int)writer.GetLineWidth (writer.GetLine (0).Chars);
-				if (width > tooltipWidth)
-					writer.Resize (width, tooltipHeight);
-				else if(width != writer.Width)
-					writer.Resize (tooltipWidth, tooltipHeight);
-				writer.RenderLines ();
-			}
-
-			x = Math.Min (x, OrthoRenderEngine.GetCanvasWidth () - tooltipWidth - 32);
-			y = Math.Min (y, OrthoRenderEngine.GetCanvasHeight () - tooltipHeight - 32);
-
-			GL.Disable (EnableCap.DepthTest);
-			DialogRenderer.DrawDialogBox (x-16, y-16, writer.Width+32, writer.Height+32);
-			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, x, y, writer.Width, writer.Height);
-			GL.Enable (EnableCap.DepthTest);
-
-			currentTooltipItem = item;
+			tooFull = 1;
 		}
 	}
 }

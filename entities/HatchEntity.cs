@@ -123,7 +123,7 @@ namespace DSmithGameCs
 		{
 			Inventory playerInv = game.GameStats.PlayerInventory;
 			HatchInventory hatchInv = game.GameStats.HatchInv;
-			playerInv.Render ();
+			playerInv.Render (game);
 
 			if (!transition.IsDone ())
 				return;
@@ -168,7 +168,7 @@ namespace DSmithGameCs
 
 				Item item = hatchInv.GetItem (itemIndex);
 
-				Inventory.RenderToolTip (item, Input.OrthoMouseX+30, Input.OrthoMouseY);
+				game.TooltipHelper.RenderItemTooltip (item, Input.OrthoMouseX+30, Input.OrthoMouseY);
 
 				if(Input.MousePressed)
 					if (playerInv.CanFitItem (item)) {
