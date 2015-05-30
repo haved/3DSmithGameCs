@@ -136,7 +136,7 @@ namespace DSmithGameCs
 			if (hoveredItem > -1 & hoveredItem < items.Count && items [hoveredItem] != null){
 				game.TooltipHelper.ClaimIfPossible (this);
 				if (game.TooltipHelper.GetOwner()==this)
-					game.TooltipHelper.RenderItemTooltip (items [hoveredItem], OrthoRenderEngine.GetCanvasWidth () - overscan - iconSize - game.TooltipHelper.Writer.Width - 32, Input.OrthoMouseY);
+					game.TooltipHelper.RenderItemTooltip (items [hoveredItem], OrthoRenderEngine.GetCanvasWidth () - overscan - iconSize - 32, Input.OrthoMouseY);
 			}
 			else if (game.TooltipHelper.GetOwner () == this)
 					game.TooltipHelper.UnClaim ();
@@ -148,7 +148,7 @@ namespace DSmithGameCs
 					game.ErrortipHelper.Writer.DrawString ("The inventory is too full!", 0, 0, Color.White);
 				}
 				if (game.ErrortipHelper.GetOwner () == this)
-					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-iconSize-game.ErrortipHelper.Writer.Width-32, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32, Util.LightRed);
+					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-game.ErrortipHelper.Writer.Width, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32-30, Util.LightRed);
 				else
 					tooFull = 0;
 				tooFull -= Time.Delta ();

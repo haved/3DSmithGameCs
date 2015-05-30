@@ -72,6 +72,7 @@ namespace DSmithGameCs
 			return false;
 		}
 
+		int hoveredItem = -1;
 		public void UpdateView (Scene s)
 		{
 			if (Input.CloseKeyPressed) {
@@ -92,6 +93,47 @@ namespace DSmithGameCs
 				game.GameStats.HatchInv.AddItem (game.GameStats.PlayerInventory.GetSelectedItem());
 				game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
 			}
+
+			Inventory playerInv = game.GameStats.PlayerInventory;
+			HatchInventory hatchInv = game.GameStats.HatchInv;
+			float x = inventoryXPos;
+			float y = inventoryYPos;
+
+			if (Input.OrthoMouseX > x & Input.OrthoMouseY > y & Input.OrthoMouseX < x + iconSize * iconsPerRow & Input.OrthoMouseY < y + iconSize * iconsPerRow) {
+				int xIndex = (int)(Input.OrthoMouseX - x) / (int)iconSize;
+				int yIndex = (int)(Input.OrthoMouseY - y) / (int)iconSize;
+
+				int iconIndex = yIndex + xIndex * iconsPerRow;
+				uint box = 0;
+				uint yPos=0;
+				uint xPos=0;
+				for (hoveredItem = 0; hoveredItem < hatchInv.GetItemAmount (); hoveredItem++) {
+					box += hatchInv.GetItem (hoveredItem).GetSize ();
+					yPos += hatchInv.GetItem (hoveredItem).GetSize ();
+
+					if (yPos > iconsPerRow) {
+						yPos = 0;
+						xPos++;
+						box = xPos * iconsPerRow+hatchInv.GetItem (hoveredItem).GetSize ();
+					}
+					if (iconIndex < box-hatchInv.GetItem(hoveredItem).GetSize()) {
+						hoveredItem = -1;
+						break;
+					}
+					if (box > iconIndex)
+						break;
+				}
+
+				if (hoveredItem < hatchInv.GetItemAmount () & Input.MousePressed) {
+					Item item = hatchInv.GetItem (hoveredItem);
+					if (playerInv.CanFitItem (item)) {
+						playerInv.AddItem (item);
+						hatchInv.RemoveItem (hoveredItem);
+					} else
+						playerInv.InventoryTooFull (item);
+				}
+			} else
+				hoveredItem = -1;
 		}
 
 		public bool ShouldRenderScene ()
@@ -119,17 +161,19 @@ namespace DSmithGameCs
 		const int iconsPerDir = 4;
 		const int iconsPerRow = iconsPerDir * 2;
 
+		static float inventoryXPos {get { return OrthoRenderEngine.GetCanvasWidth () / 2 - iconSize * iconsPerDir; }}
+		static float inventoryYPos {get { return OrthoRenderEngine.GetCanvasHeight () / 2 - iconSize * iconsPerDir; }}
 		public void RenderView(Scene s)
 		{
 			Inventory playerInv = game.GameStats.PlayerInventory;
-			HatchInventory hatchInv = game.GameStats.HatchInv;
 			playerInv.Render (game);
 
 			if (!transition.IsDone ())
 				return;
-			
-			float x = OrthoRenderEngine.GetCanvasWidth () / 2 - iconSize * iconsPerDir;
-			float y = OrthoRenderEngine.GetCanvasHeight () / 2 - iconSize * iconsPerDir;
+
+			HatchInventory hatchInv = game.GameStats.HatchInv;
+			float x = inventoryXPos;
+			float y = inventoryYPos;
 
 			OrthoRenderEngine.DrawTexturedBox (TextureCollection.Button, x, y, iconSize * iconsPerRow, iconSize * iconsPerRow, 0, 0, iconsPerRow, iconsPerRow);
 
@@ -138,45 +182,26 @@ namespace DSmithGameCs
 
 			for (int i = 0; i < hatchInv.GetItemAmount (); i++) {
 				Item item = hatchInv.GetItem (i);
-				item.RenderItem (x + itemX * iconSize, y + itemY * iconSize, iconSize, iconSize*item.GetSize());
-
-				itemY += item.GetSize ();
-				if (itemY >= iconsPerRow) {
+				if (itemY + item.GetSize () > iconsPerRow) {
 					itemY = 0;
 					itemX++;
 					if (itemX >= iconsPerRow) {
-					}//TODO add multiple pages or something 
+					}//TODO add multiple pages or something
 				}
+				item.RenderItem (x + itemX * iconSize, y + itemY * iconSize, iconSize, iconSize * item.GetSize ());
+
+				itemY += item.GetSize ();
 			}
-				
-			if (Input.OrthoMouseX > x & Input.OrthoMouseY > y & Input.OrthoMouseX < x + iconSize * iconsPerRow & Input.OrthoMouseY < y + iconSize * iconsPerRow) {
-				int xIndex = (int)(Input.OrthoMouseX - x) / (int)iconSize;
-				int yIndex = (int)(Input.OrthoMouseY - y) / (int)iconSize;
 
-				int iconIndex = yIndex + xIndex * iconsPerRow;
-				uint box = 0;
-				int itemIndex = 0;
+			if (hoveredItem>=0 & hoveredItem < hatchInv.GetItemAmount ()) {
+				Item item = hatchInv.GetItem (hoveredItem);
 
-				for (; itemIndex < hatchInv.GetItemAmount (); itemIndex++) {
-					box += hatchInv.GetItem (itemIndex).GetSize ();
-					if (box > iconIndex)
-						break;
-				}
+				game.TooltipHelper.ClaimIfPossible (this);
 
-				if (itemIndex >= hatchInv.GetItemAmount ())
-					return;
-
-				Item item = hatchInv.GetItem (itemIndex);
-
-				game.TooltipHelper.RenderItemTooltip (item, Input.OrthoMouseX+30, Input.OrthoMouseY);
-
-				if(Input.MousePressed)
-					if (playerInv.CanFitItem (item)) {
-						playerInv.AddItem (item);
-						hatchInv.RemoveItem (itemIndex);
-					} else
-						playerInv.InventoryTooFull (item);
-			}
+				if (game.TooltipHelper.GetOwner () == this)
+					game.TooltipHelper.RenderItemTooltip (item, Input.OrthoMouseX - 30, Input.OrthoMouseY);
+			} else if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.UnClaim ();
 		}
 	}
 }

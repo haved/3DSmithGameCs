@@ -74,11 +74,13 @@ namespace DSmithGameCs
 		public int GetTextureID()
 		{
 			if (textureChanged) {
+				Console.Out.WriteLine ("Texture changed!");
 				BitmapData data = bitmap.LockBits (new Rectangle (0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				GL.BindTexture (TextureTarget.Texture2D, textureID);
 				GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0,
 					OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0); 
 				bitmap.UnlockBits (data);
+				textureChanged = false;
 			}
 
 			return textureID;

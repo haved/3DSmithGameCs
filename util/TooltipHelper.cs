@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -30,6 +32,7 @@ namespace DSmithGameCs
 		{
 			if(CanClaimButHasNot(o)) {
 				Owner = o;
+				Console.Out.WriteLine ("Claimed by: " + o);
 				return true;
 			}
 			return false;
@@ -42,6 +45,7 @@ namespace DSmithGameCs
 
 		public void UnClaim()
 		{
+			Console.Out.WriteLine ("UnClaimed from: " + Owner);
 			Owner = null;
 			currentItem = null;
 		}
@@ -54,14 +58,20 @@ namespace DSmithGameCs
 				Writer.Resize ((int)Writer.GetLineWidth (i.GetTooltipName()), (int)Writer.GetLineHeight ());
 				Writer.DrawString (i.GetTooltipName(), 0, 0, Util.GetColorFromVector(i.GetTooltipColor()));
 			}
+			x -= Writer.Width;
+			GL.DepthFunc (DepthFunction.Always);
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, x-16, y-16, Writer.Width+32, Writer.Height+32);
 			OrthoRenderEngine.DrawTexturedBox (Writer.GetTextureID (), x, y, Writer.Width, Writer.Height);
+			GL.DepthFunc (DepthFunction.Lequal);
+			currentItem = i;
 		}
 
 		public void RenderNormalDialog(float x, float y, Vector4 color)
 		{
+			GL.DepthFunc (DepthFunction.Always);
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, color, x-16, y-16, Writer.Width+32, Writer.Height+32);
 			OrthoRenderEngine.DrawTexturedBox (Writer.GetTextureID (), x, y, Writer.Width, Writer.Height);
+			GL.DepthFunc (DepthFunction.Lequal);
 		}
 	}
 }
