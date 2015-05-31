@@ -22,10 +22,9 @@ namespace DSmithGameCs
 			bitmap = new Bitmap (width, height);
 			gfx = Graphics.FromImage (bitmap);
 			textureID = GL.GenTexture ();
-			GL.BindTexture (TextureTarget.Texture2D, textureID);
+			Resize(width, height);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
 		}
 
 		~TextWriter()
@@ -38,7 +37,7 @@ namespace DSmithGameCs
 		public void Resize(int width, int height)
 		{
 			bitmap.Dispose ();
-			bitmap = new Bitmap (width, height);
+			bitmap = new Bitmap (width*2, height*2);
 			gfx = Graphics.FromImage (bitmap);
 
 			GL.BindTexture (TextureTarget.Texture2D, textureID);
@@ -47,12 +46,12 @@ namespace DSmithGameCs
 
 		public float GetLineHeight()
 		{
-			return UsedFont.Height;
+			return UsedFont.Height/2;
 		}
 
 		public float GetLineWidth(string text)
 		{
-			return gfx.MeasureString (text, UsedFont).Width;
+			return gfx.MeasureString (text, UsedFont).Width/2;
 		}
 
 		bool textureChanged;
@@ -67,7 +66,7 @@ namespace DSmithGameCs
 		public void DrawString(string text, float x, float y, Color color)
 		{
 			brush.Color = color;
-			gfx.DrawString (text, UsedFont, brush, x, y);
+			gfx.DrawString (text, UsedFont, brush, x*2, y*2);
 			textureChanged = true;
 		}
 
@@ -77,7 +76,7 @@ namespace DSmithGameCs
 				Console.Out.WriteLine ("Texture changed!");
 				BitmapData data = bitmap.LockBits (new Rectangle (0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				GL.BindTexture (TextureTarget.Texture2D, textureID);
-				GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, Width, Height, 0,
+				GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0,
 					OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0); 
 				bitmap.UnlockBits (data);
 				textureChanged = false;
@@ -86,8 +85,8 @@ namespace DSmithGameCs
 			return textureID;
 		}
 
-		public int Width{ get { return bitmap.Width; } }
-		public int Height{ get { return bitmap.Height; } }
+		public int Width{ get { return bitmap.Width/2; } }
+		public int Height{ get { return bitmap.Height/2; } }
 	}
 }
 

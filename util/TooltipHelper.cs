@@ -14,7 +14,7 @@ namespace DSmithGameCs
 
 		public TooltipHelper()
 		{
-			Writer = new TextWriter(new Font(FontFamily.GenericSansSerif, 18), tooltipWidth, tooltipHeight);
+			Writer = new TextWriter(new Font(FontFamily.GenericSansSerif, 18*2), tooltipWidth, tooltipHeight);
 		}
 
 		object Owner;

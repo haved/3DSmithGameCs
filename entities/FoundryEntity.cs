@@ -19,6 +19,7 @@ namespace DSmithGameCs
 			this.IngotMatrices = ingotMatrices;
 		}
 
+		const float foundryHeatingSpeed = 1f;//0.4f;
 		const float maxTemp = 1927; //The temprature of coal under perfect air conditions
 		public override void Update(Scene s)
 		{
@@ -31,7 +32,7 @@ namespace DSmithGameCs
 				game.GameStats.AirQuality = game.GameStats.AirQuality < lowestPossibleAirQuality ? lowestPossibleAirQuality : game.GameStats.AirQuality;
 
 			if (game.GameStats.FoundryTemprature < wantedTemprature) {
-				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * 0.4f;
+				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * foundryHeatingSpeed;
 				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
 			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
 				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();
@@ -49,11 +50,11 @@ namespace DSmithGameCs
 		}
 
 		int prevVal;
-		public void UpdateDialog()
+		void UpdateDialog()
 		{
 			if (game.Player.IsLookingAt (this)) {
 				if (game.TooltipHelper.ClaimIfPossible (this)) {
-					game.TooltipHelper.Writer.Resize (300, 20 * 6 + 10);
+					game.TooltipHelper.Writer.Resize (300, 20 * 16 + 10);
 					prevVal = -1;
 				}
 				if(game.TooltipHelper.GetOwner()==this && prevVal != (prevVal=(int)(game.GameStats.FoundryTemprature+game.GameStats.CoalPercent+game.GameStats.AirQuality)))
@@ -62,16 +63,24 @@ namespace DSmithGameCs
 					game.TooltipHelper.Writer.DrawString ("Heat: " + (int)game.GameStats.FoundryTemprature + "°C", 0, 0, Color.Red);
 					game.TooltipHelper.Writer.DrawString ("Coal: " + (int)game.GameStats.CoalPercent + "%", 0, 20, Color.White);
 					game.TooltipHelper.Writer.DrawString ("Oxygen: " + (int)game.GameStats.AirQuality + "%", 0, 40, Color.Aqua);
-					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, 65, Util.GetColorFromVector(game.GameStats.FoundryAlloy.GetColor()));
-					int y = 65;
+					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, 65, Color.Green);
+					int y = 85;
 					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++)
 					{
-						y += 20;
-						if (y + 20 > game.TooltipHelper.Writer.Height)
-							game.TooltipHelper.Writer.Resize (300, y+20+10);
 						IMetal m = game.GameStats.FoundryAlloy [i];
-						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.GetName(), 10, y, Util.GetColorFromVector(m.GetColor()));
+						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.GetName() + " (molten)", 10, y, Util.GetColorFromVector(m.GetColor()));
+						y += 20;
 					}
+					for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
+						IngotItem item = game.GameStats.FoundryIngots[i];
+						if (item == null)
+							continue;
+						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.GetMetal().GetName() + " (solid)", 10, y, Util.GetColorFromVector(item.GetMetal().GetColor()));
+						y += 20;
+					}
+					if (y+10 != game.TooltipHelper.Writer.Height)
+						game.TooltipHelper.Writer.Resize (300, y+10);
+						
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.UnClaim ();

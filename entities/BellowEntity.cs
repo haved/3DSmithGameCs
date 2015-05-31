@@ -32,7 +32,7 @@ namespace DSmithGameCs
 			if (bellowSize < minBellowSize)
 				bellowSpeed += Time.Delta () * 4;
 
-			if (false &&game.Player.IsLookingAt (this)) {
+			if (game.Player.IsLookingAt (this)) {
 				if (game.TooltipHelper.ClaimIfPossible (this)) {
 					game.TooltipHelper.Writer.Resize (150, 30);
 					prevAirQuality = -1;

@@ -6,13 +6,14 @@ namespace DSmithGameCs
 {
 	public static class Input
 	{
-		private const Key UP_KEY = Key.W;
-		private const Key DOWN_KEY = Key.S;
-		private const Key LEFT_KEY = Key.A;
-		private const Key RIGHT_KEY = Key.D;
-		private const Key INTERACT_KEY = Key.E;
-		private const Key CLOSE_KEY = Key.Escape;
-		private static Key[] ITEM_KEYS = {Key.Number1, Key.Number2, Key.Number3, Key.Number4};
+		public const Key UPKEY = Key.W;
+		public const Key DOWNKEY = Key.S;
+		public const Key LEFTKEY = Key.A;
+		public const Key RIGHTKEY = Key.D;
+		public const Key INTERACTKEY = Key.E;
+		public const Key POURKEY = Key.R;
+		public const Key CLOSEKEY = Key.Escape;
+		public static Key[] ITEMKEYS = {Key.Number1, Key.Number2, Key.Number3, Key.Number4};
 
 		public static float RelativeMouseX, RelativeMouseY;
 		public static float OrthoMouseX, OrthoMouseY;
@@ -30,30 +31,30 @@ namespace DSmithGameCs
 					return;
 				
 				switch (e.Key) {
-				case CLOSE_KEY:
+				case CLOSEKEY:
 					closeKeyBuffered = true;
 					break;
-				case LEFT_KEY:
+				case LEFTKEY:
 					LeftKey = true;
 					break;
-				case RIGHT_KEY:
+				case RIGHTKEY:
 					RightKey = true;
 					break;
-				case UP_KEY:
+				case UPKEY:
 					UpKey = true;
 					break;
-				case DOWN_KEY:
+				case DOWNKEY:
 					DownKey = true;
 					break;
-				case INTERACT_KEY:
+				case INTERACTKEY:
 					interactKeyBuffered = true;
 					break;
 				default:
 					break;
 				}
 					
-				for(int i = 0; i < ITEM_KEYS.Length; i++)
-					if(e.Key == ITEM_KEYS[i])
+				for(int i = 0; i < ITEMKEYS.Length; i++)
+					if(e.Key == ITEMKEYS[i])
 					{
 						bufferedItemKey = i;
 						break;
@@ -62,16 +63,16 @@ namespace DSmithGameCs
 
 			window.Keyboard.KeyUp += (sender, e) => {
 				switch (e.Key) {
-				case LEFT_KEY:
+				case LEFTKEY:
 					LeftKey = false;
 					break;
-				case RIGHT_KEY:
+				case RIGHTKEY:
 					RightKey = false;
 					break;
-				case UP_KEY:
+				case UPKEY:
 					UpKey = false;
 					break;
-				case DOWN_KEY:
+				case DOWNKEY:
 					DownKey = false;
 					break;
 				default:
@@ -121,6 +122,11 @@ namespace DSmithGameCs
 		{
 			Input.RelativeMouseX = mousePosX;
 			Input.RelativeMouseY = mousePosY;
+		}
+
+		public static string GetKeyName(Key key)
+		{
+			return key.GetType ().GetEnumName (key);
 		}
 	}
 }
