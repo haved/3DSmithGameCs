@@ -85,6 +85,10 @@ namespace DSmithGameCs
 		{
 			return totalAmount;
 		}
+
+		public int MetalTypeAmount{	get { return metals.Count; }}
+		public IMetal this[int index]{get { return metals[index].Metal;}}
+		public float GetMetalAmount(int index) { return metals[index].Amount;}
 	}
 }
 

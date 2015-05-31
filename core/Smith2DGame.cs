@@ -79,12 +79,14 @@ namespace DSmithGameCs
 		public void OnResize (int width, int height)
 		{
 			GL.Viewport (0, 0, width, height);
-			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView (fov, width / (float)height, 0.1f, 100);
+			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView (fov, width / (float)height, 0.1f, 50);
 			OrthoRenderEngine.OnResize (width, height);
 		}
 
 		public void SetView (View v)
 		{
+			TooltipHelper.UnClaim ();
+			ErrortipHelper.UnClaim ();
 			v.OnViewUsed (this.CurrentView);
 			this.CurrentView = v;
 		}

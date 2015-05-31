@@ -60,7 +60,7 @@ namespace DSmithGameCs
 			}
 			x -= Writer.Width;
 			GL.DepthFunc (DepthFunction.Always);
-			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, x-16, y-16, Writer.Width+32, Writer.Height+32);
+			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White60, x-16, y-16, Writer.Width+32, Writer.Height+32);
 			OrthoRenderEngine.DrawTexturedBox (Writer.GetTextureID (), x, y, Writer.Width, Writer.Height);
 			GL.DepthFunc (DepthFunction.Lequal);
 			currentItem = i;

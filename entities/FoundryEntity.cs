@@ -17,7 +17,6 @@ namespace DSmithGameCs
 			this.liquidTransform = liquidTransform;
 			this.EventHandler = this;
 			this.IngotMatrices = ingotMatrices;
-			MakeDialog ();
 		}
 
 		const float maxTemp = 1927; //The temprature of coal under perfect air conditions
@@ -45,6 +44,37 @@ namespace DSmithGameCs
 				if (ingot.GetSolidProgress () <= 0)
 					game.GameStats.FoundryIngots.RemoveAt (i);
 			}
+
+			UpdateDialog ();
+		}
+
+		int prevVal;
+		public void UpdateDialog()
+		{
+			if (game.Player.IsLookingAt (this)) {
+				if (game.TooltipHelper.ClaimIfPossible (this)) {
+					game.TooltipHelper.Writer.Resize (300, 20 * 6 + 10);
+					prevVal = -1;
+				}
+				if(game.TooltipHelper.GetOwner()==this && prevVal != (prevVal=(int)(game.GameStats.FoundryTemprature+game.GameStats.CoalPercent+game.GameStats.AirQuality)))
+				{
+					game.TooltipHelper.Writer.Clear ();
+					game.TooltipHelper.Writer.DrawString ("Heat: " + (int)game.GameStats.FoundryTemprature + "°C", 0, 0, Color.Red);
+					game.TooltipHelper.Writer.DrawString ("Coal: " + (int)game.GameStats.CoalPercent + "%", 0, 20, Color.White);
+					game.TooltipHelper.Writer.DrawString ("Oxygen: " + (int)game.GameStats.AirQuality + "%", 0, 40, Color.Aqua);
+					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, 65, Util.GetColorFromVector(game.GameStats.FoundryAlloy.GetColor()));
+					int y = 65;
+					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++)
+					{
+						y += 20;
+						if (y + 20 > game.TooltipHelper.Writer.Height)
+							game.TooltipHelper.Writer.Resize (300, y+20+10);
+						IMetal m = game.GameStats.FoundryAlloy [i];
+						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.GetName(), 10, y, Util.GetColorFromVector(m.GetColor()));
+					}
+				}
+			} else if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.UnClaim ();
 		}
 
 		public override void Render(Scene s, Matrix4 VP)
@@ -65,49 +95,9 @@ namespace DSmithGameCs
 				BasicShader.GetInstance ().ResetColor ();
 			}
 
-			RenderDialog ();
+			if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}
-
-		TextWriter writer = new TextWriter(new Font(FontFamily.GenericMonospace, 18), 400, 80);
-		void MakeDialog()
-		{
-			/*writer.AddLine ("Heat: " + 0 + "°C", new PointF(10, 10), Color.Orange);
-			writer.AddLine ("Coal: " + 0 + "%", new PointF(10, 30), Color.White);
-			writer.AddLine ("Air: " + 0 + "%", new PointF(10, 50), Color.Aqua);
-			writer.RenderLines ();*/
-		}
-
-		/*int prevHeat;
-		int prevCoal;
-		int prevAir;*/
-		void RenderDialog()
-		{
-			/*if (!(game.CurrentView is SmithingView & game.Player.IsLookingAt (this)))
-				return;
-
-			bool shouldUpdateText = false;
-
-			if (prevHeat != (prevHeat=(int)game.GameStats.FoundryTemprature)) {
-				writer.GetLine (0).Chars = "Heat: " + prevHeat + "°C";
-				shouldUpdateText = true;
-			}
-
-			if (prevCoal != (prevCoal=(int)game.GameStats.CoalPercent)) {
-				writer.GetLine (1).Chars = "Coal: " + prevCoal + "%";
-				shouldUpdateText = true;
-			}
-
-			if (prevAir != (prevAir=(int)game.GameStats.AirQuality)) {
-				writer.GetLine (2).Chars = "Air: " + prevAir + "%";
-				shouldUpdateText = true;
-			}
-			
-			if (shouldUpdateText)
-				writer.RenderLines ();
-
-			DialogRenderer.DrawDialogBox (Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
-			OrthoRenderEngine.DrawTexturedBox (writer.TextureID, Input.OrthoMouseX, Input.OrthoMouseY-80+10, 400, 80);
-		*/}
 
 		#region EntityEventListener implementation
 

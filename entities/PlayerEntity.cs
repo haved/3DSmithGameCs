@@ -90,13 +90,15 @@ namespace DSmithGameCs
 			}
 		}
 
-		public bool IsLookingAt(InteractiveEntity interactiveEntity)
+		public bool IsLookingAt(InteractiveEntity e)
 		{
-			return interactiveEntity.IsInField (pos.Xy + new Vector2 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z)) * 3.5f);
+			return e.IsInField (pos.Xy + new Vector2 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z)) * 3.5f);
 		}
 
+		Matrix4 VP;
 		public override void Render(Scene s, Matrix4 VP)
 		{
+			this.VP = VP;
 			Matrix4 MVP = modelspace * VP;
 			ColorShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ().SetMVP (MVP);

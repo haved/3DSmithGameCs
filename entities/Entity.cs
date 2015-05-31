@@ -9,7 +9,7 @@ namespace DSmithGameCs
 
 		public Vector3 pos = new Vector3();
 		public Vector3 rot = new Vector3();
-		protected Matrix4 modelspace = Matrix4.Identity;
+		public Matrix4 modelspace = Matrix4.Identity;
 
 		public abstract void Update(Scene s);
 

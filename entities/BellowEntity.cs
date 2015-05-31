@@ -21,6 +21,7 @@ namespace DSmithGameCs
 			EventHandler = this;
 		}
 
+		int prevAirQuality;
 		public override void Update(Scene s)
 		{
 			bellowSize += bellowSpeed * Time.Delta ();
@@ -30,6 +31,18 @@ namespace DSmithGameCs
 				bellowSpeed -= bellowSpeed * Time.Delta () * 6;
 			if (bellowSize < minBellowSize)
 				bellowSpeed += Time.Delta () * 4;
+
+			if (false &&game.Player.IsLookingAt (this)) {
+				if (game.TooltipHelper.ClaimIfPossible (this)) {
+					game.TooltipHelper.Writer.Resize (150, 30);
+					prevAirQuality = -1;
+				}
+				if (game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)game.GameStats.AirQuality)) {
+					game.TooltipHelper.Writer.Clear ();
+					game.TooltipHelper.Writer.DrawString ("Oxygen: " + prevAirQuality + "%", 0, 0, Color.Aqua);
+				}
+			} else if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.UnClaim ();
 		}
 
 		public override void Render(Scene s, Matrix4 VP)
@@ -38,10 +51,8 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().SetModelspaceMatrix (newModelspace);
 			BasicShader.GetInstance ().SetMVP (newModelspace * VP);
 			base.Draw (s);
-			/*if (game.Player.IsLookingAt (this)) {
-				airText.Chars = "Air: " + (int)game.GameStats.AirQuality + "%";
-				TooltipHelper.Instance.RenderToolTip (airText, Input.OrthoMouseX, Input.OrthoMouseY);
-			}*/
+			if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}
 
 		#region EntityEventListener implementation

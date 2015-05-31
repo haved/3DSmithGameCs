@@ -148,7 +148,7 @@ namespace DSmithGameCs
 					game.ErrortipHelper.Writer.DrawString ("The inventory is too full!", 0, 0, Color.White);
 				}
 				if (game.ErrortipHelper.GetOwner () == this)
-					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-game.ErrortipHelper.Writer.Width, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32-30, Util.LightRed);
+					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-game.ErrortipHelper.Writer.Width, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32-30, Util.LightRed60);
 				else
 					tooFull = 0;
 				tooFull -= Time.Delta ();
