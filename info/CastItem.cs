@@ -9,13 +9,15 @@ namespace DSmithGameCs
 		readonly Vector4 color;
 		readonly string name;
 		readonly float volume;
+		readonly float height;
 
-		public CastItem (Mesh mesh, Vector4 color, string name, float volume)
+		public CastItem (Mesh mesh, Vector4 color, string name, float volume, float height)
 		{
 			this.mesh = mesh;
 			this.color = color;
 			this.name = name;
 			this.volume = volume;
+			this.height = height;
 		}
 
 		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2)*Matrix4.CreateRotationX(0.1f)*Matrix4.CreateRotationY(-0.1f)*Matrix4.CreateTranslation(0, 0, -2.8f)
@@ -48,6 +50,11 @@ namespace DSmithGameCs
 		public float GetVolume()
 		{
 			return volume;
+		}
+
+		public float FillHeight
+		{
+			get { return height; }
 		}
 
 		public override Vector4 GetTooltipColor()

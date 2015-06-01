@@ -18,9 +18,9 @@ namespace DSmithGameCs
 		public static float RelativeMouseX, RelativeMouseY;
 		public static float OrthoMouseX, OrthoMouseY;
 		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
-		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed;
+		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed, PourKeyPressed;
 		public static int PressedItemKey = -1;
-		private static bool closeKeyBuffered, interactKeyBuffered, mousePressBuffered;
+		private static bool closeKeyBuffered, interactKeyBuffered, mousePressBuffered, pourKeyBuffered;
 		private static int bufferedItemKey = -1;
 
 
@@ -49,7 +49,8 @@ namespace DSmithGameCs
 				case INTERACTKEY:
 					interactKeyBuffered = true;
 					break;
-				default:
+				case POURKEY:
+					pourKeyBuffered = true;
 					break;
 				}
 					
@@ -105,14 +106,16 @@ namespace DSmithGameCs
 
 		public static void Update ()
 		{
-			closeKeyBuffered &= !CloseKeyPressed; //If close key is pressed from the previos tick, set closeKeyBuffered to false
-			CloseKeyPressed = closeKeyBuffered;
-
-			interactKeyBuffered &= !InteractKeyPressed; //Same as the above
 			InteractKeyPressed = interactKeyBuffered;
-
-			mousePressBuffered &= !MousePressed;
+			CloseKeyPressed = closeKeyBuffered;
 			MousePressed = mousePressBuffered;
+			PourKeyPressed = pourKeyBuffered;
+
+			interactKeyBuffered = false;
+			closeKeyBuffered = false;
+			mousePressBuffered = false;
+			pourKeyBuffered = false;
+
 			if (PressedItemKey != -1)
 				bufferedItemKey = -1;
 			PressedItemKey = bufferedItemKey;

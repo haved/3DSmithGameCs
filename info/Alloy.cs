@@ -86,6 +86,28 @@ namespace DSmithGameCs
 			return totalAmount;
 		}
 
+		public Alloy Normalized()
+		{
+			var output = new Alloy();
+			foreach( MetalMass mm in metals)
+				output.AddMetal (mm.Metal, mm.Amount / totalAmount);
+			return output;
+		}
+
+		public void SetAmount(float amount)
+		{
+			if (amount < 0.005f) {
+				totalAmount = 0;
+				metals.Clear ();
+				return;
+			}
+
+			foreach (MetalMass mm in metals)
+				mm.Amount = mm.Amount / totalAmount * amount;
+
+			totalAmount = amount;
+		}
+
 		public int MetalTypeAmount{	get { return metals.Count; }}
 		public IMetal this[int index]{get { return metals[index].Metal;}}
 		public float GetMetalAmount(int index) { return metals[index].Amount;}

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
@@ -8,16 +9,41 @@ namespace DSmithGameCs
 		readonly Smith2DGame game;
 		readonly Matrix4 castModelspace;
 
-		public CastingTableEntity (Smith2DGame game, Mesh m, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
+		readonly Mesh fill;
+		readonly Matrix4 fillMatrix;
+
+		public CastingTableEntity (Smith2DGame game, Mesh m, Mesh fill, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
+			this.fill = fill;
 			EventHandler = this;
 			castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (0, 0, height);
+			fillMatrix = Matrix4.CreateTranslation (0, 0, height-0.08f);
 		}
 
 		public override void Update(Scene s)
 		{
 			UpdateDialog ();
+			if (Input.PourKeyPressed & game.TooltipHelper.GetOwner () == this) {
+				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume () - 0.005f & game.GameStats.CastFilling == 0) {
+					Console.Out.WriteLine ("Started filling!");
+					game.GameStats.CastAlloy = game.GameStats.FoundryAlloy.Normalized ();
+					game.GameStats.CastFilling = 0.01f;
+					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.GetAmount ();
+					game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
+				}
+			}
+
+			if (game.GameStats.CastFilling > 0 & game.GameStats.CastFilling < 1) {
+				game.GameStats.CastFilling += Time.Delta();
+				if (game.GameStats.CastFilling >= 1) {
+					game.GameStats.CastFilling = 1;
+				}
+				game.GameStats.FoundryAlloy.SetAmount (game.GameStats.OldFoundryAmount-game.GameStats.CurrentCast.GetVolume()*game.GameStats.CastFilling);
+			}
+
+			if (game.GameStats.CastingTemprature > 25)
+				game.GameStats.CastingTemprature -= Time.Delta ()*50;
 		}
 
 		int prevVal;
@@ -38,7 +64,17 @@ namespace DSmithGameCs
 						game.TooltipHelper.Writer.DrawString (game.GameStats.CurrentCast.GetTooltipName (), 0, 0, Color.White);
 						game.TooltipHelper.Writer.DrawString ("Volume: " + game.GameStats.CurrentCast.GetVolume() + " Ingots", 0, 20, Color.Green);
 						y += 20;
-						if (game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume ()) {
+						if (game.GameStats.CastFilling > 0) {
+							if (game.GameStats.CastFilling >= 1)
+								if(game.GameStats.CastingTemprature > 25)
+									game.TooltipHelper.Writer.DrawString ("The casting is too hot (" + (int)game.GameStats.CastingTemprature + "°C)", 0, 40, Color.Green);
+								else	
+									game.TooltipHelper.Writer.DrawString ("Hit " + Input.GetKeyName(Input.INTERACTKEY) + " to pick up the casting", 0, 40, Color.Green);
+							else
+								game.TooltipHelper.Writer.DrawString ("Casting...", 0, 40, Color.Red);
+							y += 20;
+						}
+						else if (game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume ()-0.005f) {
 							y += 20;
 							if (game.GameStats.FoundryTemprature < game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 								game.TooltipHelper.Writer.DrawString ("The foundry is too cold", 0, 40, Color.Red);
@@ -75,6 +111,13 @@ namespace DSmithGameCs
 				BasicShader.GetInstance ().SetMVP(castModelspace*modelspace * VP);
 				BasicShader.GetInstance ().SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
+				if (game.GameStats.CastFilling > 0) {
+					Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fillMatrix*modelspace;
+					BasicShader.GetInstance ().SetModelspaceMatrix(fillModelspace);
+					BasicShader.GetInstance ().SetMVP (fillModelspace*VP);
+					BasicShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor());
+					fill.Draw ();
+				}
 				BasicShader.GetInstance ().ResetColor ();
 			}
 			if (game.TooltipHelper.GetOwner () == this)
@@ -85,6 +128,8 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed (InteractiveEntity entity, object source)
 		{
+			if (game.GameStats.CastFilling > 0)
+				return;
 			Inventory playerInv = game.GameStats.PlayerInventory;
 			if (game.GameStats.CurrentCast == null & playerInv.HasSelectedItem ()) {
 				CastItem cast = playerInv.GetSelectedItem () as CastItem;

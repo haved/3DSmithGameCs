@@ -35,7 +35,7 @@ namespace DSmithGameCs
 				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * foundryHeatingSpeed;
 				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
 			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
-				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ();
+				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ()*0.2f;
 
 			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
 				IngotItem ingot = game.GameStats.FoundryIngots [i];
