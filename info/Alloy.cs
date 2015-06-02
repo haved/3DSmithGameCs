@@ -28,7 +28,7 @@ namespace DSmithGameCs
 		List<MetalMass> metals = new List<MetalMass>();
 		float totalAmount;
 		Vector4 color = Vector4.Zero;
-		int meltingPoint;
+		int highestMeltingPoint=0;
 
 		public void AddMetal(IMetal m, float amount)
 		{
@@ -41,10 +41,12 @@ namespace DSmithGameCs
 					AddMetal (mm.Metal, mm.Amount/alloy.totalAmount*amount);
 			} else {
 				color = totalAmount * color + amount * m.GetColor ();
-				meltingPoint = (int)(totalAmount * meltingPoint + amount * m.GetMeltingPoint ());
 				totalAmount += amount;
 				color /= totalAmount;
-				meltingPoint = (int)(meltingPoint / totalAmount);
+
+				if (m.GetMeltingPoint() > highestMeltingPoint)
+					highestMeltingPoint = m.GetMeltingPoint ();
+
 				for (int i = 0; i < metals.Count; i++) {
 					if (metals [i].Metal == m) {
 						metals [i].Amount += amount;
@@ -59,7 +61,7 @@ namespace DSmithGameCs
 
 		public int GetMeltingPoint ()
 		{
-			return meltingPoint;
+			return highestMeltingPoint;
 		}
 
 		public Vector4 GetColor ()
@@ -98,6 +100,7 @@ namespace DSmithGameCs
 		{
 			if (amount < 0.005f) {
 				totalAmount = 0;
+				highestMeltingPoint = 0;
 				metals.Clear ();
 				return;
 			}

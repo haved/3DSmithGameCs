@@ -10,12 +10,14 @@ namespace DSmithGameCs
 		readonly Matrix4 castModelspace;
 
 		readonly Mesh fill;
+		readonly Mesh fall;
 		readonly Matrix4 fillMatrix;
 
-		public CastingTableEntity (Smith2DGame game, Mesh m, Mesh fill, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
+		public CastingTableEntity (Smith2DGame game, Mesh m, Mesh fill, Mesh fall, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
 			this.fill = fill;
+			this.fall = fall;
 			EventHandler = this;
 			castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (0, 0, height);
 			fillMatrix = Matrix4.CreateTranslation (0, 0, height-0.08f);
@@ -25,8 +27,8 @@ namespace DSmithGameCs
 		{
 			UpdateDialog ();
 			if (Input.PourKeyPressed & game.TooltipHelper.GetOwner () == this) {
-				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume () - 0.005f & game.GameStats.CastFilling == 0) {
-					Console.Out.WriteLine ("Started filling!");
+				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume () - 0.005f &
+																	game.GameStats.CastFilling <= 0 & game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint()) {
 					game.GameStats.CastAlloy = game.GameStats.FoundryAlloy.Normalized ();
 					game.GameStats.CastFilling = 0.01f;
 					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.GetAmount ();
@@ -67,7 +69,7 @@ namespace DSmithGameCs
 						if (game.GameStats.CastFilling > 0) {
 							if (game.GameStats.CastFilling >= 1)
 								if(game.GameStats.CastingTemprature > 25)
-									game.TooltipHelper.Writer.DrawString ("The casting is too hot (" + (int)game.GameStats.CastingTemprature + "°C)", 0, 40, Color.Green);
+									game.TooltipHelper.Writer.DrawString ("The casting is too hot (" + (int)game.GameStats.CastingTemprature + "°C)", 0, 40, Color.Red);
 								else	
 									game.TooltipHelper.Writer.DrawString ("Hit " + Input.GetKeyName(Input.INTERACTKEY) + " to pick up the casting", 0, 40, Color.Green);
 							else
@@ -112,11 +114,17 @@ namespace DSmithGameCs
 				BasicShader.GetInstance ().SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
 				if (game.GameStats.CastFilling > 0) {
-					Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fillMatrix*modelspace;
+					Matrix4 fallModelspace = fillMatrix*modelspace;
+					Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
 					BasicShader.GetInstance ().SetModelspaceMatrix(fillModelspace);
 					BasicShader.GetInstance ().SetMVP (fillModelspace*VP);
 					BasicShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor());
 					fill.Draw ();
+					if (game.GameStats.CastFilling < 1) {
+						BasicShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
+						BasicShader.GetInstance ().SetMVP (fallModelspace*VP);
+						fall.Draw ();
+					}
 				}
 				BasicShader.GetInstance ().ResetColor ();
 			}
