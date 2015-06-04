@@ -39,6 +39,11 @@ namespace DSmithGameCs
 			return name;
 		}
 
+		public IMetal Clone()
+		{
+			return this;
+		}
+
 		#endregion
 	}
 }

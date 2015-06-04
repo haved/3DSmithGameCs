@@ -109,7 +109,7 @@ namespace DSmithGameCs
 		public static void Main (string[] args)
 		{
 			using (SmithGameWindow gw = new SmithGameWindow (new Smith2DGame ())) {
-				gw.Run (60.00);
+				gw.Run (1, 60.00);
 			}
 		}
 	}

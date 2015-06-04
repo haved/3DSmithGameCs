@@ -1,12 +1,15 @@
 ﻿using System;
+using System.IO;
 using OpenTK;
 
 namespace DSmithGameCs
 {
 	public class IngotItem : Item
 	{
-		readonly IMetal metal;
+		IMetal metal;
 		float solid;
+
+		IngotItem(){}
 
 		public IngotItem (IMetal metal)
 		{
@@ -80,6 +83,17 @@ namespace DSmithGameCs
 		public IMetal GetMetal()
 		{
 			return metal;
+		}
+
+		public override void LoadFromFile(StreamReader reader)
+		{
+			metal = BasicMetal.Iron; //TODO: Add metal saving
+			solid = Single.Parse(reader.ReadLine ());
+		}
+
+		public override void SaveToFile(StreamWriter writer)
+		{
+			writer.WriteLine (solid);
 		}
 	}
 }

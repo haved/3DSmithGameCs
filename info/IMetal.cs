@@ -10,6 +10,8 @@ namespace DSmithGameCs
 		Vector4 GetColor();
 
 		string GetName();
+
+		IMetal Clone();
 	}
 }
 

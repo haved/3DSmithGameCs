@@ -25,10 +25,26 @@ namespace DSmithGameCs
 			}
 		}
 
-		List<MetalMass> metals = new List<MetalMass>();
+		List<MetalMass> metals;
 		float totalAmount;
 		Vector4 color = Vector4.Zero;
 		int highestMeltingPoint=0;
+
+		private Alloy(Alloy other)
+		{
+			this.metals = new List<MetalMass>(other.metals);
+			this.totalAmount = other.totalAmount;
+			this.color = other.color;
+			this.highestMeltingPoint = other.highestMeltingPoint;
+		}
+
+		public Alloy()
+		{
+			metals = new List<MetalMass>();
+			totalAmount = 0;
+			color = Vector4.Zero;
+			highestMeltingPoint = 0;
+		}
 
 		public void AddMetal(IMetal m, float amount)
 		{
@@ -75,9 +91,9 @@ namespace DSmithGameCs
 			foreach (MetalMass m in metals) {
 				if (!contents.Equals (""))
 					contents += " + ";
-				contents += (m.Amount/totalAmount * 100)  + "% " + m.Metal.GetName ();
+				contents += (int)(m.Amount/totalAmount * 100+0.9f)  + "% " + m.Metal.GetName ();
 			}
-			return "Alloy: " + contents;
+			return contents;
 		}
 
 		#endregion
@@ -114,6 +130,11 @@ namespace DSmithGameCs
 		public int MetalTypeAmount{	get { return metals.Count; }}
 		public IMetal this[int index]{get { return metals[index].Metal;}}
 		public float GetMetalAmount(int index) { return metals[index].Amount;}
+
+		public IMetal Clone()
+		{
+			return new Alloy (this);
+		}
 	}
 }
 

@@ -45,7 +45,7 @@ namespace DSmithGameCs
 			}
 
 			if (game.GameStats.CastingTemprature > 25)
-				game.GameStats.CastingTemprature -= Time.Delta ()*50;
+				game.GameStats.CastingTemprature -= Time.Delta ()*150;
 		}
 
 		int prevVal;
@@ -64,7 +64,7 @@ namespace DSmithGameCs
 						game.TooltipHelper.Writer.DrawString ("No cast in table", 0, 0, Color.White);
 					else {
 						game.TooltipHelper.Writer.DrawString (game.GameStats.CurrentCast.GetTooltipName (), 0, 0, Color.White);
-						game.TooltipHelper.Writer.DrawString ("Volume: " + game.GameStats.CurrentCast.GetVolume() + " Ingots", 0, 20, Color.Green);
+						game.TooltipHelper.Writer.DrawString ("Volume: " + game.GameStats.CurrentCast.GetVolume() + " Ingot" + ((int)game.GameStats.CurrentCast.GetVolume() == 1 ? "" : "s"), 0, 20, Color.Green);
 						y += 20;
 						if (game.GameStats.CastFilling > 0) {
 							if (game.GameStats.CastFilling >= 1)
@@ -136,21 +136,35 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed (InteractiveEntity entity, object source)
 		{
-			if (game.GameStats.CastFilling > 0)
-				return;
 			Inventory playerInv = game.GameStats.PlayerInventory;
-			if (game.GameStats.CurrentCast == null & playerInv.HasSelectedItem ()) {
-				CastItem cast = playerInv.GetSelectedItem () as CastItem;
-				if (cast != null) {
-					game.GameStats.CurrentCast = cast;
-					playerInv.RemoveItem (playerInv.GetSelectedItemIndex ());
+			if (game.GameStats.CastFilling > 0) {
+				if (game.GameStats.CastingTemprature > 25)
+					return; //The cast is too hot to take out of the cast
+				if (game.GameStats.CastFilling >= 1) {
+					Item i = game.GameStats.CurrentCast.CreateItem (game, game.GameStats.CastAlloy);
+					if (i == null)
+						return;
+					if (playerInv.CanFitItem (i)) {
+						playerInv.AddItem (i);
+						game.GameStats.CastFilling = 0;
+					}
+					else
+						playerInv.InventoryTooFull (i);
 				}
-			} else if (game.GameStats.CurrentCast != null && !playerInv.HasSelectedItem ()) {
-				if (playerInv.CanFitItem (game.GameStats.CurrentCast)) {
-					playerInv.AddItem (game.GameStats.CurrentCast);
-					game.GameStats.CurrentCast = null;
-				} else {
-					playerInv.InventoryTooFull (game.GameStats.CurrentCast);
+			} else {
+				if (game.GameStats.CurrentCast == null & playerInv.HasSelectedItem ()) {
+					CastItem cast = playerInv.GetSelectedItem () as CastItem;
+					if (cast != null) {
+						game.GameStats.CurrentCast = cast;
+						playerInv.RemoveItem (playerInv.GetSelectedItemIndex ());
+					}
+				} else if (game.GameStats.CurrentCast != null && !playerInv.HasSelectedItem ()) {
+					if (playerInv.CanFitItem (game.GameStats.CurrentCast)) {
+						playerInv.AddItem (game.GameStats.CurrentCast);
+						game.GameStats.CurrentCast = null;
+					} else {
+						playerInv.InventoryTooFull (game.GameStats.CurrentCast);
+					}
 				}
 			}
 		}
@@ -158,4 +172,3 @@ namespace DSmithGameCs
 		#endregion
 	}
 }
-
