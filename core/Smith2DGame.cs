@@ -63,6 +63,12 @@ namespace DSmithGameCs
 		public void Update ()
 		{
 			CountFPS ();
+			Console.Out.WriteLine ("Shader.Binds: " + Shader.Binds);
+			Console.Out.WriteLine ("BasicShader.Binds: " + BasicShader.Binds);
+			Console.Out.WriteLine ("BasicShader.ColorSets: " + BasicShader.ColorSets);
+			Shader.Binds = 0;
+			BasicShader.Binds = 0;
+			BasicShader.ColorSets = 0;
 
 			if (CurrentView.ShouldUpdateScene ())
 				CurrentScene.Update ();

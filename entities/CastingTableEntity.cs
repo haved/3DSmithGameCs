@@ -121,6 +121,7 @@ namespace DSmithGameCs
 					INormalShader shader;
 					if (game.GameStats.CastingTemprature > 25) {
 						shader = LiquidShader.GetInstance ();
+						shader.Bind ();
 						LiquidShader.GetInstance ().UseTexture ();
 						LiquidShader.GetInstance ().AutoPan ();
 						LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
@@ -135,6 +136,7 @@ namespace DSmithGameCs
 						LiquidShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
 						LiquidShader.GetInstance ().SetMVP (fallModelspace*VP);
 						if (!(shader is LiquidShader)) {
+							LiquidShader.GetInstance ().Bind ();
 							LiquidShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor ());
 							LiquidShader.GetInstance ().UseTexture ();
 							LiquidShader.GetInstance ().AutoPan ();

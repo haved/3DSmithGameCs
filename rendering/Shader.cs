@@ -8,8 +8,10 @@ namespace DSmithGameCs
 {
 	public class Shader
 	{
-		private int programID;
-		private List<int> shaders = new List<int> ();
+		public static int Binds = 0;
+
+		int programID;
+		List<int> shaders = new List<int> ();
 
 		public Shader ()
 		{
@@ -44,8 +46,9 @@ namespace DSmithGameCs
 			GL.ValidateProgram (programID);
 		}
 
-		public void Bind()
+		public virtual void Bind()
 		{
+			Binds++;
 			GL.UseProgram (programID);
 		}
 
