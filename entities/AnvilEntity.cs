@@ -48,12 +48,12 @@ namespace DSmithGameCs
 		static Vector3 eyeOffset = new Vector3(0, 0, 10);
 		public Vector3 GetEyePos()
 		{
-			return transition.GetEyePos (pos+eyeOffset);
+			return transition.GetEyePos (Pos+eyeOffset);
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition.GetEyeTarget (pos);
+			return transition.GetEyeTarget (Pos);
 		}
 
 		public Vector3 GetEyeUp()

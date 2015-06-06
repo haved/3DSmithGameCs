@@ -41,7 +41,6 @@ namespace DSmithGameCs
 			ColorShader.GetInstance ().SetMVP (allScreen*orthoMatrix);
 			ColorShader.GetInstance ().SetColor (color);
 			flat.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawColoredTextureOnEntireScreen(Vector4 color, Texture texture)
@@ -53,7 +52,6 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetSampleUV (Vector2.Zero);
 			TextureShader.GetInstance ().SetSampleSize (Util.X1Y1);
 			flat.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawColoredBox(Vector4 color, float x, float y, float width, float height)
@@ -62,7 +60,6 @@ namespace DSmithGameCs
 			ColorShader.GetInstance ().SetMVP (Matrix4.CreateScale(width, height, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
 			ColorShader.GetInstance ().SetColor (color);
 			flat.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height)
@@ -89,7 +86,6 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetSampleUV (Vector2.Zero);
 			TextureShader.GetInstance ().SetSampleSize (Util.X1Y1);
 			flat.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
@@ -106,7 +102,6 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetSampleUV (texX, texY);
 			TextureShader.GetInstance ().SetSampleSize (texXSize, texYSize);
 			flat.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 
 		public static void DrawColoredMesh(Mesh mesh, Vector4 color, float x, float y, float width, float height, float meshX1, float meshY1, float meshWidth, float meshHeight)
@@ -116,6 +111,7 @@ namespace DSmithGameCs
 
 		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height, float meshX1, float meshY1, float meshWidth, float meshHeight)
 		{
+			BasicShader.GetInstance ().Bind ();
 			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateTranslation(-meshX1, -meshY1, 0)*Matrix4.CreateScale(width/meshWidth, height/meshHeight, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
 			BasicShader.GetInstance ().SetModelspaceMatrix (Matrix4.Identity);
 			BasicShader.GetInstance ().SetColor (color);
@@ -182,8 +178,6 @@ namespace DSmithGameCs
 			TextureShader.GetInstance ().SetSampleUV (2/3f, 1);
 			TextureShader.GetInstance ().SetSampleSize (1/3f, -1/3f);
 			flat.Draw ();
-
-			BasicShader.GetInstance ().Bind ();
 		}
 	}
 }

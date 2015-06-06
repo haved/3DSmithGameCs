@@ -42,12 +42,12 @@ namespace DSmithGameCs
 
 		public Vector3 GetEyePos()
 		{
-			return transition.GetEyePos (new Vector3 (game.Player.pos.X, game.Player.pos.Y - 10, 40));
+			return transition.GetEyePos (new Vector3 (game.Player.Pos.X, game.Player.Pos.Y - 10, 40));
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition.GetEyeTarget (new Vector3 (game.Player.pos.X, game.Player.pos.Y, 1.73f));
+			return transition.GetEyeTarget (new Vector3 (game.Player.Pos.X, game.Player.Pos.Y, 1.73f));
 		}
 
 		public Vector3 GetEyeUp()

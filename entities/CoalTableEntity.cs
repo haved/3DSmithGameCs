@@ -28,15 +28,15 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			Matrix4 MVP = modelspace * VP;
-			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			Matrix4 MVP = Modelspace * VP;
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
 			BasicShader.GetInstance ().SetMVP (MVP);
 			table.Draw ();
 			ColorShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ().SetMVP (MVP);
 			ColorShader.GetInstance ().SetColor (coalColor);
 			coal.Draw ();
-			BasicShader.GetInstance ().Bind ();
 		}
 	}
 }

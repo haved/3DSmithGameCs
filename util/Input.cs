@@ -20,8 +20,8 @@ namespace DSmithGameCs
 		public static bool MouseDown, LeftKey, RightKey, UpKey, DownKey;
 		public static bool InteractKeyPressed, CloseKeyPressed, MousePressed, PourKeyPressed;
 		public static int PressedItemKey = -1;
-		private static bool closeKeyBuffered, interactKeyBuffered, mousePressBuffered, pourKeyBuffered;
-		private static int bufferedItemKey = -1;
+		static bool closeKeyBuffered, interactKeyBuffered, mousePressBuffered, pourKeyBuffered;
+		static int bufferedItemKey = -1;
 
 
 		public static void AddToWindow (GameWindow window)

@@ -7,21 +7,23 @@ namespace DSmithGameCs
 	{
 		bool dead = false;
 
-		public Vector3 pos = new Vector3();
-		public Vector3 rot = new Vector3();
-		public Matrix4 modelspace = Matrix4.Identity;
+		public Vector3 Pos;
+		public Vector3 Rot;
+		public Matrix4 Modelspace = Matrix4.Identity;
 
 		public abstract void Update(Scene s);
 
 		public void UpdateModelspaceMatrix()
 		{
-			modelspace = Matrix4.CreateRotationX (rot.X) * Matrix4.CreateRotationY (rot.Y) * Matrix4.CreateRotationZ (rot.Z) * Matrix4.CreateTranslation (pos);
+			Modelspace = Matrix4.CreateRotationX (Rot.X) * Matrix4.CreateRotationY (Rot.Y) * Matrix4.CreateRotationZ (Rot.Z) * Matrix4.CreateTranslation (Pos);
 		}
 
 		public virtual void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
-			BasicShader.GetInstance ().SetMVP(modelspace * VP);
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.GetInstance ().SetModelspaceMatrix(Modelspace);
+			BasicShader.GetInstance ().SetMVP(Modelspace * VP);
 			Draw (s);
 		}
 
@@ -52,8 +54,8 @@ namespace DSmithGameCs
 				}
 			}
 
-			pos.X += xMove;
-			pos.Y += yMove;
+			Pos.X += xMove;
+			Pos.Y += yMove;
 			UpdateModelspaceMatrix ();
 		}
 
@@ -64,22 +66,22 @@ namespace DSmithGameCs
 
 		public virtual float GetSolidX1()
 		{
-			return pos.X-1;
+			return Pos.X-1;
 		}
 
 		public virtual float GetSolidY1()
 		{
-			return pos.Y-1;
+			return Pos.Y-1;
 		}
 
 		public virtual float GetSolidX2()
 		{
-			return pos.X+1;
+			return Pos.X+1;
 		}
 
 		public virtual float GetSolidY2()
 		{
-			return pos.Y+1;
+			return Pos.Y+1;
 		}
 	}
 }

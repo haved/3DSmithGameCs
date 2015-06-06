@@ -21,7 +21,7 @@ namespace DSmithGameCs
 
 		public bool IsInField(Vector2 point)
 		{
-			return ((point - pos.Xy) * new Vector2 (1 / xSize, 1 / ySize)).Length < 1.4f;
+			return ((point - Pos.Xy) * new Vector2 (1 / xSize, 1 / ySize)).Length < 1.4f;
 		}
 	}
 }

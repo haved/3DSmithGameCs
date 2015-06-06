@@ -32,12 +32,14 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			Matrix4 MVP = modelspace * VP;
-			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			Matrix4 MVP = Modelspace * VP;
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
 			BasicShader.GetInstance ().SetMVP (MVP);
 			box.Draw ();
 			Matrix4 lidMatrix = Matrix4.CreateRotationX (lidRotation) * lidOffset;
-			BasicShader.GetInstance ().SetModelspaceMatrix (lidMatrix*modelspace);
+			BasicShader.GetInstance ().SetModelspaceMatrix (lidMatrix*Modelspace);
 			BasicShader.GetInstance ().SetMVP (lidMatrix*MVP);
 			lid.Draw ();
 		}

@@ -17,8 +17,8 @@ namespace DSmithGameCs
 		private float xSize, ySize;
 		public PlayerEntity(float x, float y, Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
 		{
-			this.pos.X = x;
-			this.pos.Y = y;
+			this.Pos.X = x;
+			this.Pos.Y = y;
 			this.mesh = mesh;
 			this.shadow = shadow;
 			this.shadowColor = shadowColor;
@@ -68,14 +68,14 @@ namespace DSmithGameCs
 				speed.Y = 0;
 			}
 
-			rot.Z = (float)Math.Atan2 (-Input.RelativeMouseY,Input.RelativeMouseX);
+			Rot.Z = (float)Math.Atan2 (-Input.RelativeMouseY,Input.RelativeMouseX);
 
 			UpdateModelspaceMatrix ();
 		}
 
 		public void LookAt(float x, float y)
 		{
-			rot.Z = (float)Math.Atan2 (y-pos.Y,x-pos.X);
+			Rot.Z = (float)Math.Atan2 (y-Pos.Y,x-Pos.X);
 		}
 
 		void Interact(Scene s)
@@ -92,14 +92,14 @@ namespace DSmithGameCs
 
 		public bool IsLookingAt(InteractiveEntity e)
 		{
-			return e.IsInField (pos.Xy + new Vector2 ((float)Math.Cos (rot.Z), (float)Math.Sin (rot.Z)) * 3.5f);
+			return e.IsInField (Pos.Xy + new Vector2 ((float)Math.Cos (Rot.Z), (float)Math.Sin (Rot.Z)) * 3.5f);
 		}
 
 		Matrix4 VP;
 		public override void Render(Scene s, Matrix4 VP)
 		{
 			this.VP = VP;
-			Matrix4 MVP = modelspace * VP;
+			Matrix4 MVP = Modelspace * VP;
 			ColorShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ().SetMVP (MVP);
 			ColorShader.GetInstance ().SetColor (shadowColor);
@@ -107,7 +107,8 @@ namespace DSmithGameCs
 			shadow.Draw ();
 			GL.Enable (EnableCap.DepthTest);
 			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
 			BasicShader.GetInstance ().SetMVP (MVP);
 			mesh.Draw ();
 		}
@@ -119,22 +120,22 @@ namespace DSmithGameCs
 
 		public override float GetSolidX1()
 		{
-			return pos.X - xSize;
+			return Pos.X - xSize;
 		}
 
 		public override float GetSolidY1()
 		{
-			return pos.Y - ySize;
+			return Pos.Y - ySize;
 		}
 
 		public override float GetSolidX2()
 		{
-			return pos.X + xSize;
+			return Pos.X + xSize;
 		}
 
 		public override float GetSolidY2()
 		{
-			return pos.Y + ySize;
+			return Pos.Y + ySize;
 		}
 	}
 }

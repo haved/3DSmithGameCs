@@ -91,7 +91,7 @@ namespace DSmithGameCs
 			foreach (MetalMass m in metals) {
 				if (!contents.Equals (""))
 					contents += " + ";
-				contents += (int)(m.Amount/totalAmount * 100+0.9f)  + "% " + m.Metal.GetName ();
+				contents += (int)(m.Amount/totalAmount * 100+0.4f)  + "% " + m.Metal.GetName ();
 			}
 			return contents;
 		}
@@ -133,6 +133,8 @@ namespace DSmithGameCs
 
 		public IMetal Clone()
 		{
+			if (metals.Count == 1)
+				return metals [0].Metal;
 			return new Alloy (this);
 		}
 	}

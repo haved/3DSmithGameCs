@@ -23,7 +23,7 @@ namespace DSmithGameCs
 
 		public static float CurrentTime()
 		{
-			return Environment.TickCount / 1000f;
+			return Environment.TickCount * 0.001f;
 		}
 	}
 }

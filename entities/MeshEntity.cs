@@ -21,12 +21,12 @@ namespace DSmithGameCs
 		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ)
 		{
 			mesh = m;
-			pos.X = x;
-			pos.Y = y;
-			pos.Z = z;
-			rot.X = rotX;
-			rot.Y = rotY;
-			rot.Z = rotZ;
+			Pos.X = x;
+			Pos.Y = y;
+			Pos.Z = z;
+			Rot.X = rotX;
+			Rot.Y = rotY;
+			Rot.Z = rotZ;
 			UpdateModelspaceMatrix ();
 		}
 
@@ -44,22 +44,22 @@ namespace DSmithGameCs
 
 		public override float GetSolidX1()
 		{
-			return pos.X - xSize;
+			return Pos.X - xSize;
 		}
 
 		public override float GetSolidY1()
 		{
-			return pos.Y - ySize;
+			return Pos.Y - ySize;
 		}
 
 		public override float GetSolidX2()
 		{
-			return pos.X + xSize;
+			return Pos.X + xSize;
 		}
 
 		public override float GetSolidY2()
 		{
-			return pos.Y + ySize;
+			return Pos.Y + ySize;
 		}
 	}
 }

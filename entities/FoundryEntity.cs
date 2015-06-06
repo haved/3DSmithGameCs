@@ -88,20 +88,31 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
-			BasicShader.GetInstance ().SetMVP(modelspace * VP);
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.GetInstance ().SetModelspaceMatrix(Modelspace);
+			BasicShader.GetInstance ().SetMVP(Modelspace * VP);
 			Draw (s);
 			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++)
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
-					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * modelspace, VP);
+					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * Modelspace, VP);
 
 			if (game.GameStats.FoundryAlloy.GetAmount () >= 0.01f) {
-				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * modelspace;
-				BasicShader.GetInstance ().SetModelspaceMatrix (m);
-				BasicShader.GetInstance ().SetMVP (m * VP);
-				BasicShader.GetInstance ().SetColor (game.GameStats.FoundryAlloy.GetColor ());
+				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * Modelspace;
+				INormalShader shader;
+				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
+					shader = LiquidShader.GetInstance ();
+					shader.Bind ();
+					LiquidShader.GetInstance ().UseTexture ();
+					LiquidShader.GetInstance ().AutoPan ();
+					LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
+				} else
+					shader = BasicShader.GetInstance ();
+
+				shader.SetModelspaceMatrix (m);
+				shader.SetMVP (m * VP);
+				shader.SetColor (game.GameStats.FoundryAlloy.GetColor ());
 				molten.Draw ();
-				BasicShader.GetInstance ().ResetColor ();
 			}
 
 			if (game.TooltipHelper.GetOwner () == this)

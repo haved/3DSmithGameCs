@@ -27,6 +27,7 @@ namespace DSmithGameCs
 			BasicShader.MakeInstance ().Bind ();
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
+			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
 			OrthoRenderEngine.Init ();
 			TooltipHelper = new TooltipHelper ();
 			ErrortipHelper = new TooltipHelper ();
@@ -57,7 +58,6 @@ namespace DSmithGameCs
 			CurrentScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/coalTableSmall.ply"), new Mesh ("../../res/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
 			CurrentScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/table.ply"), 11.5f, -8, 0, 7, 4));
 			CurrentScene.AddEntity (new MailboxEntity(this, new Mesh("../../res/mailboxBox.ply"),new Mesh("../../res/mailboxLid.ply"), Matrix4.CreateTranslation(0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
-
 		}
 
 		public void Update ()

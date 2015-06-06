@@ -3,7 +3,7 @@ using System;
 
 namespace DSmithGameCs
 {
-	public class Vertex
+	public struct Vertex
 	{
 		public const int VERTEXFLOATAMOUNT = 9;
 		public const int VERTEXBYTEAMOUNT = VERTEXFLOATAMOUNT*sizeof(float);
@@ -29,7 +29,7 @@ namespace DSmithGameCs
 
 		public static float[] VertexArrayToFloatArray(Vertex[] vertices)
 		{
-			float[] output = new float[vertices.Length*VERTEXFLOATAMOUNT];
+			var output = new float[vertices.Length*VERTEXFLOATAMOUNT];
 
 			for (int i = 0; i < vertices.Length; i++) {
 				output [i * VERTEXFLOATAMOUNT+0] = vertices [i].X;

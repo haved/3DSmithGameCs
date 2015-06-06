@@ -105,28 +105,44 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetModelspaceMatrix(modelspace);
-			BasicShader.GetInstance ().SetMVP(modelspace * VP);
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().SetModelspaceMatrix(Modelspace);
+			BasicShader.GetInstance ().SetMVP(Modelspace * VP);
 			Draw (s);
 			if (game.GameStats.CurrentCast != null) {
-				BasicShader.GetInstance ().SetModelspaceMatrix(castModelspace*modelspace);
-				BasicShader.GetInstance ().SetMVP(castModelspace*modelspace * VP);
+				BasicShader.GetInstance ().SetModelspaceMatrix(castModelspace*Modelspace);
+				BasicShader.GetInstance ().SetMVP(castModelspace*Modelspace * VP);
 				BasicShader.GetInstance ().SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
 				if (game.GameStats.CastFilling > 0) {
-					Matrix4 fallModelspace = fillMatrix*modelspace;
+					Matrix4 fallModelspace = fillMatrix*Modelspace;
 					Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
-					BasicShader.GetInstance ().SetModelspaceMatrix(fillModelspace);
-					BasicShader.GetInstance ().SetMVP (fillModelspace*VP);
-					BasicShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor());
+
+					INormalShader shader;
+					if (game.GameStats.CastingTemprature > 25) {
+						shader = LiquidShader.GetInstance ();
+						LiquidShader.GetInstance ().UseTexture ();
+						LiquidShader.GetInstance ().AutoPan ();
+						LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
+					} else
+						shader = BasicShader.GetInstance ();
+
+					shader.SetModelspaceMatrix(fillModelspace);
+					shader.SetMVP (fillModelspace*VP);
+					shader.SetColor (game.GameStats.CastAlloy.GetColor());
 					fill.Draw ();
 					if (game.GameStats.CastFilling < 1) {
-						BasicShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
-						BasicShader.GetInstance ().SetMVP (fallModelspace*VP);
+						LiquidShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
+						LiquidShader.GetInstance ().SetMVP (fallModelspace*VP);
+						if (!(shader is LiquidShader)) {
+							LiquidShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor ());
+							LiquidShader.GetInstance ().UseTexture ();
+							LiquidShader.GetInstance ().AutoPan ();
+							LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
+						}
 						fall.Draw ();
 					}
 				}
-				BasicShader.GetInstance ().ResetColor ();
 			}
 			if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);

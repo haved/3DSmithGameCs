@@ -3,11 +3,11 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BasicShader : Shader
+	public class BasicShader : Shader, INormalShader
 	{
-		private static BasicShader instance;
+		static BasicShader instance;
 
-		private int modelspaceID, MVP_id, colorId;
+		int modelspaceID, MVP_id, colorId;
 
 		public BasicShader ()
 		{

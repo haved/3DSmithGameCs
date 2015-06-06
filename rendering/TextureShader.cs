@@ -22,7 +22,6 @@ namespace DSmithGameCs
 			sampleSizeId = AddUniform ("sampleSize");
 			SetColor (new Vector4(1, 1, 1, 1));
 			SetSampleSize (new Vector2(1, 1));
-			GL.ActiveTexture(TextureUnit.Texture0);
 			SetInteger (diffuseId, 0);
 		}
 
@@ -43,15 +42,15 @@ namespace DSmithGameCs
 
 		public void SetTexture(Texture texture)
 		{
-			GL.ActiveTexture(TextureUnit.Texture0);
-			SetInteger (diffuseId, 0);
+			//GL.ActiveTexture(TextureUnit.Texture0); //This is default
+			//SetInteger (diffuseId, 0); //This is done in the constructor
 			GL.BindTexture(TextureTarget.Texture2D, texture.GetTextureID());
 		}
 
 		public void SetTexture(int texture)
 		{
-			GL.ActiveTexture(TextureUnit.Texture0);
-			SetInteger (diffuseId, 0);
+			//GL.ActiveTexture(TextureUnit.Texture0); //This is default
+			//SetInteger (diffuseId, 0); //This is done in the constructor
 			GL.BindTexture(TextureTarget.Texture2D, texture);
 		}
 

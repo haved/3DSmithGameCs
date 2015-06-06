@@ -36,12 +36,14 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			Matrix4 MVP = modelspace * VP;
-			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
+			Matrix4 MVP = Modelspace * VP;
+			BasicShader.GetInstance ().Bind ();
+			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
 			BasicShader.GetInstance ().SetMVP (MVP);
 			hatchHole.Draw ();
 			Matrix4 hatchTransform = Matrix4.CreateRotationY (hatchRotation) * hatchTranslation;
-			BasicShader.GetInstance ().SetModelspaceMatrix (hatchTransform*modelspace);
+			BasicShader.GetInstance ().SetModelspaceMatrix (hatchTransform*Modelspace);
 			BasicShader.GetInstance ().SetMVP (hatchTransform*MVP);
 			hatch.Draw ();
 		}
@@ -51,9 +53,9 @@ namespace DSmithGameCs
 			game.GameStats.PlayerInventory.Deselect ();
 			game.SetView (this);
 			if (game.Player.GetSolidX1 () < GetSolidX2 () & game.Player.GetSolidX2 () > GetSolidX1 () & game.Player.GetSolidY1 () < GetSolidY2 () & game.Player.GetSolidY2 () > GetSolidY1 ()) {
-				game.Player.LookAt (pos.X, pos.Y);
-				game.Player.pos.X = pos.X - (float)Math.Cos (game.Player.rot.Z) * 5;
-				game.Player.pos.Y = pos.Y - (float)Math.Sin (game.Player.rot.Z) * 5;
+				game.Player.LookAt (Pos.X, Pos.Y);
+				game.Player.Pos.X = Pos.X - (float)Math.Cos (game.Player.Rot.Z) * 5;
+				game.Player.Pos.Y = Pos.Y - (float)Math.Sin (game.Player.Rot.Z) * 5;
 				game.Player.UpdateModelspaceMatrix ();
 			}
 		}
@@ -144,12 +146,12 @@ namespace DSmithGameCs
 		static Vector3 eyeOffset = new Vector3 (0, 0, 10);
 		public Vector3 GetEyePos()
 		{
-			return transition.GetEyePos (pos+eyeOffset);
+			return transition.GetEyePos (Pos+eyeOffset);
 		}
 
 		public Vector3 GetEyeTarget()
 		{
-			return transition.GetEyeTarget (pos);
+			return transition.GetEyeTarget (Pos);
 		}
 
 		public Vector3 GetEyeUp()
