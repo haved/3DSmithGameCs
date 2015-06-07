@@ -74,11 +74,10 @@ namespace DSmithGameCs
 			SetVector2 (sampleSizeId, sampleSize);
 		}
 
-		public static TextureShader MakeInstance()
+		public static void MakeInstance()
 		{
 			if (instance == null)
 				instance = new TextureShader ();
-			return instance;
 		}
 
 		public static TextureShader GetInstance()

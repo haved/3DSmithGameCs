@@ -16,7 +16,8 @@ namespace DSmithGameCs
 
 		public void OnViewUsed(View prevView)
 		{
-			transition.SetStart (prevView.GetEyePos(), prevView.GetEyeTarget(), prevView.GetEyeUp());
+			if (prevView != null)
+				transition.SetStart (prevView.GetEyePos (), prevView.GetEyeTarget (), prevView.GetEyeUp ());
 		}
 
 		public bool ShouldUpdateScene ()

@@ -29,11 +29,10 @@ namespace DSmithGameCs
 			SetMatrix4 (MVP_id, MVP);
 		}
 
-		public static ColorShader MakeInstance()
+		public static void MakeInstance()
 		{
 			if (instance == null)
 				instance = new ColorShader ();
-			return instance;
 		}
 
 		public static ColorShader GetInstance()

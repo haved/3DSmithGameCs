@@ -24,7 +24,7 @@ namespace DSmithGameCs
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
 			TextureCollection.Load ();
 			MeshCollection.Load ();
-			BasicShader.MakeInstance ().Bind ();
+			BasicShader.MakeInstance ();
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
 			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
@@ -32,12 +32,14 @@ namespace DSmithGameCs
 			TooltipHelper = new TooltipHelper ();
 			ErrortipHelper = new TooltipHelper ();
 
-			NewGame ();
+			CurrentView = new MainMenuView (this);
+			CurrentView.OnViewUsed (null);
 		}
 
-		private void NewGame()
+		public void NewGame()
 		{
-			CurrentView = new SmithingView (this);
+			CurrentView = null;
+			SetView(new SmithingView (this));
 			GameStats = new GameInfo ();
 			GameStats.NewGame ();
 
@@ -63,12 +65,6 @@ namespace DSmithGameCs
 		public void Update ()
 		{
 			CountFPS ();
-			Console.Out.WriteLine ("Shader.Binds: " + Shader.Binds);
-			Console.Out.WriteLine ("BasicShader.Binds: " + BasicShader.Binds);
-			Console.Out.WriteLine ("BasicShader.ColorSets: " + BasicShader.ColorSets);
-			Shader.Binds = 0;
-			BasicShader.Binds = 0;
-			BasicShader.ColorSets = 0;
 
 			if (CurrentView.ShouldUpdateScene ())
 				CurrentScene.Update ();

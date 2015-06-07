@@ -5,9 +5,6 @@ namespace DSmithGameCs
 {
 	public class BasicShader : Shader, INormalShader
 	{
-		public static int ColorSets = 0;
-		public static int Binds = 0;
-
 		static BasicShader instance;
 
 		int modelspaceID, MVP_id, colorId;
@@ -25,7 +22,6 @@ namespace DSmithGameCs
 
 		public override void Bind()
 		{
-			BasicShader.Binds++;
 			base.Bind ();
 		}
 
@@ -41,13 +37,11 @@ namespace DSmithGameCs
 
 		public void SetColor(Vector4 color)
 		{
-			ColorSets++;
 			SetVector4 (colorId, color);
 		}
 
 		public void ResetColor()
 		{
-			ColorSets++;
 			SetVector4 (colorId, Util.White);
 		}
 
