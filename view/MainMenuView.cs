@@ -14,9 +14,9 @@ namespace DSmithGameCs
 
 		#region View implementation
 
-		const string newGame = "New game";
 		public void OnViewUsed (View prevView)
 		{
+			string newGame = Localization.GetLocalization ("ui.button.newgame");
 			game.TooltipHelper.Writer.Resize (200, 30);
 			game.TooltipHelper.Writer.Clear ();
 			game.TooltipHelper.Writer.DrawString (newGame, (game.TooltipHelper.Writer.Width - game.TooltipHelper.Writer.GetLineWidth (newGame)) / 2, 0, Color.White);

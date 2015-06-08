@@ -61,10 +61,10 @@ namespace DSmithGameCs
 					game.TooltipHelper.Writer.Clear ();
 					int y = 20;
 					if (game.GameStats.CurrentCast == null)
-						game.TooltipHelper.Writer.DrawString ("No cast in table", 0, 0, Color.White);
+						game.TooltipHelper.Writer.DrawString (Localization.GetLocalization("ui.tooltip.nocast"), 0, 0, Color.White);
 					else {
 						game.TooltipHelper.Writer.DrawString (game.GameStats.CurrentCast.GetTooltipName (), 0, 0, Color.White);
-						game.TooltipHelper.Writer.DrawString ("Volume: " + game.GameStats.CurrentCast.GetVolume() + " Ingot" + ((int)game.GameStats.CurrentCast.GetVolume() == 1 ? "" : "s"), 0, 20, Color.Green);
+						game.TooltipHelper.Writer.DrawString (Localization.GetLocalization("ui.tooltip.volume:") + game.GameStats.CurrentCast.GetVolume() + " " + Localization.GetLocalization("ui.tooltip.unit.ingot" + ((int)game.GameStats.CurrentCast.GetVolume() == 1 ? "" : ".plural")), 0, 20, Color.Green);
 						y += 20;
 						if (game.GameStats.CastFilling > 0) {
 							if (game.GameStats.CastFilling >= 1)
@@ -91,7 +91,7 @@ namespace DSmithGameCs
 								}
 							}
 						} else {
-							game.TooltipHelper.Writer.DrawString ("Not enough molten metal!", 0, 40, Color.Red);
+							game.TooltipHelper.Writer.DrawString (Localization.GetLocalization("ui.tooltip.notenoughmoltenmetal"), 0, 40, Color.Red);
 							y += 20;
 						}
 					}

@@ -38,7 +38,7 @@ namespace DSmithGameCs
 
 		public string GetName ()
 		{
-			return name;
+			return Localization.GetLocalization("ui.metal."+name);
 		}
 
 		public IMetal Clone()

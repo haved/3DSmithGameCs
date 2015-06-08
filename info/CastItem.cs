@@ -78,7 +78,7 @@ namespace DSmithGameCs
 
 		public override string GetTooltipName()
 		{
-			return info.Name + " Cast";
+			return Localization.GetLocalization("ui.cast." + info.Name) + Localization.GetLocalization("ui.item.cast");
 		}
 
 		public float GetVolume()

@@ -31,6 +31,7 @@ namespace DSmithGameCs
 			OrthoRenderEngine.Init ();
 			TooltipHelper = new TooltipHelper ();
 			ErrortipHelper = new TooltipHelper ();
+			Localization.LoadFromFile ("../../res/localization/no_NO.txt");
 
 			CurrentView = new MainMenuView (this);
 			CurrentView.OnViewUsed (null);

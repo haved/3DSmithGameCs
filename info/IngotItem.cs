@@ -45,7 +45,7 @@ namespace DSmithGameCs
 
 		public override string GetTooltipName()
 		{
-			return metal.GetName() + " Ingot";
+			return metal.GetName() + Localization.GetLocalization("ui.item.ingot");
 		}
 
 		public override Vector4 GetTooltipColor()

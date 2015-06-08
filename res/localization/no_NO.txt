@@ -1,0 +1,18 @@
+ui.button.newgame===Nytt Spill
+ui.tooltip.oxygen:===Oksygen:       
+ui.tooltip.nocast===Ingen støpeform på bordet
+ui.tooltip.volume:===Volum: 
+ui.tooltip.unit.ingot===Barre
+ui.tooltip.unit.ingot.plural===Barrer
+ui.tooltip.notenoughmoltenmetal===Ikke nok flytende metall
+ui.item.ingot===barre
+ui.item.cast===støpeform
+ui.metal.Copper===Kobber
+ui.metal.Gold===Gull
+ui.metal.Iron===Jern
+ui.metal.Lead===Bly
+ui.metal.Tin===Tinn
+ui.metal.Zinc===Sink
+ui.metal.Carbon===Karbon
+ui.cast.Ingot===Barre
+ui.cast.Greatsword===Storsverd

@@ -34,12 +34,12 @@ namespace DSmithGameCs
 
 			if (game.Player.IsLookingAt (this)) {
 				if (game.TooltipHelper.ClaimIfPossible (this)) {
-					game.TooltipHelper.Writer.Resize (150, 30);
+					game.TooltipHelper.Writer.Resize (200, 30);
 					prevAirQuality = -1;
 				}
 				if (game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)game.GameStats.AirQuality)) {
 					game.TooltipHelper.Writer.Clear ();
-					game.TooltipHelper.Writer.DrawString ("Oxygen: " + prevAirQuality + "%", 0, 0, Color.Aqua);
+					game.TooltipHelper.Writer.DrawString (Localization.GetLocalization("ui.tooltip.oxygen:") + prevAirQuality + "%", 0, 0, Color.Aqua);
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.UnClaim ();
