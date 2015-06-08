@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class MainMenuView : View
 	{
-		Smith2DGame game;
+		readonly Smith2DGame game;
 
 		public MainMenuView (Smith2DGame game)
 		{
@@ -27,18 +27,11 @@ namespace DSmithGameCs
 			return false;
 		}
 
+		bool hoveringNewGame = false;
 		public void UpdateView (Scene s)
 		{
-			if (Input.MousePressed) {
-				float x = Input.OrthoMouseX - OrthoRenderEngine.GetCanvasWidth () / 2;
-				float y = Input.OrthoMouseY - OrthoRenderEngine.GetCanvasHeight () / 2 + 70;
-				float width = game.TooltipHelper.Writer.Width / 2;
-				float height = game.TooltipHelper.Writer.Height / 2;
-
-				if (x > -width & x < width & y > -height & y < height) {
-					game.NewGame ();
-				}
-			}
+			if(Input.MousePressed & hoveringNewGame)
+				game.NewGame();
 		}
 
 		public bool ShouldRenderScene ()
@@ -65,7 +58,10 @@ namespace DSmithGameCs
 		{
 			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, 100, 0, 200, OrthoRenderEngine.GetCanvasHeight());
 			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
-			OrthoRenderEngine.DrawColoredTexturedBox (Util.White, game.TooltipHelper.Writer.GetTextureID (), 100, maxY, game.TooltipHelper.Writer.Width, game.TooltipHelper.Writer.Height);
+			float x = Input.OrthoMouseX - 100;
+			float y = Input.OrthoMouseY - maxY;
+			hoveringNewGame = x > 0 & x < game.TooltipHelper.Writer.Width & y > 0 & y < game.TooltipHelper.Writer.Height;
+			OrthoRenderEngine.DrawColoredTexturedBox (hoveringNewGame ? Util.White : Util.White60, game.TooltipHelper.Writer.GetTextureID (), 100, maxY, game.TooltipHelper.Writer.Width, game.TooltipHelper.Writer.Height);
 		}
 
 		#endregion
