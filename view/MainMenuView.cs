@@ -17,9 +17,9 @@ namespace DSmithGameCs
 		const string newGame = "New game";
 		public void OnViewUsed (View prevView)
 		{
-			game.TooltipHelper.Writer.Resize (600, 50);
+			game.TooltipHelper.Writer.Resize (200, 30);
 			game.TooltipHelper.Writer.Clear ();
-			game.TooltipHelper.Writer.DrawString (newGame, (game.TooltipHelper.Writer.Width - game.TooltipHelper.Writer.GetLineWidth (newGame)) / 2, 10, Color.White);
+			game.TooltipHelper.Writer.DrawString (newGame, (game.TooltipHelper.Writer.Width - game.TooltipHelper.Writer.GetLineWidth (newGame)) / 2, 0, Color.White);
 		}
 
 		public bool ShouldUpdateScene ()
@@ -63,7 +63,9 @@ namespace DSmithGameCs
 
 		public void RenderView (Scene s)
 		{
-			game.TooltipHelper.RenderNormalDialog ((OrthoRenderEngine.GetCanvasWidth()-game.TooltipHelper.Writer.Width)/2, OrthoRenderEngine.GetCanvasHeight()/2-25-70, Util.White);
+			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, 100, 0, 200, OrthoRenderEngine.GetCanvasHeight());
+			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
+			OrthoRenderEngine.DrawColoredTexturedBox (Util.White, game.TooltipHelper.Writer.GetTextureID (), 100, maxY, game.TooltipHelper.Writer.Width, game.TooltipHelper.Writer.Height);
 		}
 
 		#endregion

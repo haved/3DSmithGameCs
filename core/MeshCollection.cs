@@ -9,9 +9,9 @@ namespace DSmithGameCs
 		public static void Load()
 		{
 			meshes = new Mesh[3];
-			meshes [0] = new Mesh ("../../res/GreatswordCast.ply");
-			meshes [1] = new Mesh ("../../res/ingot.ply");
-			meshes [2] = new Mesh ("../../res/IngotCast.ply");
+			meshes [0] = new Mesh ("../../res/mesh/GreatswordCast.ply");
+			meshes [1] = new Mesh ("../../res/mesh/ingot.ply");
+			meshes [2] = new Mesh ("../../res/mesh/IngotCast.ply");
 		}
 
 		public static void Dispose()
