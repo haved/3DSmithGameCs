@@ -19,6 +19,8 @@ namespace DSmithGameCs
 		public TooltipHelper TooltipHelper;
 		public TooltipHelper ErrortipHelper;
 
+		public Scene MenuScene;
+
 		public void Init ()
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
@@ -33,6 +35,10 @@ namespace DSmithGameCs
 			ErrortipHelper = new TooltipHelper ();
 			Localization.LoadFromFile ("../../res/localization/no_NO.txt");
 
+			MenuScene = new Scene ();
+			MenuScene.AddEntity(new MeshEntity(new Mesh("../../res/mesh/menuBG.ply")));
+
+			CurrentScene = MenuScene;
 			CurrentView = new MainMenuView (this);
 			CurrentView.OnViewUsed (null);
 		}

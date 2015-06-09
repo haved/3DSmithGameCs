@@ -36,22 +36,25 @@ namespace DSmithGameCs
 
 		public bool ShouldRenderScene ()
 		{
-			return false;
+			return true;
 		}
 
+		static readonly Vector3 eyePos = new Vector3(1, -3, 6);
+		static readonly Vector3 eyeTarget = new Vector3(1, 7, 0);
+		static readonly Vector3 eyeUp = Vector3.UnitY;
 		public Vector3 GetEyePos ()
 		{
-			return Vector3.Zero;
+			return eyePos;
 		}
 
 		public Vector3 GetEyeTarget ()
 		{
-			return Vector3.Zero;
+			return eyeTarget;
 		}
 
 		public Vector3 GetEyeUp ()
 		{
-			return Vector3.Zero;
+			return eyeUp;
 		}
 
 		public void RenderView (Scene s)
