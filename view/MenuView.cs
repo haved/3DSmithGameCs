@@ -6,25 +6,43 @@ namespace DSmithGameCs
 {
 	public abstract class MenuView : View
 	{
-		static readonly Font font = new Font (FontFamily.GenericSansSerif, 18);
+		const float barXPos = 100;
+		const int barWidth=240;
+		const int optionHeight = 40;
+		static readonly Vector4 gradiantColor = new Vector4(0, 0, 0, 0.7f);
+		static readonly Font font = new Font (FontFamily.GenericSansSerif, 18*2);
 
-		TextWriter[] writers;
+		readonly string[] options;
+		readonly TextWriter[] writers;
 		int hovering=-1;
 
+		int languageID = -1;
 		protected MenuView (string[] options)
 		{
+			this.options = options;
 			writers = new TextWriter[options.Length];
 			for (int i = 0; i < options.Length; i++) {
-				writers [i] = new TextWriter (font, 200, 30);
-				writers [i].DrawString (options[i], (writers [i].Width - writers [i].GetLineWidth (options[i])) / 2, 0, Color.White);
+				writers [i] = new TextWriter (font, barWidth, optionHeight);
+				string s = Localization.GetLocalization (options [i]);
+				writers [i].DrawString (s, (barWidth - writers [i].GetLineWidth (s)) / 2, 0, Color.White);
 			}
+			languageID = Localization.GetCurrentLanguageID ();
 		}
 
 		#region View implementation
 
+		protected View PrevView;
 		public void OnViewUsed (View prevView)
 		{
-			
+			PrevView = prevView;
+			if (Localization.GetCurrentLanguageID () != languageID) {
+				for (int i = 0; i < options.Length; i++) {
+					writers [i].Clear ();
+					string s = Localization.GetLocalization (options [i]);
+					writers [i].DrawString (s, (barWidth - writers [i].GetLineWidth (s)) / 2, 0, Color.White);
+				}
+				languageID = Localization.GetCurrentLanguageID ();
+			}
 		}
 
 		public bool ShouldUpdateScene ()
@@ -34,8 +52,12 @@ namespace DSmithGameCs
 
 		public void UpdateView (Scene s)
 		{
-
+			if (hovering != -16 & Input.MousePressed) {
+				OnButtonPressed (hovering);
+			}
 		}
+
+		public abstract void OnButtonPressed (int button);
 
 		public bool ShouldRenderScene ()
 		{
@@ -50,7 +72,19 @@ namespace DSmithGameCs
 
 		public void RenderView (Scene s)
 		{
-
+			if (PrevView != null)
+				PrevView.RenderView (s);
+			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
+			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, barXPos, 0, barWidth, OrthoRenderEngine.GetCanvasHeight());
+			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
+			float x = Input.OrthoMouseX - barXPos;
+			float y = maxY+optionHeight-Input.OrthoMouseY;
+			if (x > 0 & x < barWidth & y > 0 & y < writers.Length * optionHeight)
+				hovering = (int)y / optionHeight;
+			else
+				hovering = -1;
+			for (int i = 0; i < writers.Length; i++)
+				OrthoRenderEngine.DrawColoredTexturedBox (hovering==i ? Util.White : Util.White60, writers[i].GetTextureID(), barXPos, maxY-optionHeight*i, writers[i].Width, writers[i].Height);
 		}
 
 		#endregion

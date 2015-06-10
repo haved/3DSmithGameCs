@@ -1,4 +1,8 @@
-ui.button.newgame===Nytt Spill
+﻿ui.button.newgame===Nytt Spill
+ui.button.resume===Fortsett
+ui.button.savegame===Lagre Spill
+ui.button.loadgame===Last Inn Spill
+ui.button.exittomainmenu===Gå til hovedmenyen
 ui.tooltip.oxygen:===Oksygen:       
 ui.tooltip.nocast===Ingen støpeform på bordet
 ui.tooltip.volume:===Volum: 

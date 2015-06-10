@@ -6,9 +6,12 @@ namespace DSmithGameCs
 {
 	public static class Localization
 	{
+		public static readonly Dictionary<string, int> LanguageIDs = new Dictionary<string, int> ();
 		public static readonly Dictionary<string, string> Map = new Dictionary<string, string> ();
 
 		static readonly string[] spacer = {"==="};
+
+		static int languageID=-1;
 
 		public static void LoadFromFile(string path)
 		{
@@ -17,6 +20,10 @@ namespace DSmithGameCs
 				var file = new StreamReader (path);
 
 				Map.Clear ();
+
+				if(!LanguageIDs.ContainsKey(path))
+					LanguageIDs.Add(path, LanguageIDs.Count);
+				languageID = LanguageIDs[path];
 
 				string line;
 				while ((line = file.ReadLine ()) != null) {
@@ -35,6 +42,11 @@ namespace DSmithGameCs
 		public static string GetLocalization(string key)
 		{
 			return Map.ContainsKey (key) ? Map [key] : key;
+		}
+
+		public static int GetCurrentLanguageID()
+		{
+			return languageID;
 		}
 	}
 }

@@ -34,12 +34,14 @@ namespace DSmithGameCs
 			TooltipHelper = new TooltipHelper ();
 			ErrortipHelper = new TooltipHelper ();
 			Localization.LoadFromFile ("../../res/localization/no_NO.txt");
+			PauseMenuView.MakeInstance (this);
+			MainMenuView.MakeInstance (this);
 
 			MenuScene = new Scene ();
 			MenuScene.AddEntity(new MeshEntity(new Mesh("../../res/mesh/menuBG.ply")));
 
 			CurrentScene = MenuScene;
-			CurrentView = new MainMenuView (this);
+			CurrentView = MainMenuView.Instance;
 			CurrentView.OnViewUsed (null);
 		}
 

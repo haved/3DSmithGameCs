@@ -1,71 +1,47 @@
 ﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using System.Drawing;
 
 namespace DSmithGameCs
 {
-	public class PauseMenuView : View
+	public class PauseMenuView : MenuView
 	{
-		static Vector4 gradiantColor = new Vector4(0, 0, 0, 0.7f);
-		readonly Smith2DGame game;
-		View prevView;
+		static readonly string[] options = {"ui.button.resume","ui.button.savegame", "ui.button.loadgame", "ui.button.exittomainmenu"};
 
-		public PauseMenuView(Smith2DGame game)
+		public static PauseMenuView Instance;
+
+		readonly Smith2DGame game;
+
+		PauseMenuView(Smith2DGame game) : base(options)
 		{
 			this.game = game;
 		}
 
-		#region View implementation
-
-		public void OnViewUsed (View prevView)
+		#region implemented abstract members of MenuView
+		public override Vector3 GetEyePos ()
 		{
-			this.prevView = prevView;
+			return PrevView.GetEyePos ();
+		}
+		public override Vector3 GetEyeTarget ()
+		{
+			return PrevView.GetEyeTarget ();
+		}
+		public override Vector3 GetEyeUp ()
+		{
+			return PrevView.GetEyeUp ();
 		}
 
-		public bool ShouldUpdateScene ()
+		public override void OnButtonPressed (int button)
 		{
-			return false;
-		}
-
-		bool hoveringSaveGame, hoveringLoadGame, hoveringExitToMain;
-		public void UpdateView (Scene s)
-		{
-			if (Input.CloseKeyPressed)
-				game.SetView (prevView);
-		}
-
-		public bool ShouldRenderScene ()
-		{
-			return true;
-		}
-
-		public Vector3 GetEyePos ()
-		{
-			return prevView.GetEyePos ();
-		}
-
-		public Vector3 GetEyeTarget ()
-		{
-			return prevView.GetEyeTarget ();
-		}
-
-		public Vector3 GetEyeUp ()
-		{
-			return prevView.GetEyeUp ();
-		}
-			
-		public void RenderView (Scene s)
-		{
-			prevView.RenderView (s);
-			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
-			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, 100, 0, 200, OrthoRenderEngine.GetCanvasHeight());
-			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
-			float x = Input.OrthoMouseX - 100;
-			float y = Input.OrthoMouseY - maxY;
-			hoveringSaveGame = x > 0 & x < game.TooltipHelper.Writer.Width & y > 0 & y < game.TooltipHelper.Writer.Height;
-			OrthoRenderEngine.DrawColoredTexturedBox (hoveringSaveGame ? Util.White : Util.White60, game.TooltipHelper.Writer.GetTextureID (), 100, maxY, game.TooltipHelper.Writer.Width, game.TooltipHelper.Writer.Height);
+			if (button == 0)
+				game.SetView (PrevView);
 		}
 
 		#endregion
+
+		public static void MakeInstance(Smith2DGame game)
+		{
+			Instance = new PauseMenuView (game);
+		}
 	}
 }
 
