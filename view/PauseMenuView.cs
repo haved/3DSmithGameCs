@@ -26,6 +26,7 @@ namespace DSmithGameCs
 			return false;
 		}
 
+		bool hoveringSaveGame, hoveringLoadGame, hoveringExitToMain;
 		public void UpdateView (Scene s)
 		{
 			if (Input.CloseKeyPressed)
@@ -51,13 +52,17 @@ namespace DSmithGameCs
 		{
 			return prevView.GetEyeUp ();
 		}
-
+			
 		public void RenderView (Scene s)
 		{
 			prevView.RenderView (s);
-			GL.Disable (EnableCap.DepthTest);
 			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
-			GL.Enable (EnableCap.DepthTest);
+			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, 100, 0, 200, OrthoRenderEngine.GetCanvasHeight());
+			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
+			float x = Input.OrthoMouseX - 100;
+			float y = Input.OrthoMouseY - maxY;
+			hoveringSaveGame = x > 0 & x < game.TooltipHelper.Writer.Width & y > 0 & y < game.TooltipHelper.Writer.Height;
+			OrthoRenderEngine.DrawColoredTexturedBox (hoveringSaveGame ? Util.White : Util.White60, game.TooltipHelper.Writer.GetTextureID (), 100, maxY, game.TooltipHelper.Writer.Width, game.TooltipHelper.Writer.Height);
 		}
 
 		#endregion

@@ -57,8 +57,10 @@ namespace DSmithGameCs
 			return eyeUp;
 		}
 
+		static readonly Vector4 diffuse = new Vector4(1,1,1,0.4f);
 		public void RenderView (Scene s)
 		{
+			OrthoRenderEngine.DrawColorOnEntireScreen (diffuse);
 			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, 100, 0, 200, OrthoRenderEngine.GetCanvasHeight());
 			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;
 			float x = Input.OrthoMouseX - 100;
