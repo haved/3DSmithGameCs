@@ -7,11 +7,9 @@ namespace DSmithGameCs
 	{
 		static readonly string[] options = {"ui.button.resume","ui.button.savegame", "ui.button.loadgame", "ui.button.exittomainmenu", "ui.button.exit"};
 
-		public static PauseMenuView Instance;
-
 		readonly Smith2DGame game;
 
-		PauseMenuView(Smith2DGame game) : base(options)
+		public PauseMenuView(Smith2DGame game) : base(options)
 		{
 			this.game = game;
 		}
@@ -37,7 +35,8 @@ namespace DSmithGameCs
 				game.SetView (PrevView);
 				return;
 			case 3:
-				game.SetView (MainMenuView.Instance);
+				game.SetView (game.MainMenu);
+				game.CurrentScene = game.MakeMenuScene ();
 				return;
 			case 4:
 				game.Exit ();
@@ -46,11 +45,6 @@ namespace DSmithGameCs
 		}
 
 		#endregion
-
-		public static void MakeInstance(Smith2DGame game)
-		{
-			Instance = new PauseMenuView (game);
-		}
 	}
 }
 

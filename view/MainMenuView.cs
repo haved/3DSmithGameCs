@@ -6,12 +6,10 @@ namespace DSmithGameCs
 	public class MainMenuView : MenuView
 	{
 		static readonly string[] options = {"ui.button.newgame","ui.button.loadgame","ui.button.exit"};
-
-		public static MainMenuView Instance;
 		
 		readonly Smith2DGame game;
 
-		MainMenuView (Smith2DGame game) : base(options)
+		public MainMenuView (Smith2DGame game) : base(options)
 		{
 			this.game = game;
 		}
@@ -49,11 +47,6 @@ namespace DSmithGameCs
 		}
 
 		#endregion
-
-		public static void MakeInstance(Smith2DGame game)
-		{
-			Instance = new MainMenuView (game);
-		}
 	}
 }
 

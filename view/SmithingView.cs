@@ -30,7 +30,7 @@ namespace DSmithGameCs
 			transition.UpdateTransition (Time.Delta () * 2);
 
 			if (Input.CloseKeyPressed) {
-				game.SetView (PauseMenuView.Instance);
+				game.SetView (game.PauseMenu);
 			}
 
 			game.GameStats.PlayerInventory.HandleInput ();
