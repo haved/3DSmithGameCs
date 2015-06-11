@@ -21,6 +21,12 @@ namespace DSmithGameCs
 
 		public Scene MenuScene;
 
+		ICloseable closeable;
+		public void SetCloser(ICloseable closeable)
+		{
+			this.closeable = closeable;
+		}
+
 		public void Init ()
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
@@ -115,6 +121,11 @@ namespace DSmithGameCs
 				frames = 0;
 				timeTotal = 0;
 			}
+		}
+
+		public void Exit()
+		{
+			closeable.Close ();
 		}
 
 		public static void Main (string[] args)

@@ -7,13 +7,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class SmithGameWindow : GameWindow
+	public class SmithGameWindow : GameWindow, ICloseable
 	{
 		readonly Smith2DGame game;
 		public SmithGameWindow (Smith2DGame game) : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
 		{
 			this.game = game;
 			game.Init ();
+			game.SetCloser (this);
 			GL.Enable (EnableCap.CullFace);
 			GL.CullFace (CullFaceMode.Back);
 			GL.Enable (EnableCap.DepthTest);

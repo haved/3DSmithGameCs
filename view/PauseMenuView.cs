@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class PauseMenuView : MenuView
 	{
-		static readonly string[] options = {"ui.button.resume","ui.button.savegame", "ui.button.loadgame", "ui.button.exittomainmenu"};
+		static readonly string[] options = {"ui.button.resume","ui.button.savegame", "ui.button.loadgame", "ui.button.exittomainmenu", "ui.button.exit"};
 
 		public static PauseMenuView Instance;
 
@@ -32,8 +32,17 @@ namespace DSmithGameCs
 
 		public override void OnButtonPressed (int button)
 		{
-			if (button == 0)
+			switch (button) {
+			case 0:
 				game.SetView (PrevView);
+				return;
+			case 3:
+				game.SetView (MainMenuView.Instance);
+				return;
+			case 4:
+				game.Exit ();
+				return;
+			}
 		}
 
 		#endregion
