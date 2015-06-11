@@ -1,10 +1,11 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace DSmithGameCs
 {
 	public class MainMenuView : MenuView
 	{
-		static readonly string[] options = {"ui.button.newgame"};
+		static readonly string[] options = {"ui.button.newgame","ui.button.loadgame","ui.button.exit"};
 
 		public static MainMenuView Instance;
 		
@@ -37,8 +38,14 @@ namespace DSmithGameCs
 
 		public override void OnButtonPressed (int button)
 		{
-			if (button == 0)
+			switch(button){
+			case 0:
 				game.NewGame ();
+				return;
+			case 2:
+				game.Exit ();
+				return;
+			}
 		}
 
 		#endregion
