@@ -13,9 +13,9 @@ namespace DSmithGameCs
 
 		public abstract void RenderItem (float x, float y, float width, float height);
 
-		public abstract void LoadFromFile(StreamReader reader);
+		public abstract void LoadInfoFromFile(Stream reader);
 
-		public abstract void SaveToFile(StreamWriter writer);
+		public abstract void SaveInfoToFile(Stream writer);
 	}
 }
 

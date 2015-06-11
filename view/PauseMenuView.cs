@@ -34,9 +34,15 @@ namespace DSmithGameCs
 			case 0:
 				game.SetView (PrevView);
 				return;
+			case 1:
+				game.GameStats.SaveGame ();
+				game.SetView (PrevView);
+				return;
+			case 2:
+				game.LoadGame ();
+				return;
 			case 3:
-				game.SetView (game.MainMenu);
-				game.CurrentScene = game.MakeMenuScene ();
+				game.ShowMainMenu ();
 				return;
 			case 4:
 				game.Exit ();

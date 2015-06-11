@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -160,6 +160,25 @@ namespace DSmithGameCs
 		public void InventoryTooFull(Item item)
 		{
 			tooFull = 1;
+		}
+
+		public void SaveToFile(Stream writer)
+		{
+			writer.WriteByte ((byte)items.Count);
+
+			foreach (Item i in items) {
+				ItemIO.SaveItem (i, writer);
+			}
+		}
+
+		public void LoadFromFile(Stream reader)
+		{
+			int itemCount = reader.ReadByte();
+			items.Clear ();
+
+			for (int i = 0; i < itemCount; i++) {
+				items.Add(ItemIO.LoadItem(reader));
+			}
 		}
 	}
 }

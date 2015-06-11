@@ -12,7 +12,7 @@ namespace DSmithGameCs
 		{
 			public static CastItemInfo[] CastItemsInfo = new CastItemInfo[20];
 
-			public readonly int Id;
+			public readonly byte Id;
 			public readonly Mesh Mesh;
 			public readonly Vector4 Color;
 			public readonly string Name;
@@ -20,7 +20,7 @@ namespace DSmithGameCs
 			public readonly float Height;
 			public readonly ICastItemCreator ItemCreator;
 
-			public CastItemInfo (int id, Mesh mesh, Vector4 color, string name, float volume, float height, ICastItemCreator itemCreator)
+			public CastItemInfo (byte id, Mesh mesh, Vector4 color, string name, float volume, float height, ICastItemCreator itemCreator)
 			{
 				Id = id;
 				Mesh = mesh;
@@ -33,22 +33,22 @@ namespace DSmithGameCs
 			}
 		}
 
-		public int CastInfoID;
+		public byte CastInfoID;
 		CastItemInfo info;
 
-		CastItem(){}
+		public CastItem(){}
 
 		public CastItem(CastItemInfo info)
 		{
 			SetCastInfoID (info.Id);
 		}
 
-		public CastItem (int castInfoID)
+		public CastItem (byte castInfoID)
 		{
 			SetCastInfoID (castInfoID);
 		}
 
-		void SetCastInfoID(int castInfoID)
+		void SetCastInfoID(byte castInfoID)
 		{
 			CastInfoID = castInfoID;
 			info = CastItemInfo.CastItemsInfo[castInfoID];
@@ -103,14 +103,14 @@ namespace DSmithGameCs
 			return null;
 		}
 
-		public override void LoadFromFile(StreamReader reader)
+		public override void LoadInfoFromFile(Stream reader)
 		{
-			SetCastInfoID(int.Parse(reader.ReadLine ()));
+			SetCastInfoID((byte)reader.ReadByte());
 		}
 
-		public override void SaveToFile(StreamWriter writer)
+		public override void SaveInfoToFile(Stream writer)
 		{
-			writer.Write (CastInfoID);
+			writer.WriteByte (CastInfoID);
 		}
 	}
 }

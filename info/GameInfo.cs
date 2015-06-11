@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace DSmithGameCs
 {
@@ -13,12 +14,12 @@ namespace DSmithGameCs
 		public float CastingTemprature;
 		public float OldFoundryAmount;
 
-		public SolidList<IngotItem> FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
-		public Alloy FoundryAlloy = new Alloy();
+		public SolidList<IngotItem> FoundryIngots;
+		public Alloy FoundryAlloy;
 
-		public float AirQuality = 25;
-		public float CoalPercent = 80;
-		public float FoundryTemprature = 25;
+		public float AirQuality;
+		public float CoalPercent;
+		public float FoundryTemprature;
 
 		public void NewGame()
 		{
@@ -31,16 +32,101 @@ namespace DSmithGameCs
 			HatchInv.AddItem (new IngotItem(Alloy.Steel));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Iron));
 			HatchInv.AddItem (new IngotItem(BasicMetal.Gold));
+			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
+			FoundryAlloy = new Alloy ();
+			AirQuality = 25;
+			CoalPercent = 80;
+			FoundryTemprature = 25;
 		}
 
-		public void SaveGame(StreamWriter writer)
+		public void SaveGame(Stream writer)
 		{
-
+			Console.Out.WriteLine ("Game saved!");
+			PlayerInventory.SaveToFile (writer); //PlayerInventory
+			HatchInv.SaveToFile (writer); //HatchInv
+			writer.WriteByte ((byte)(CurrentCast != null ? 1 : 0)); //Is CurrentCast not null?
+			if (CurrentCast != null)
+				ItemIO.SaveItem (CurrentCast, writer); //CurrentCast if it's not null.
+			writer.WriteByte((byte)(CastAlloy!=null?1 : 0)); //Is CastAlloy not null?
+			if(CastAlloy!=null)
+				//CastAlloy.SaveToFile (writer); //CastAlloy if it's not null.
+			writer.Write (BitConverter.GetBytes (CastFilling), 0, sizeof(float)); //CastFilling
+			writer.Write (BitConverter.GetBytes (CastingTemprature), 0, sizeof(float)); //CastingTemerature
+			writer.Write (BitConverter.GetBytes (OldFoundryAmount), 0, sizeof(float)); //OldFoundryAmount
+			//TODO: Write foundryingots
+			//TODO: FoundryAlloy.SaveToFile(writer);
+			writer.Write (BitConverter.GetBytes (AirQuality), 0, sizeof(float)); //AirQualtiy
+			writer.Write (BitConverter.GetBytes (CoalPercent), 0, sizeof(float)); //CoalPercent
+			writer.Write (BitConverter.GetBytes (FoundryTemprature), 0, sizeof(float)); //FoundryTemperature
 		}
 
-		public void LoadGame(StreamReader reader)
+		public void LoadGame(Stream reader)
 		{
+			PlayerInventory = new Inventory ();
+			PlayerInventory.LoadFromFile (reader); //PlayerInventory
+			HatchInv = new HatchInventory ();
+			HatchInv.LoadFromFile (reader); //HatchInv
+			if(reader.ReadByte()!=0) //Check if CurrentCast is not null
+				CurrentCast = (CastItem)ItemIO.LoadItem(reader); //CurrentCast
+			if(reader.ReadByte()!=0) //Check if CastAlloy is not null
+			{} //TODO: Load the CastAlloy
+			byte[] buffer = new byte[sizeof(float)];
+			reader.Read (buffer, 0, buffer.Length); //CastFilling
+			CastFilling = BitConverter.ToSingle (buffer,0);
+			reader.Read (buffer, 0, buffer.Length); //CastingTemperature
+			CastingTemprature = BitConverter.ToSingle (buffer,0);
+			reader.Read (buffer, 0, buffer.Length); //OldFoudryTemperature
+			OldFoundryAmount = BitConverter.ToSingle (buffer,0);
+			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
+			FoundryAlloy = new Alloy(); //TODO: Load FoundryAlloy
+			reader.Read (buffer, 0, buffer.Length); //AirQuality
+			AirQuality = BitConverter.ToSingle (buffer,0);
+			reader.Read (buffer, 0, buffer.Length); //CoalPercent
+			CoalPercent = BitConverter.ToSingle (buffer,0);
+			reader.Read (buffer, 0, buffer.Length); //FoundryTemperature
+			FoundryTemprature = BitConverter.ToSingle (buffer,0);
+		}
 
+		public void SaveGame()
+		{
+			using (var writer = new FileStream (GetSaveGamePath () + "save.sav", FileMode.Create, FileAccess.Write)) {
+				SaveGame (writer);
+				writer.Close ();
+			}
+		}
+
+		public void LoadGame()
+		{
+			using (var reader = new FileStream (GetSaveGamePath () + "save.sav", FileMode.Open, FileAccess.Read)) {
+				LoadGame (reader);
+				reader.Close ();
+			}
+		}
+
+		string saveGamePath;
+		string GetSaveGamePath()
+		{
+			if (saveGamePath != null)
+				return saveGamePath;
+			try {
+				string[] lines = File.ReadAllLines (Util.PATH + "savepath.txt");
+				foreach (string s in lines)
+					if (!s.StartsWith ("#", StringComparison.InvariantCulture)) {
+						saveGamePath = s;
+						break;
+					}
+			} catch (FileNotFoundException e) {
+				Console.Error.WriteLine (e);
+			}
+			if (!Directory.Exists (saveGamePath)) {
+				saveGamePath = Util.PATH + "saves/";
+				Console.Error.WriteLine ("The path specified in savepath.txt is not a directory. Dafaulting to /saves");
+			}
+			if(!saveGamePath.EndsWith("/", StringComparison.InvariantCulture))
+				saveGamePath+="/";
+			if (!Directory.Exists (saveGamePath))
+				Directory.CreateDirectory (saveGamePath);
+			return saveGamePath;
 		}
 	}
 }

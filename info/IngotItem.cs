@@ -9,7 +9,7 @@ namespace DSmithGameCs
 		IMetal metal;
 		float solid;
 
-		IngotItem(){}
+		public IngotItem(){}
 
 		public IngotItem (IMetal metal)
 		{
@@ -85,15 +85,18 @@ namespace DSmithGameCs
 			return metal;
 		}
 
-		public override void LoadFromFile(StreamReader reader)
+		public override void LoadInfoFromFile(Stream reader)
 		{
 			metal = BasicMetal.Iron; //TODO: Add metal saving
-			solid = Single.Parse(reader.ReadLine ());
+			byte[] buffer = new byte[sizeof(float)];
+			reader.Read (buffer, 0, buffer.Length);  //solid
+			solid = BitConverter.ToSingle (buffer, 0);
 		}
 
-		public override void SaveToFile(StreamWriter writer)
+		public override void SaveInfoToFile(Stream writer)
 		{
-			writer.WriteLine (solid);
+			//TODO: Add metal loading
+			writer.Write (BitConverter.GetBytes(solid), 0, sizeof(float)); //solid
 		}
 	}
 }

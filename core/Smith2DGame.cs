@@ -26,12 +26,6 @@ namespace DSmithGameCs
 		public MainMenuView MainMenu;
 		public PauseMenuView PauseMenu;
 
-		ICloseable closeable;
-		public void SetCloser(ICloseable closeable)
-		{
-			this.closeable = closeable;
-		}
-
 		public void Init ()
 		{
 			Console.WriteLine ("GL version: " + GL.GetString (StringName.Version));
@@ -59,6 +53,16 @@ namespace DSmithGameCs
 			SetView(new SmithingView (this));
 			GameStats = new GameInfo ();
 			GameStats.NewGame ();
+
+			CurrentScene = MakeSmithScene ();
+		}
+
+		public void LoadGame()
+		{
+			CurrentView = null;
+			SetView(new SmithingView (this));
+			GameStats = new GameInfo ();
+			GameStats.LoadGame ();
 
 			CurrentScene = MakeSmithScene ();
 		}
@@ -125,14 +129,21 @@ namespace DSmithGameCs
 		{
 			TooltipHelper.UnClaim ();
 			ErrortipHelper.UnClaim ();
-			v.OnViewUsed (this.CurrentView);
-			this.CurrentView = v;
+			v.OnViewUsed (CurrentView);
+			CurrentView = v;
+		}
+
+		public void ShowMainMenu()
+		{
+			CurrentView = null;
+			SetView (MainMenu);
+			CurrentScene = MakeMenuScene ();
 		}
 
 		int frames;
 		float timeTotal;
 
-		private void CountFPS()
+		void CountFPS()
 		{
 			timeTotal += Time.Delta ();
 			frames++;
@@ -142,6 +153,12 @@ namespace DSmithGameCs
 				frames = 0;
 				timeTotal = 0;
 			}
+		}
+
+		ICloseable closeable;
+		public void SetCloser(ICloseable closeable)
+		{
+			this.closeable = closeable;
 		}
 
 		public void Exit()

@@ -40,6 +40,9 @@ namespace DSmithGameCs
 			case 0:
 				game.NewGame ();
 				return;
+			case 1:
+				game.LoadGame ();
+				return;
 			case 2:
 				game.Exit ();
 				return;

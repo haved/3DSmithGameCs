@@ -12,22 +12,21 @@ namespace DSmithGameCs
 			types [1] = typeof(CastItem);
 		}
 
-		public static Item LoadItem(StreamReader reader)
+		public static Item LoadItem(Stream reader)
 		{
-			int id = int.Parse( reader.ReadLine().Substring (5));
+			int id = reader.ReadByte ();
 			var output = (Item)Activator.CreateInstance(types[id]);
-			output.LoadFromFile (reader);
+			output.LoadInfoFromFile (reader);
 			return output;
 		}
 
-		public static void SaveItem(Item item, StreamWriter writer)
+		public static void SaveItem(Item item, Stream writer)
 		{
-			writer.Write ("Item:");
 			if(item is IngotItem)
-				writer.WriteLine (0);
+				writer.WriteByte (0);
 			else if(item is CastItem)
-				writer.WriteLine (1);
-			item.SaveToFile (writer);
+				writer.WriteByte (1);
+			item.SaveInfoToFile (writer);
 		}
 	}
 }

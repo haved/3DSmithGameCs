@@ -42,6 +42,14 @@ namespace DSmithGameCs
 			count--;
 		}
 
+		public void Clear()
+		{
+			for (int i = 0; i < Capacity; i++) {
+				items [i] = default(T);
+			}
+			count = 0;
+		}
+
 		public T this[int i]{
 			get{ return items [i]; }
 			set{ items [i] = value;}
