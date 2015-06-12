@@ -167,7 +167,7 @@ namespace DSmithGameCs
 			writer.WriteByte ((byte)items.Count);
 
 			foreach (Item i in items) {
-				ItemIO.SaveItem (i, writer);
+				StreamIO.SaveItem (i, writer);
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace DSmithGameCs
 			items.Clear ();
 
 			for (int i = 0; i < itemCount; i++) {
-				items.Add(ItemIO.LoadItem(reader));
+				items.Add(StreamIO.LoadItem(reader));
 			}
 		}
 	}

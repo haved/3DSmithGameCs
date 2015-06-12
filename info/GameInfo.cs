@@ -42,49 +42,62 @@ namespace DSmithGameCs
 		public void SaveGame(Stream writer)
 		{
 			Console.Out.WriteLine ("Game saved!");
-			PlayerInventory.SaveToFile (writer); //PlayerInventory
-			HatchInv.SaveToFile (writer); //HatchInv
-			writer.WriteByte ((byte)(CurrentCast != null ? 1 : 0)); //Is CurrentCast not null?
+			PlayerInventory.SaveToFile (writer); 									//PlayerInventory
+			HatchInv.SaveToFile (writer);											//HatchInv
+			writer.WriteByte ((byte)(CurrentCast != null ? 1 : 0)); 				//Is CurrentCast not null?
 			if (CurrentCast != null)
-				ItemIO.SaveItem (CurrentCast, writer); //CurrentCast if it's not null.
-			writer.WriteByte((byte)(CastAlloy!=null?1 : 0)); //Is CastAlloy not null?
-			if(CastAlloy!=null)
-				//CastAlloy.SaveToFile (writer); //CastAlloy if it's not null.
-			writer.Write (BitConverter.GetBytes (CastFilling), 0, sizeof(float)); //CastFilling
+				StreamIO.SaveItem (CurrentCast, writer); 							//CurrentCast if it's not null.
+			writer.WriteByte((byte)(CastAlloy!=null?1 : 0)); 						//Is CastAlloy not null?
+			if (CastAlloy != null) {
+				StreamIO.SaveMetal (CastAlloy, writer); 							//CastAlloy if it's not null
+			}
+			writer.Write (BitConverter.GetBytes (CastFilling), 0, sizeof(float)); 	//CastFilling
 			writer.Write (BitConverter.GetBytes (CastingTemprature), 0, sizeof(float)); //CastingTemerature
 			writer.Write (BitConverter.GetBytes (OldFoundryAmount), 0, sizeof(float)); //OldFoundryAmount
-			//TODO: Write foundryingots
-			//TODO: FoundryAlloy.SaveToFile(writer);
-			writer.Write (BitConverter.GetBytes (AirQuality), 0, sizeof(float)); //AirQualtiy
-			writer.Write (BitConverter.GetBytes (CoalPercent), 0, sizeof(float)); //CoalPercent
+			for (int i = 0; i < FoundryIngots.Capacity; i++) {
+				writer.WriteByte((byte)(FoundryIngots[i]!=null?1 : 0)); 			//Is The Ingot at i not null?
+				if (FoundryIngots [i] != null)
+					StreamIO.SaveItem (FoundryIngots [i], writer);
+			}
+			StreamIO.SaveMetal (FoundryAlloy, writer);								//FoundryAlloy
+			writer.Write (BitConverter.GetBytes (AirQuality), 0, sizeof(float)); 	//AirQualtiy
+			writer.Write (BitConverter.GetBytes (CoalPercent), 0, sizeof(float)); 	//CoalPercent
 			writer.Write (BitConverter.GetBytes (FoundryTemprature), 0, sizeof(float)); //FoundryTemperature
+			Console.Out.WriteLine (writer.Position);
 		}
 
 		public void LoadGame(Stream reader)
 		{
+			Console.WriteLine ("Loading game!");
 			PlayerInventory = new Inventory ();
-			PlayerInventory.LoadFromFile (reader); //PlayerInventory
+			PlayerInventory.LoadFromFile (reader); 									//PlayerInventory
 			HatchInv = new HatchInventory ();
-			HatchInv.LoadFromFile (reader); //HatchInv
-			if(reader.ReadByte()!=0) //Check if CurrentCast is not null
-				CurrentCast = (CastItem)ItemIO.LoadItem(reader); //CurrentCast
-			if(reader.ReadByte()!=0) //Check if CastAlloy is not null
-			{} //TODO: Load the CastAlloy
-			byte[] buffer = new byte[sizeof(float)];
-			reader.Read (buffer, 0, buffer.Length); //CastFilling
+			HatchInv.LoadFromFile (reader); 										//HatchInv
+			if(reader.ReadByte()!=0) 												//Check if CurrentCast is not null
+				CurrentCast = (CastItem)StreamIO.LoadItem(reader); 					//CurrentCast
+			if (reader.ReadByte () != 0) { 											//Check if CastAlloy is not null
+				CastAlloy = (Alloy)StreamIO.LoadMetal(reader);
+			}
+			var buffer = new byte[sizeof(float)];
+			reader.Read (buffer, 0, buffer.Length); 								//CastFilling
 			CastFilling = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); //CastingTemperature
+			reader.Read (buffer, 0, buffer.Length); 								//CastingTemperature
 			CastingTemprature = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); //OldFoudryTemperature
+			reader.Read (buffer, 0, buffer.Length); 								//OldFoundryAmount
 			OldFoundryAmount = BitConverter.ToSingle (buffer,0);
 			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
-			FoundryAlloy = new Alloy(); //TODO: Load FoundryAlloy
-			reader.Read (buffer, 0, buffer.Length); //AirQuality
+			for (int i = 0; i < FoundryIngots.Capacity; i++) {
+				if (reader.ReadByte () != 0) 										//Check if the item is not null
+					FoundryIngots [i] = (IngotItem)StreamIO.LoadItem (reader);  	//Read IngotItems
+			}
+			FoundryAlloy = (Alloy)StreamIO.LoadMetal (reader);						//FoundryAlloy
+			reader.Read (buffer, 0, buffer.Length); 								//AirQuality
 			AirQuality = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); //CoalPercent
+			reader.Read (buffer, 0, buffer.Length); 								//CoalPercent
 			CoalPercent = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); //FoundryTemperature
+			reader.Read (buffer, 0, buffer.Length); 								//FoundryTemperature
 			FoundryTemprature = BitConverter.ToSingle (buffer,0);
+			Console.Out.WriteLine (reader.Position);
 		}
 
 		public void SaveGame()

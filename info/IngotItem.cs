@@ -87,16 +87,16 @@ namespace DSmithGameCs
 
 		public override void LoadInfoFromFile(Stream reader)
 		{
-			metal = BasicMetal.Iron; //TODO: Add metal saving
+			metal = StreamIO.LoadMetal (reader); 		//metal
 			byte[] buffer = new byte[sizeof(float)];
-			reader.Read (buffer, 0, buffer.Length);  //solid
+			reader.Read (buffer, 0, buffer.Length);  	//solid
 			solid = BitConverter.ToSingle (buffer, 0);
 		}
 
 		public override void SaveInfoToFile(Stream writer)
 		{
-			//TODO: Add metal loading
-			writer.Write (BitConverter.GetBytes(solid), 0, sizeof(float)); //solid
+			StreamIO.SaveMetal (metal, writer);								//metal
+			writer.Write (BitConverter.GetBytes(solid), 0, sizeof(float)); 	//solid
 		}
 	}
 }

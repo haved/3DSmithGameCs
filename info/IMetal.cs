@@ -12,6 +12,8 @@ namespace DSmithGameCs
 		string GetName();
 
 		IMetal Clone();
+
+		IMetalRecreator GetRecreator();
 	}
 }
 

@@ -30,12 +30,12 @@ namespace DSmithGameCs
 		Vector4 color = Vector4.Zero;
 		int highestMeltingPoint=0;
 
-		private Alloy(Alloy other)
+		Alloy(Alloy other)
 		{
-			this.metals = new List<MetalMass>(other.metals);
-			this.totalAmount = other.totalAmount;
-			this.color = other.color;
-			this.highestMeltingPoint = other.highestMeltingPoint;
+			metals = new List<MetalMass>(other.metals);
+			totalAmount = other.totalAmount;
+			color = other.color;
+			highestMeltingPoint = other.highestMeltingPoint;
 		}
 
 		public Alloy()
@@ -133,9 +133,44 @@ namespace DSmithGameCs
 
 		public IMetal Clone()
 		{
-			if (metals.Count == 1)
-				return metals [0].Metal;
-			return new Alloy (this);
+			return metals.Count == 1 ? metals [0].Metal : new Alloy (this);
+		}
+
+		public IMetalRecreator GetRecreator()
+		{
+			return new AlloyRecreator (this);
+		}
+
+		[Serializable]
+		public struct AlloyRecreator : IMetalRecreator
+		{
+			readonly IMetalRecreator[] metals;
+			readonly float[] amounts;
+
+			public AlloyRecreator(Alloy alloy)
+			{
+				metals = new IMetalRecreator[alloy.metals.Count];
+				amounts = new float[alloy.metals.Count];
+
+				for(int i = 0; i < alloy.metals.Count; i++)
+				{
+					metals[i] = alloy.metals[i].Metal.GetRecreator();
+					amounts[i] = alloy.metals[i].Amount;
+				}
+			}
+
+			#region IMetalRecreator implementation
+
+			public IMetal GetMetal ()
+			{
+				var output = new Alloy();
+				for (int i = 0; i < metals.Length; i++) {
+					output.AddMetal (metals[i].GetMetal(),amounts[i]);
+				}
+				return output;
+			}
+
+			#endregion
 		}
 	}
 }

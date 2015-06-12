@@ -38,8 +38,10 @@ namespace DSmithGameCs
 
 		public void RemoveAt(int index)
 		{
-			items [index] = default(T);
-			count--;
+			if (items [index] != null) {
+				items [index] = default(T);
+				count--;
+			}
 		}
 
 		public void Clear()
