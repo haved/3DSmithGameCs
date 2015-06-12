@@ -23,10 +23,12 @@ namespace DSmithGameCs
 
 		public static void SaveItem(Item item, Stream writer)
 		{
-			if(item is IngotItem)
-				writer.WriteByte (0);
-			else if(item is CastItem)
-				writer.WriteByte (1);
+			for (byte i = 0; i < types.Length; i++) {
+				if (types [i] == null)
+					break;
+				if (item.GetType () == types [i])
+					writer.WriteByte (i);
+			}
 			item.SaveInfoToFile (writer);
 		}
 
