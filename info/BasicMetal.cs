@@ -15,40 +15,42 @@ namespace DSmithGameCs
 		public static BasicMetal Zinc = new BasicMetal(5, new Vector4(183/255f, 183/255f, 183/255f, 1f), 420, 0, "Zinc");
 
 		public readonly int Id;
-		readonly Vector4 color;
-		readonly int meltingPoint;
+		public readonly Vector4 Color;
+		public readonly int MeltingPoint;
+		public readonly float Density;
 		readonly string name;
-		readonly float density;
 		public BasicMetal (int id, Vector4 color, int meltingPoint, float density, string name)
 		{
 			Id = id;
 			if (Metals [id] != null)
 				throw new Exception ("The BasicMetal.Metals id " + id + " is already taken");
 			Metals [id] = this;
-			this.color = color;
-			this.meltingPoint = meltingPoint;
+			Color = color;
+			MeltingPoint = meltingPoint;
+			Density = density;
 			this.name = name;
-			this.density = density;
 		}
 
-		public int GetMeltingPoint ()
+		public string Name {get{ return Localization.GetLocalization ("ui.metal." + name); }}
+
+		public static int GetMeltingPoint(int id)
 		{
-			return meltingPoint;
+			return Metals [id].MeltingPoint;
 		}
 
-		public Vector4 GetColor ()
+		public static Vector4 GetColor(int id)
 		{
-			return color;
+			return Metals [id].Color;
 		}
 
-		public float GetDensity()
+		public static float GetDensity(int id)
 		{
-			return density;
+			return Metals [id].Density;
 		}
 
-		public string GetName ()
+		public static string GetName(int id)
 		{
-			return Localization.GetLocalization("ui.metal."+name);
+			return Metals [id].Name;
 		}
 	}
 }

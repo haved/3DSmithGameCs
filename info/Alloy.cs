@@ -45,12 +45,12 @@ namespace DSmithGameCs
 
 			BasicMetal m = BasicMetal.Metals [metal];
 
-			color = totalAmount * color + amount * m.GetColor ();
+			color = totalAmount * color + amount * m.Color;
 			totalAmount += amount;
 			color /= totalAmount;
 
-			if (m.GetMeltingPoint() > highestMeltingPoint)
-				highestMeltingPoint = m.GetMeltingPoint ();
+			if (m.MeltingPoint > highestMeltingPoint)
+				highestMeltingPoint = m.MeltingPoint;
 
 			for (int i = 0; i < metals.Count; i++) {
 				if (metals [i].Metal == metal) {

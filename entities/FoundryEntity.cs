@@ -68,14 +68,14 @@ namespace DSmithGameCs
 					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++)
 					{
 						BasicMetal m = game.GameStats.FoundryAlloy [i];
-						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.GetName() + " (molten)", 10, y, Util.GetColorFromVector(m.GetColor()));
+						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector(m.Color));
 						y += 20;
 					}
 					for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
 						IngotItem item = game.GameStats.FoundryIngots[i];
 						if (item == null)
 							continue;
-						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.Metal.GetName() + " (solid)", 10, y, Util.GetColorFromVector(item.Metal.GetColor()));
+						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.Metal.Name + " (solid)", 10, y, Util.GetColorFromVector(item.Metal.Color));
 						y += 20;
 					}
 					if (y+10 != game.TooltipHelper.Writer.Height)

@@ -86,7 +86,7 @@ namespace DSmithGameCs
 								y += 20;
 								for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++) {
 									BasicMetal m = game.GameStats.FoundryAlloy [i];
-									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount (i) * 100 + .5f) / 100f + " " + m.GetName () + " (molten)", 10, y, Util.GetColorFromVector (m.GetColor ()));
+									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount (i) * 100 + .5f) / 100f + " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector (m.Color));
 									y += 20;
 								}
 							}
@@ -130,14 +130,14 @@ namespace DSmithGameCs
 
 					shader.SetModelspaceMatrix(fillModelspace);
 					shader.SetMVP (fillModelspace*VP);
-					shader.SetColor (BasicMetal.Metals[game.GameStats.CastMetal].GetColor());
+					shader.SetColor (BasicMetal.GetColor(game.GameStats.CastMetal));
 					fill.Draw ();
 					if (game.GameStats.CastFilling < 1) {
 						LiquidShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
 						LiquidShader.GetInstance ().SetMVP (fallModelspace*VP);
 						if (!(shader is LiquidShader)) {
 							LiquidShader.GetInstance ().Bind ();
-							LiquidShader.GetInstance ().SetColor (BasicMetal.Metals[game.GameStats.CastMetal].GetColor ());
+							LiquidShader.GetInstance ().SetColor (BasicMetal.GetColor(game.GameStats.CastMetal));
 							LiquidShader.GetInstance ().UseTexture ();
 							LiquidShader.GetInstance ().AutoPan ();
 							LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);

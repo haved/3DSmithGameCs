@@ -23,12 +23,12 @@ namespace DSmithGameCs
 			*Matrix4.CreatePerspectiveFieldOfView(0.6f, 16f/9, 0.1f, 4);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
-			OrthoRenderEngine.DrawColoredMesh (MeshCollection.Ingot, ItemMatrix, Metal.GetColor(), x+4, y+4, width-8, height-8, -1, -2, 2, 4);
+			OrthoRenderEngine.DrawColoredMesh (MeshCollection.Ingot, ItemMatrix, Metal.Color, x+4, y+4, width-8, height-8, -1, -2, 2, 4);
 		}
 
 		public void RenderMesh(Matrix4 location, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetColor (Metal.GetColor ());
+			BasicShader.GetInstance ().SetColor (Metal.Color);
 			BasicShader.GetInstance ().SetModelspaceMatrix (location);
 			BasicShader.GetInstance ().SetMVP (location*VP);
 			MeshCollection.Ingot.Draw();
@@ -42,22 +42,22 @@ namespace DSmithGameCs
 
 		public Vector4 GetColor()
 		{
-			return Metal.GetColor ();
+			return Metal.Color;
 		}
 
 		public override string GetTooltipName()
 		{
-			return Metal.GetName() + Localization.GetLocalization("ui.item.ingot");
+			return Metal.Name + Localization.GetLocalization("ui.item.ingot");
 		}
 
 		public override Vector4 GetTooltipColor()
 		{
-			return Metal.GetColor();
+			return Metal.Color;
 		}
 
 		public float Melt(float temprature)
 		{
-			float melt = Time.Delta()*(.1f+(temprature - Metal.GetMeltingPoint ())/100);
+			float melt = Time.Delta()*(.1f+(temprature - Metal.MeltingPoint)/100);
 			if (melt<0)
 				return -1;
 
