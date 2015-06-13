@@ -41,7 +41,7 @@ namespace DSmithGameCs
 				IngotItem ingot = game.GameStats.FoundryIngots [i];
 				if (ingot == null)
 					continue;
-				game.GameStats.FoundryAlloy.AddMetal (ingot.GetMetal (), ingot.Melt (game.GameStats.FoundryTemprature));
+				game.GameStats.FoundryAlloy.AddMetal (ingot.MetalID, ingot.Melt (game.GameStats.FoundryTemprature));
 				if (ingot.GetSolidProgress () <= 0)
 					game.GameStats.FoundryIngots.RemoveAt (i);
 			}
@@ -67,7 +67,7 @@ namespace DSmithGameCs
 					int y = 85;
 					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++)
 					{
-						IMetal m = game.GameStats.FoundryAlloy [i];
+						BasicMetal m = game.GameStats.FoundryAlloy [i];
 						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.GetName() + " (molten)", 10, y, Util.GetColorFromVector(m.GetColor()));
 						y += 20;
 					}
@@ -75,7 +75,7 @@ namespace DSmithGameCs
 						IngotItem item = game.GameStats.FoundryIngots[i];
 						if (item == null)
 							continue;
-						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.GetMetal().GetName() + " (solid)", 10, y, Util.GetColorFromVector(item.GetMetal().GetColor()));
+						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.Metal.GetName() + " (solid)", 10, y, Util.GetColorFromVector(item.Metal.GetColor()));
 						y += 20;
 					}
 					if (y+10 != game.TooltipHelper.Writer.Height)

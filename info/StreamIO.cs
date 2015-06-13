@@ -33,14 +33,14 @@ namespace DSmithGameCs
 		}
 
 		static readonly BinaryFormatter formater = new BinaryFormatter();
-		public static IMetal LoadMetal(Stream reader)
+		public static Alloy LoadAlloy(Stream reader)
 		{
-			return ((IMetalRecreator)formater.Deserialize (reader)).GetMetal ();
+			return ((Alloy.AlloyRecreator)formater.Deserialize (reader)).GetAlloy ();
 		}
 
-		public static void SaveMetal(IMetal metal, Stream writer)
+		public static void SaveAlloy(Alloy alloy, Stream writer)
 		{
-			formater.Serialize (writer, metal.GetRecreator ());
+			formater.Serialize (writer, alloy.GetRecreator ());
 		}
 	}
 }

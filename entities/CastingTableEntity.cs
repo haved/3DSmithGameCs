@@ -29,7 +29,7 @@ namespace DSmithGameCs
 			if (Input.PourKeyPressed & game.TooltipHelper.GetOwner () == this) {
 				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume () - 0.005f &
 																	game.GameStats.CastFilling <= 0 & game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint()) {
-					game.GameStats.CastAlloy = game.GameStats.FoundryAlloy.Normalized ();
+					game.GameStats.CastMetal = BasicMetal.Zinc.Id;
 					game.GameStats.CastFilling = 0.01f;
 					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.GetAmount ();
 					game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
@@ -85,7 +85,7 @@ namespace DSmithGameCs
 								game.TooltipHelper.Writer.DrawString ("Foundry contents:", 0, 60, Color.Green);
 								y += 20;
 								for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++) {
-									IMetal m = game.GameStats.FoundryAlloy [i];
+									BasicMetal m = game.GameStats.FoundryAlloy [i];
 									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount (i) * 100 + .5f) / 100f + " " + m.GetName () + " (molten)", 10, y, Util.GetColorFromVector (m.GetColor ()));
 									y += 20;
 								}
@@ -130,14 +130,14 @@ namespace DSmithGameCs
 
 					shader.SetModelspaceMatrix(fillModelspace);
 					shader.SetMVP (fillModelspace*VP);
-					shader.SetColor (game.GameStats.CastAlloy.GetColor());
+					shader.SetColor (BasicMetal.Metals[game.GameStats.CastMetal].GetColor());
 					fill.Draw ();
 					if (game.GameStats.CastFilling < 1) {
 						LiquidShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
 						LiquidShader.GetInstance ().SetMVP (fallModelspace*VP);
 						if (!(shader is LiquidShader)) {
 							LiquidShader.GetInstance ().Bind ();
-							LiquidShader.GetInstance ().SetColor (game.GameStats.CastAlloy.GetColor ());
+							LiquidShader.GetInstance ().SetColor (BasicMetal.Metals[game.GameStats.CastMetal].GetColor ());
 							LiquidShader.GetInstance ().UseTexture ();
 							LiquidShader.GetInstance ().AutoPan ();
 							LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
@@ -159,7 +159,7 @@ namespace DSmithGameCs
 				if (game.GameStats.CastingTemprature > 25)
 					return; //The cast is too hot to take out of the cast
 				if (game.GameStats.CastFilling >= 1) {
-					Item i = game.GameStats.CurrentCast.CreateItem (game, game.GameStats.CastAlloy);
+					Item i = game.GameStats.CurrentCast.CreateItem (game, game.GameStats.CastMetal);
 					if (i == null)
 						return;
 					if (playerInv.CanFitItem (i)) {

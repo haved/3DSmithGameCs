@@ -96,7 +96,7 @@ namespace DSmithGameCs
 			return info.Color;
 		}
 
-		public Item CreateItem(Smith2DGame game, IMetal metal)
+		public Item CreateItem(Smith2DGame game, int metal)
 		{
 			if (info.ItemCreator != null && info.ItemCreator.CanCreateItem (metal, game))
 				return info.ItemCreator.CreateItem (metal);

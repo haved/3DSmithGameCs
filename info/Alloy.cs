@@ -4,21 +4,13 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class Alloy : IMetal
+	public class Alloy
 	{
-		public static Alloy Steel = new Alloy();
-
-		static Alloy()
-		{
-			Steel.AddMetal (BasicMetal.Iron, 0.90f);
-			Steel.AddMetal (BasicMetal.Carbon, 0.1f);
-		}
-
 		class MetalMass
 		{
-			public IMetal Metal;
+			public int Metal;
 			public float Amount;
-			public MetalMass(IMetal metal, float amount)
+			public MetalMass(int metal, float amount)
 			{
 				Metal = metal;
 				Amount = amount;
@@ -30,7 +22,7 @@ namespace DSmithGameCs
 		Vector4 color = Vector4.Zero;
 		int highestMeltingPoint=0;
 
-		Alloy(Alloy other)
+		public Alloy(Alloy other)
 		{
 			metals = new List<MetalMass>(other.metals);
 			totalAmount = other.totalAmount;
@@ -46,34 +38,28 @@ namespace DSmithGameCs
 			highestMeltingPoint = 0;
 		}
 
-		public void AddMetal(IMetal m, float amount)
+		public void AddMetal(int metal, float amount)
 		{
 			if (amount <= 0)
 				return;
 
-			Alloy alloy = m as Alloy;
-			if (alloy != null) {
-				foreach (MetalMass mm in alloy.metals)
-					AddMetal (mm.Metal, mm.Amount/alloy.totalAmount*amount);
-			} else {
-				color = totalAmount * color + amount * m.GetColor ();
-				totalAmount += amount;
-				color /= totalAmount;
+			BasicMetal m = BasicMetal.Metals [metal];
 
-				if (m.GetMeltingPoint() > highestMeltingPoint)
-					highestMeltingPoint = m.GetMeltingPoint ();
+			color = totalAmount * color + amount * m.GetColor ();
+			totalAmount += amount;
+			color /= totalAmount;
 
-				for (int i = 0; i < metals.Count; i++) {
-					if (metals [i].Metal == m) {
-						metals [i].Amount += amount;
-						return;
-					}
+			if (m.GetMeltingPoint() > highestMeltingPoint)
+				highestMeltingPoint = m.GetMeltingPoint ();
+
+			for (int i = 0; i < metals.Count; i++) {
+				if (metals [i].Metal == metal) {
+					metals [i].Amount += amount;
+					return;
 				}
-				metals.Add (new MetalMass (m, amount));
 			}
+			metals.Add (new MetalMass (metal, amount));
 		}
-
-		#region IMetal implementation
 
 		public int GetMeltingPoint ()
 		{
@@ -84,20 +70,6 @@ namespace DSmithGameCs
 		{
 			return color;
 		}
-
-		public string GetName ()
-		{
-			string contents = "";
-			foreach (MetalMass m in metals) {
-				if (!contents.Equals (""))
-					contents += " + ";
-				contents += (int)(m.Amount/totalAmount * 100+0.4f)  + "% " + m.Metal.GetName ();
-			}
-			return contents;
-		}
-
-		#endregion
-
 
 		public float GetAmount()
 		{
@@ -128,49 +100,40 @@ namespace DSmithGameCs
 		}
 
 		public int MetalTypeAmount{	get { return metals.Count; }}
-		public IMetal this[int index]{get { return metals[index].Metal;}}
+		public BasicMetal this[int index]{get { return BasicMetal.Metals[metals[index].Metal];}}
 		public float GetMetalAmount(int index) { return metals[index].Amount;}
 
-		public IMetal Clone()
-		{
-			return metals.Count == 1 ? metals [0].Metal : new Alloy (this);
-		}
-
-		public IMetalRecreator GetRecreator()
+		public AlloyRecreator GetRecreator()
 		{
 			return new AlloyRecreator (this);
 		}
 
 		[Serializable]
-		public struct AlloyRecreator : IMetalRecreator
+		public struct AlloyRecreator
 		{
-			readonly IMetalRecreator[] metals;
+			readonly int[] metals;
 			readonly float[] amounts;
 
 			public AlloyRecreator(Alloy alloy)
 			{
-				metals = new IMetalRecreator[alloy.metals.Count];
+				metals = new int[alloy.metals.Count];
 				amounts = new float[alloy.metals.Count];
 
 				for(int i = 0; i < alloy.metals.Count; i++)
 				{
-					metals[i] = alloy.metals[i].Metal.GetRecreator();
+					metals[i] = alloy.metals[i].Metal;
 					amounts[i] = alloy.metals[i].Amount;
 				}
 			}
 
-			#region IMetalRecreator implementation
-
-			public IMetal GetMetal ()
+			public Alloy GetAlloy ()
 			{
 				var output = new Alloy();
 				for (int i = 0; i < metals.Length; i++) {
-					output.AddMetal (metals[i].GetMetal(),amounts[i]);
+					output.AddMetal (metals[i],amounts[i]);
 				}
 				return output;
 			}
-
-			#endregion
 		}
 	}
 }

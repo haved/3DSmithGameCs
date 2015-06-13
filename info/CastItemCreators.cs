@@ -4,21 +4,21 @@ namespace DSmithGameCs
 {
 	public interface ICastItemCreator
 	{
-		bool CanCreateItem(IMetal metal, Smith2DGame game);
+		bool CanCreateItem(int metal, Smith2DGame game);
 
-		Item CreateItem(IMetal metal);
+		Item CreateItem(int metal);
 	}
 
 	public class IngotItemCreator : ICastItemCreator
 	{
 		#region ICastItemCreator implementation
-		public bool CanCreateItem (IMetal metal, Smith2DGame game)
+		public bool CanCreateItem (int metal, Smith2DGame game)
 		{
 			return true;
 		}
-		public Item CreateItem (IMetal metal)
+		public Item CreateItem (int metal)
 		{
-			return new IngotItem (metal.Clone());
+			return new IngotItem (metal);
 		}
 		#endregion
 	}
