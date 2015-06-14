@@ -54,9 +54,7 @@ namespace DSmithGameCs
 		public void RenderItemTooltip(Item i, float x, float y)
 		{
 			if (i != currentItem) {
-				Writer.Clear ();
-				Writer.Resize ((int)Writer.GetLineWidth (i.GetTooltipName()), (int)Writer.GetLineHeight ());
-				Writer.DrawString (i.GetTooltipName(), 0, 0, Util.GetColorFromVector(i.GetTooltipColor()));
+				i.DrawTooltip (Writer);
 			}
 			x -= Writer.Width;
 			GL.DepthFunc (DepthFunction.Always);

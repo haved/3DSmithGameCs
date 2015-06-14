@@ -96,10 +96,10 @@ namespace DSmithGameCs
 			return info.Color;
 		}
 
-		public Item CreateItem(Smith2DGame game, int metal)
+		public Item CreateItem(Smith2DGame game, int metal, float purity)
 		{
-			if (info.ItemCreator != null && info.ItemCreator.CanCreateItem (metal, game))
-				return info.ItemCreator.CreateItem (metal);
+			if (info.ItemCreator != null && info.ItemCreator.CanCreateItem (metal, purity, game))
+				return info.ItemCreator.CreateItem (metal, purity);
 			return null;
 		}
 

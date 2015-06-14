@@ -21,11 +21,13 @@ namespace DSmithGameCs
 		float totalAmount;
 		Vector4 color = Vector4.Zero;
 		int highestMeltingPoint=0;
+		float impurity;
 
 		public Alloy(Alloy other)
 		{
 			metals = new List<MetalMass>(other.metals);
 			totalAmount = other.totalAmount;
+			impurity = other.impurity;
 			color = other.color;
 			highestMeltingPoint = other.highestMeltingPoint;
 		}
@@ -38,16 +40,18 @@ namespace DSmithGameCs
 			highestMeltingPoint = 0;
 		}
 
-		public void AddMetal(int metal, float amount)
+		public void AddMetal(int metal, float purity, float amount)
 		{
 			if (amount <= 0)
 				return;
 
-			BasicMetal m = BasicMetal.Metals [metal];
+			KnownMetal m = KnownMetal.Metals [metal];
 
 			color = totalAmount * color + amount * m.Color;
 			totalAmount += amount;
 			color /= totalAmount;
+
+			impurity += (1-purity) * amount;
 
 			if (m.MeltingPoint > highestMeltingPoint)
 				highestMeltingPoint = m.MeltingPoint;
@@ -71,16 +75,15 @@ namespace DSmithGameCs
 			return color;
 		}
 
-		public float GetAmount()
-		{
-			return totalAmount;
+		public float Amount {
+			get { return totalAmount; }
 		}
 
 		public Alloy Normalized()
 		{
 			var output = new Alloy();
 			foreach( MetalMass mm in metals)
-				output.AddMetal (mm.Metal, mm.Amount / totalAmount);
+				output.AddMetal (mm.Metal, Purity, mm.Amount / totalAmount);
 			return output;
 		}
 
@@ -89,6 +92,7 @@ namespace DSmithGameCs
 			if (amount < 0.005f) {
 				totalAmount = 0;
 				highestMeltingPoint = 0;
+				impurity = 0;
 				metals.Clear ();
 				return;
 			}
@@ -96,45 +100,15 @@ namespace DSmithGameCs
 			foreach (MetalMass mm in metals)
 				mm.Amount = mm.Amount / totalAmount * amount;
 
+			impurity = impurity / totalAmount * amount;
 			totalAmount = amount;
 		}
 
-		public int MetalTypeAmount{	get { return metals.Count; }}
-		public BasicMetal this[int index]{get { return BasicMetal.Metals[metals[index].Metal];}}
-		public float GetMetalAmount(int index) { return metals[index].Amount;}
-
-		public AlloyRecreator GetRecreator()
-		{
-			return new AlloyRecreator (this);
-		}
-
-		[Serializable]
-		public struct AlloyRecreator
-		{
-			readonly int[] metals;
-			readonly float[] amounts;
-
-			public AlloyRecreator(Alloy alloy)
-			{
-				metals = new int[alloy.metals.Count];
-				amounts = new float[alloy.metals.Count];
-
-				for(int i = 0; i < alloy.metals.Count; i++)
-				{
-					metals[i] = alloy.metals[i].Metal;
-					amounts[i] = alloy.metals[i].Amount;
-				}
-			}
-
-			public Alloy GetAlloy ()
-			{
-				var output = new Alloy();
-				for (int i = 0; i < metals.Length; i++) {
-					output.AddMetal (metals[i],amounts[i]);
-				}
-				return output;
-			}
-		}
+		public int MetalCount{	get { return metals.Count; } }
+		public KnownMetal this [int index]{ get { return KnownMetal.Metals [metals [index].Metal]; } }
+		public int GetMetalID (int index) { return metals [index].Metal; }
+		public float GetMetalAmount(int index) { return metals [index].Amount; }
+		public float Purity { get { return 1-impurity/totalAmount; } }
 	}
 }
 

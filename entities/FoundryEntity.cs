@@ -41,7 +41,7 @@ namespace DSmithGameCs
 				IngotItem ingot = game.GameStats.FoundryIngots [i];
 				if (ingot == null)
 					continue;
-				game.GameStats.FoundryAlloy.AddMetal (ingot.MetalID, ingot.Melt (game.GameStats.FoundryTemprature));
+				game.GameStats.FoundryAlloy.AddMetal (ingot.MetalID, ingot.Purity, ingot.Melt (game.GameStats.FoundryTemprature));
 				if (ingot.GetSolidProgress () <= 0)
 					game.GameStats.FoundryIngots.RemoveAt (i);
 			}
@@ -65,9 +65,9 @@ namespace DSmithGameCs
 					game.TooltipHelper.Writer.DrawString ("Oxygen: " + (int)game.GameStats.AirQuality + "%", 0, 40, Color.Aqua);
 					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, 65, Color.Green);
 					int y = 85;
-					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++)
+					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalCount; i++)
 					{
-						BasicMetal m = game.GameStats.FoundryAlloy [i];
+						KnownMetal m = game.GameStats.FoundryAlloy [i];
 						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector(m.Color));
 						y += 20;
 					}
@@ -97,8 +97,8 @@ namespace DSmithGameCs
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
 					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * Modelspace, VP);
 
-			if (game.GameStats.FoundryAlloy.GetAmount () >= 0.01f) {
-				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.GetAmount ()) * liquidTransform * Modelspace;
+			if (game.GameStats.FoundryAlloy.Amount >= 0.01f) {
+				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.Amount) * liquidTransform * Modelspace;
 				INormalShader shader;
 				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 					shader = LiquidShader.GetInstance ();
@@ -126,7 +126,7 @@ namespace DSmithGameCs
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var ingotItem = game.GameStats.PlayerInventory.GetSelectedItem () as IngotItem;
 				if(ingotItem != null)
-				if (game.GameStats.FoundryIngots.Count+game.GameStats.FoundryAlloy.GetAmount() + 1 <= game.GameStats.FoundryIngots.Capacity) {
+				if (game.GameStats.FoundryIngots.Count+game.GameStats.FoundryAlloy.Amount + 1 <= game.GameStats.FoundryIngots.Capacity) {
 					game.GameStats.FoundryIngots.Add(ingotItem);
 					game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
 				}

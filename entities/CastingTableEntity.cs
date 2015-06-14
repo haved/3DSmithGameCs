@@ -27,11 +27,11 @@ namespace DSmithGameCs
 		{
 			UpdateDialog ();
 			if (Input.PourKeyPressed & game.TooltipHelper.GetOwner () == this) {
-				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume () - 0.005f &
+				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.Amount >= game.GameStats.CurrentCast.GetVolume () - 0.005f &
 																	game.GameStats.CastFilling <= 0 & game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint()) {
-					game.GameStats.CastMetal = BasicMetal.Zinc.Id;
+					game.GameStats.CastMetal = KnownMetal.Zinc.Id;
 					game.GameStats.CastFilling = 0.01f;
-					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.GetAmount ();
+					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.Amount;
 					game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
 				}
 			}
@@ -76,7 +76,7 @@ namespace DSmithGameCs
 								game.TooltipHelper.Writer.DrawString ("Casting...", 0, 40, Color.Red);
 							y += 20;
 						}
-						else if (game.GameStats.FoundryAlloy.GetAmount () >= game.GameStats.CurrentCast.GetVolume ()-0.005f) {
+						else if (game.GameStats.FoundryAlloy.Amount >= game.GameStats.CurrentCast.GetVolume ()-0.005f) {
 							y += 20;
 							if (game.GameStats.FoundryTemprature < game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 								game.TooltipHelper.Writer.DrawString ("The foundry is too cold", 0, 40, Color.Red);
@@ -84,8 +84,8 @@ namespace DSmithGameCs
 								game.TooltipHelper.Writer.DrawString ("Hit " + Input.GetKeyName (Input.POURKEY) + " to pour", 0, 40, Color.Red);
 								game.TooltipHelper.Writer.DrawString ("Foundry contents:", 0, 60, Color.Green);
 								y += 20;
-								for (int i = 0; i < game.GameStats.FoundryAlloy.MetalTypeAmount; i++) {
-									BasicMetal m = game.GameStats.FoundryAlloy [i];
+								for (int i = 0; i < game.GameStats.FoundryAlloy.MetalCount; i++) {
+									KnownMetal m = game.GameStats.FoundryAlloy [i];
 									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount (i) * 100 + .5f) / 100f + " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector (m.Color));
 									y += 20;
 								}
@@ -130,14 +130,14 @@ namespace DSmithGameCs
 
 					shader.SetModelspaceMatrix(fillModelspace);
 					shader.SetMVP (fillModelspace*VP);
-					shader.SetColor (BasicMetal.GetColor(game.GameStats.CastMetal));
+					shader.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
 					fill.Draw ();
 					if (game.GameStats.CastFilling < 1) {
 						LiquidShader.GetInstance ().SetModelspaceMatrix(fallModelspace);
 						LiquidShader.GetInstance ().SetMVP (fallModelspace*VP);
 						if (!(shader is LiquidShader)) {
 							LiquidShader.GetInstance ().Bind ();
-							LiquidShader.GetInstance ().SetColor (BasicMetal.GetColor(game.GameStats.CastMetal));
+							LiquidShader.GetInstance ().SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
 							LiquidShader.GetInstance ().UseTexture ();
 							LiquidShader.GetInstance ().AutoPan ();
 							LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
@@ -159,7 +159,7 @@ namespace DSmithGameCs
 				if (game.GameStats.CastingTemprature > 25)
 					return; //The cast is too hot to take out of the cast
 				if (game.GameStats.CastFilling >= 1) {
-					Item i = game.GameStats.CurrentCast.CreateItem (game, game.GameStats.CastMetal);
+					Item i = game.GameStats.CurrentCast.CreateItem (game, game.GameStats.CastMetal, game.GameStats.CastMetalPurity);
 					if (i == null)
 						return;
 					if (playerInv.CanFitItem (i)) {

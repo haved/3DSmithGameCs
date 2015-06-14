@@ -35,12 +35,38 @@ namespace DSmithGameCs
 		static readonly BinaryFormatter formater = new BinaryFormatter();
 		public static Alloy LoadAlloy(Stream reader)
 		{
-			return ((Alloy.AlloyRecreator)formater.Deserialize (reader)).GetAlloy ();
+			var output = new Alloy ();
+
+			if(reader.ReadByte()==0) //The alloy is empty
+				return output;
+
+			var buffer = new byte[sizeof(float)];
+
+			reader.Read (buffer, 0, buffer.Length);
+			float Purity = BitConverter.ToSingle (buffer, 0);
+			int metalCount = reader.ReadByte ();
+			for (int i = 0; i < metalCount; i++) {
+				int id = reader.ReadByte ();
+				reader.Read (buffer, 0, buffer.Length);
+				float amount = BitConverter.ToSingle (buffer, 0);
+				output.AddMetal (id, Purity, amount);
+			}
+			return output;
 		}
 
 		public static void SaveAlloy(Alloy alloy, Stream writer)
 		{
-			formater.Serialize (writer, alloy.GetRecreator ());
+			if (alloy.Amount <= 0) {
+				writer.WriteByte ((byte)0);
+				return;
+			}
+			writer.WriteByte ((byte)1);
+			writer.Write (BitConverter.GetBytes (alloy.Purity), 0, sizeof(float)); //Purity
+			writer.WriteByte ((byte)alloy.MetalCount); //metalCount
+			for (int i = 0; i < alloy.MetalCount; i++) {
+				writer.WriteByte((byte) alloy.GetMetalID(i)); //metalID
+				writer.Write(BitConverter.GetBytes (alloy.GetMetalAmount (i)), 0, sizeof(float)); //metalAmount
+			}
 		}
 	}
 }

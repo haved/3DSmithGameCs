@@ -10,6 +10,7 @@ namespace DSmithGameCs
 		public CastItem CurrentCast;
 
 		public int CastMetal;
+		public float CastMetalPurity;
 		public float CastFilling;
 		public float CastingTemprature;
 		public float OldFoundryAmount;
@@ -25,12 +26,14 @@ namespace DSmithGameCs
 		{
 			PlayerInventory = new Inventory ();
 			HatchInv = new HatchInventory ();
-			PlayerInventory.AddItem (new IngotItem(BasicMetal.Iron));
+			PlayerInventory.AddItem (new IngotItem(KnownMetal.Iron, 1));
 			HatchInv.AddItem (new CastItem (CastItem.GreatsowordCast));
 			HatchInv.AddItem (new CastItem (CastItem.IngotCast));
-			HatchInv.AddItem (new IngotItem(BasicMetal.Gold));
-			HatchInv.AddItem (new IngotItem(BasicMetal.Iron));
-			HatchInv.AddItem (new IngotItem(BasicMetal.Gold));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Gold, 0.8f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Iron, 0.7f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Gold, 0.9f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 1f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 0.8f));
 			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
 			FoundryAlloy = new Alloy ();
 			AirQuality = 25;
@@ -47,7 +50,8 @@ namespace DSmithGameCs
 			writer.WriteByte ((byte)(CurrentCast != null ? 1 : 0)); 				//Is CurrentCast not null?
 			if (CurrentCast != null)
 				StreamIO.SaveItem (CurrentCast, writer); 							//CurrentCast if it's not null.
-			writer.WriteByte((byte)CastMetal); 										//CastMetal
+			writer.WriteByte((byte)CastMetal);										//CastMetal
+			writer.Write(BitConverter.GetBytes(CastMetalPurity), 0, sizeof(float)); //CastMetalPurity
 			writer.Write (BitConverter.GetBytes (CastFilling), 0, sizeof(float)); 	//CastFilling
 			writer.Write (BitConverter.GetBytes (CastingTemprature), 0, sizeof(float)); //CastingTemerature
 			writer.Write (BitConverter.GetBytes (OldFoundryAmount), 0, sizeof(float)); //OldFoundryAmount
@@ -74,12 +78,14 @@ namespace DSmithGameCs
 				CurrentCast = (CastItem)StreamIO.LoadItem(reader); 					//CurrentCast	
 			CastMetal = reader.ReadByte();											//CastMetal
 			var buffer = new byte[sizeof(float)];
+			reader.Read (buffer, 0, buffer.Length); 					
+			CastMetalPurity = BitConverter.ToSingle (buffer, 0);
 			reader.Read (buffer, 0, buffer.Length); 								//CastFilling
-			CastFilling = BitConverter.ToSingle (buffer,0);
+			CastFilling = BitConverter.ToSingle (buffer, 0);
 			reader.Read (buffer, 0, buffer.Length); 								//CastingTemperature
-			CastingTemprature = BitConverter.ToSingle (buffer,0);
+			CastingTemprature = BitConverter.ToSingle (buffer, 0);
 			reader.Read (buffer, 0, buffer.Length); 								//OldFoundryAmount
-			OldFoundryAmount = BitConverter.ToSingle (buffer,0);
+			OldFoundryAmount = BitConverter.ToSingle (buffer, 0);
 			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
 			for (int i = 0; i < FoundryIngots.Capacity; i++) {
 				if (reader.ReadByte () != 0) 										//Check if the item is not null
