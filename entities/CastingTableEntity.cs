@@ -53,7 +53,7 @@ namespace DSmithGameCs
 						game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.Amount;
 						game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
 					} else {
-						game.ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.notanalloy"), 200, 500, 2);
+						game.ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.notanalloy"), 200, 500, 2, false);
 					}
 				}
 			}

@@ -59,27 +59,33 @@ namespace DSmithGameCs
 				}
 				if(game.TooltipHelper.GetOwner()==this && prevVal != (prevVal=(int)(game.GameStats.FoundryTemprature+game.GameStats.CoalPercent+game.GameStats.AirQuality)))
 				{
+					float lineSpacing = game.TooltipHelper.Writer.GetLineHeight ();
 					game.TooltipHelper.Writer.Clear ();
 					game.TooltipHelper.Writer.DrawString ("Heat: " + (int)game.GameStats.FoundryTemprature + "°C", 0, 0, Color.Red);
-					game.TooltipHelper.Writer.DrawString ("Coal: " + (int)game.GameStats.CoalPercent + "%", 0, 20, Color.White);
-					game.TooltipHelper.Writer.DrawString ("Oxygen: " + (int)game.GameStats.AirQuality + "%", 0, 40, Color.Aqua);
-					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, 65, Color.Green);
-					int y = 85;
+					game.TooltipHelper.Writer.DrawString ("Coal: " + (int)game.GameStats.CoalPercent + "%", 0, lineSpacing, Color.White);
+					game.TooltipHelper.Writer.DrawString ("Oxygen: " + (int)game.GameStats.AirQuality + "%", 0, lineSpacing*2, Color.Aqua);
+					game.TooltipHelper.Writer.DrawString ("Ingots:", 0, lineSpacing*3.5f, Color.Green);
+					float y = lineSpacing*4.5f;
 					for (int i = 0; i < game.GameStats.FoundryAlloy.MetalCount; i++)
 					{
 						KnownMetal m = game.GameStats.FoundryAlloy [i];
 						game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount(i)*100+.5f)/100f+ " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector(m.Color));
-						y += 20;
+						y += lineSpacing;
 					}
 					for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
 						IngotItem item = game.GameStats.FoundryIngots[i];
 						if (item == null)
 							continue;
 						game.TooltipHelper.Writer.DrawString ((int)(item.GetSolidProgress()*100+.5f)/100f+ " " + item.Metal.Name + " (solid)", 10, y, Util.GetColorFromVector(item.Metal.Color));
-						y += 20;
+						y += lineSpacing;
 					}
-					if (y+10 != game.TooltipHelper.Writer.Height)
-						game.TooltipHelper.Writer.Resize (300, y+10);
+					if (game.GameStats.FoundryAlloy.Amount > 0) {
+						game.TooltipHelper.Writer.DrawString (Localization.GetLocalization ("ui.tooltip.purity") + "   " + (int)(game.GameStats.FoundryAlloy.Purity * 1000.5f) + "%", 10, y, Util.GetColorFromVector (game.GameStats.FoundryAlloy.GetColor ()));
+						y += lineSpacing;
+					}
+
+					if ((int)y+10 != game.TooltipHelper.Writer.Height)
+						game.TooltipHelper.Writer.Resize (300, (int)y+10);
 						
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)

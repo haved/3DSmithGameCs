@@ -49,34 +49,45 @@ namespace DSmithGameCs
 		}
 
 		int selectedItem = -1;
+		int hoveredBox = -1;
 		int hoveredItem = -1;
 		public void HandleInput()
 		{
 			int pressedBox = -1;
 
 			if (Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth () - overscan & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth () - iconSize - overscan &
-			   Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight () - overscan & Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight () - iconSize * SIZE - overscan)
-				hoveredItem = (int)((OrthoRenderEngine.GetCanvasHeight () - Input.OrthoMouseY - overscan) / iconSize);
+			    Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight () - overscan & Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight () - iconSize * SIZE - overscan)
+				hoveredBox = (int)((OrthoRenderEngine.GetCanvasHeight () - Input.OrthoMouseY - overscan) / iconSize);
 			else
-				hoveredItem = -1;
+				hoveredBox = -1;
 
 			if (Input.PressedItemKey != -1)
 				pressedBox = Input.PressedItemKey;
-			else if (Input.MousePressed && hoveredItem > -1)
-				pressedBox = hoveredItem;
+			else if (Input.MousePressed && hoveredBox > -1)
+				pressedBox = hoveredBox;
 
-			if (pressedBox == -1)
+			int usedBox = pressedBox == -1 ? hoveredBox : pressedBox;
+
+			if (usedBox == -1){
+				hoveredItem = -1;
 				return;
+			}
 
 			uint box = 0;
 			int index = 0;
 			for (; index < GetItemAmount (); index++) {
-				box += GetItem (index).GetSize();
-				if (box > pressedBox)
+				box += GetItem (index).GetSize ();
+				if (box > usedBox)
 					break;
 			}
-
-			selectedItem = (selectedItem != index & index < GetItemAmount ()) ? index : -1;
+			int usedItem = (index < GetItemAmount ()) ? index : -1;
+			if (pressedBox != -1)
+				if (selectedItem == usedItem)
+					selectedItem = -1;
+				else
+					selectedItem = usedItem;
+			else
+				hoveredItem = usedItem;
 		}
 
 		public bool HasSelectedItem()
@@ -142,7 +153,7 @@ namespace DSmithGameCs
 					game.TooltipHelper.UnClaim ();
 
 			if (tooFull) {
-				game.ErrortipHelper.ShowError (Localization.GetLocalization ("ui.error.inventoryfull"), OrthoRenderEngine.GetCanvasWidth () - overscan - 300, OrthoRenderEngine.GetCanvasHeight () - overscan - iconSize * SIZE - 32 - 30, 1.5f); 
+				game.ErrortipHelper.ShowError (Localization.GetLocalization ("ui.error.inventoryfull"), OrthoRenderEngine.GetCanvasWidth () - overscan, OrthoRenderEngine.GetCanvasHeight () - overscan - iconSize * SIZE - 32 - 30, 1.5f, true); 
 				tooFull = false;
 			}
 		}

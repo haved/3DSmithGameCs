@@ -11,6 +11,8 @@ ui.tooltip.volume:===Volum:
 ui.tooltip.unit.ingot===Barre
 ui.tooltip.unit.ingot.plural===Barrer
 ui.tooltip.notenoughmoltenmetal===Ikke nok flytende metall
+ui.error.inventoryfull===Beholdningen har ikke nok plass
+ui.error.notanalloy===Smelteovnens innhold er ikke en ren legering
 ui.item.ingot===barre
 ui.item.cast===støpeform
 ui.metal.Copper===Kobber
@@ -20,5 +22,6 @@ ui.metal.Lead===Bly
 ui.metal.Tin===Tinn
 ui.metal.Zinc===Sink
 ui.metal.Carbon===Karbon
+ui.metal.Bronze===Bronse
 ui.cast.Ingot===Barre
 ui.cast.Greatsword===Storsverd

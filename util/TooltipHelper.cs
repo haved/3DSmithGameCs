@@ -57,6 +57,7 @@ namespace DSmithGameCs
 				i.DrawTooltip (Writer);
 			}
 			x -= Writer.Width;
+			y -= Writer.Height / 2;
 			GL.DepthFunc (DepthFunction.Always);
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White60, x-16, y-16, Writer.Width+32, Writer.Height+32);
 			OrthoRenderEngine.DrawTexturedBox (Writer.GetTextureID (), x, y, Writer.Width, Writer.Height);

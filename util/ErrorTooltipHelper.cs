@@ -19,12 +19,8 @@ namespace DSmithGameCs
 
 		float x, y, time;
 
-		public void ShowError(string textIn, float x, float y, float time)
+		public void ShowError(string textIn, float x, float y, float time, bool printLeft)
 		{
-			this.x = x;
-			this.y = y;
-			this.time = Time.CurrentTime() + time;
-
 			string[] lines = textIn.Split ('\n');
 
 			float width = 0;
@@ -35,6 +31,10 @@ namespace DSmithGameCs
 
 			for(int i = 0; i < lines.Length; i++)
 				Writer.DrawString (lines [i], 0, Writer.GetLineHeight () * i, Color.White);
+
+			this.x = printLeft ? x-Writer.Width : x;
+			this.y = y;
+			this.time = Time.CurrentTime() + time;
 		}
 
 		public void UnClaim()
