@@ -18,7 +18,7 @@ namespace DSmithGameCs
 		public PlayerEntity Player;
 
 		public TooltipHelper TooltipHelper;
-		public TooltipHelper ErrortipHelper;
+		public ErrorTooltipHelper ErrortipHelper;
 
 		Scene menuScene;
 		Scene smithScene;
@@ -37,7 +37,7 @@ namespace DSmithGameCs
 			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
 			OrthoRenderEngine.Init ();
 			TooltipHelper = new TooltipHelper ();
-			ErrortipHelper = new TooltipHelper ();
+			ErrortipHelper = new ErrorTooltipHelper ();
 			Localization.LoadFromFile ("../../res/localization/no_NO.txt");
 			MainMenu = new MainMenuView (this);
 			PauseMenu = new PauseMenuView (this);
@@ -116,6 +116,7 @@ namespace DSmithGameCs
 			if (CurrentView.ShouldRenderScene ())
 				CurrentScene.Render (Matrix4.LookAt (CurrentView.GetEyePos (), CurrentView.GetEyeTarget (), CurrentView.GetEyeUp ()) * ProjectionMatrix);
 			CurrentView.RenderView (CurrentScene);
+			ErrortipHelper.Render ();
 		}
 
 		public void OnResize (int width, int height)

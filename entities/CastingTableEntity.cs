@@ -29,10 +29,32 @@ namespace DSmithGameCs
 			if (Input.PourKeyPressed & game.TooltipHelper.GetOwner () == this) {
 				if (game.GameStats.CurrentCast != null & game.GameStats.FoundryAlloy != null && game.GameStats.FoundryAlloy.Amount >= game.GameStats.CurrentCast.GetVolume () - 0.005f &
 																	game.GameStats.CastFilling <= 0 & game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint()) {
-					game.GameStats.CastMetal = KnownMetal.Zinc.Id;
-					game.GameStats.CastFilling = 0.01f;
-					game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.Amount;
-					game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
+					Alloy input = game.GameStats.FoundryAlloy;
+
+					float bestPurity = 0;
+					KnownMetal bestMetal = null;
+
+					foreach(KnownMetal metal in KnownMetal.Metals)
+					{
+						if (metal == null)
+							continue;
+						float newPurity = metal.GetPurityFrom (input);
+						if (newPurity > metal.MinimumPurity & newPurity > bestPurity) {
+							bestPurity = newPurity;
+							bestMetal = metal;
+						}
+					}
+
+					if (bestMetal != null) {
+						game.GameStats.CastMetal = bestMetal.Id;
+						game.GameStats.CastMetalPurity = bestPurity;
+
+						game.GameStats.CastFilling = 0.01f;
+						game.GameStats.OldFoundryAmount = game.GameStats.FoundryAlloy.Amount;
+						game.GameStats.CastingTemprature = game.GameStats.FoundryTemprature;
+					} else {
+						game.ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.notanalloy"), 200, 500, 2);
+					}
 				}
 			}
 
@@ -86,7 +108,7 @@ namespace DSmithGameCs
 								y += 20;
 								for (int i = 0; i < game.GameStats.FoundryAlloy.MetalCount; i++) {
 									KnownMetal m = game.GameStats.FoundryAlloy [i];
-									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalAmount (i) * 100 + .5f) / 100f + " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector (m.Color));
+									game.TooltipHelper.Writer.DrawString ((int)(game.GameStats.FoundryAlloy.GetMetalFraction (i) * 100 + .5f) / 100f + " " + m.Name + " (molten)", 10, y, Util.GetColorFromVector (m.Color));
 									y += 20;
 								}
 							}

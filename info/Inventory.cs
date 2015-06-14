@@ -99,7 +99,7 @@ namespace DSmithGameCs
 			selectedItem = -1;
 		}
 
-		float tooFull = 0;
+		bool tooFull = false;
 
 		const uint iconSize = 64;
 		const uint overscan = 20;
@@ -141,25 +141,15 @@ namespace DSmithGameCs
 			else if (game.TooltipHelper.GetOwner () == this)
 					game.TooltipHelper.UnClaim ();
 
-			if (tooFull > 0) {
-				if (game.ErrortipHelper.ClaimIfPossible(this)) {
-					game.ErrortipHelper.Writer.Resize (300, 30);
-					game.ErrortipHelper.Writer.Clear ();
-					game.ErrortipHelper.Writer.DrawString ("The inventory is too full!", 0, 0, Color.White);
-				}
-				if (game.ErrortipHelper.GetOwner () == this)
-					game.ErrortipHelper.RenderNormalDialog (OrthoRenderEngine.GetCanvasWidth()-overscan-game.ErrortipHelper.Writer.Width, OrthoRenderEngine.GetCanvasHeight()-overscan-iconSize*SIZE-32-30, Util.LightRed60);
-				else
-					tooFull = 0;
-				tooFull -= Time.Delta ();
+			if (tooFull) {
+				game.ErrortipHelper.ShowError (Localization.GetLocalization ("ui.error.inventoryfull"), OrthoRenderEngine.GetCanvasWidth () - overscan - 300, OrthoRenderEngine.GetCanvasHeight () - overscan - iconSize * SIZE - 32 - 30, 1.5f); 
+				tooFull = false;
 			}
-			else if(game.ErrortipHelper.GetOwner()==this)
-				game.ErrortipHelper.UnClaim();
 		}
 
 		public void InventoryTooFull(Item item)
 		{
-			tooFull = 1;
+			tooFull = true;
 		}
 
 		public void SaveToFile(Stream writer)

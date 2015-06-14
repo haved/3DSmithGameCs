@@ -16,7 +16,8 @@ namespace DSmithGameCs
 
 		public void Interact(object source)
 		{
-			EventHandler.InteractionPerformed (this, source);
+			if(EventHandler!=null)
+				EventHandler.InteractionPerformed (this, source);
 		}
 
 		public bool IsInField(Vector2 point)

@@ -108,6 +108,7 @@ namespace DSmithGameCs
 		public KnownMetal this [int index]{ get { return KnownMetal.Metals [metals [index].Metal]; } }
 		public int GetMetalID (int index) { return metals [index].Metal; }
 		public float GetMetalAmount(int index) { return metals [index].Amount; }
+		public float GetMetalFraction(int index) { return metals [index].Amount/totalAmount; }
 		public float Purity { get { return 1-impurity/totalAmount; } }
 	}
 }

@@ -34,6 +34,10 @@ namespace DSmithGameCs
 			HatchInv.AddItem (new IngotItem(KnownMetal.Gold, 0.9f));
 			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 1f));
 			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 0.8f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 1f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Copper, 0.65f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Tin, 0.8f));
+			HatchInv.AddItem (new IngotItem(KnownMetal.Tin, 0.9f));
 			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
 			FoundryAlloy = new Alloy ();
 			AirQuality = 25;
