@@ -8,7 +8,7 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "greatsword", MeshCollection.GreatswordBlade, 2);
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 2);
 
 		public class BladeType
 		{
@@ -84,17 +84,17 @@ namespace DSmithGameCs
 		public override void LoadInfoFromFile(Stream reader)
 		{
 			Type = BladeTypes [reader.ReadByte ()]; //Type.Id
-			Metal = reader.ReadByte();
+			Metal = reader.ReadByte(); //MetalId
 			var buffer = new byte[sizeof(float)];
 			reader.Read (buffer, 0, buffer.Length);
-			Purity = BitConverter.ToSingle (buffer, 0);
+			Purity = BitConverter.ToSingle (buffer, 0); //Purity
 		}
 
 		public override void SaveInfoToFile(Stream writer)
 		{
 			writer.WriteByte ((byte)Type.Id);  //Type.Id
-			writer.WriteByte ((byte)Metal);
-			writer.Write (BitConverter.GetBytes (Purity), 0, sizeof(float));
+			writer.WriteByte ((byte)Metal); //MetalId
+			writer.Write (BitConverter.GetBytes (Purity), 0, sizeof(float)); //Purity
 		}
 	}
 }

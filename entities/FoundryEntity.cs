@@ -80,7 +80,7 @@ namespace DSmithGameCs
 						y += lineSpacing;
 					}
 					if (game.GameStats.FoundryAlloy.Amount > 0) {
-						game.TooltipHelper.Writer.DrawString (Localization.GetLocalization ("ui.tooltip.purity") + "   " + (int)(game.GameStats.FoundryAlloy.Purity * 100+0.5f) + "%", 10, y, Util.GetColorFromVector (game.GameStats.FoundryAlloy.GetColor ()));
+						game.TooltipHelper.Writer.DrawString (Localization.GetLocalization ("ui.tooltip.purity:") + (int)(game.GameStats.FoundryAlloy.Purity * 100+0.5f) + "%", 10, y, Util.GetColorFromVector (game.GameStats.FoundryAlloy.GetColor ()));
 						y += lineSpacing;
 					}
 
