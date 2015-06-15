@@ -81,27 +81,22 @@ namespace DSmithGameCs
 			if(reader.ReadByte()!=0) 												//Check if CurrentCast is not null
 				CurrentCast = (CastItem)StreamIO.LoadItem(reader); 					//CurrentCast	
 			CastMetal = reader.ReadByte();											//CastMetal
-			var buffer = new byte[sizeof(float)];
-			reader.Read (buffer, 0, buffer.Length); 					
+			var buffer = new byte[sizeof(float)*4];
+			reader.Read (buffer, 0, sizeof(float)*4); 								//CastMetaPurity, CastFilling, CastingTemperature, OldFoundryAmount
 			CastMetalPurity = BitConverter.ToSingle (buffer, 0);
-			reader.Read (buffer, 0, buffer.Length); 								//CastFilling
-			CastFilling = BitConverter.ToSingle (buffer, 0);
-			reader.Read (buffer, 0, buffer.Length); 								//CastingTemperature
-			CastingTemprature = BitConverter.ToSingle (buffer, 0);
-			reader.Read (buffer, 0, buffer.Length); 								//OldFoundryAmount
-			OldFoundryAmount = BitConverter.ToSingle (buffer, 0);
+			CastFilling = BitConverter.ToSingle (buffer, sizeof(float));
+			CastingTemprature = BitConverter.ToSingle (buffer, 2*sizeof(float));
+			OldFoundryAmount = BitConverter.ToSingle (buffer, 3*sizeof(float));
 			FoundryIngots = new SolidList<IngotItem> (FoundryMeshInfo.IngotAmount);
 			for (int i = 0; i < FoundryIngots.Capacity; i++) {
 				if (reader.ReadByte () != 0) 										//Check if the item is not null
 					FoundryIngots [i] = (IngotItem)StreamIO.LoadItem (reader);  	//Read IngotItems
 			}
 			FoundryAlloy = StreamIO.LoadAlloy (reader);								//FoundryAlloy
-			reader.Read (buffer, 0, buffer.Length); 								//AirQuality
-			AirQuality = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); 								//CoalPercent
-			CoalPercent = BitConverter.ToSingle (buffer,0);
-			reader.Read (buffer, 0, buffer.Length); 								//FoundryTemperature
-			FoundryTemprature = BitConverter.ToSingle (buffer,0);
+			reader.Read (buffer, 0, sizeof(float)*3); 								//Read3
+			AirQuality = BitConverter.ToSingle (buffer,0);							//AirQuality
+			CoalPercent = BitConverter.ToSingle (buffer,sizeof(float));							//CoalPercent
+			FoundryTemprature = BitConverter.ToSingle (buffer,sizeof(float)*2);					//FoundryTemperature
 			Console.Out.WriteLine (reader.Position);
 		}
 

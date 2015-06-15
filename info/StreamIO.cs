@@ -11,6 +11,7 @@ namespace DSmithGameCs
 		{
 			types [0] = typeof(IngotItem);
 			types [1] = typeof(CastItem);
+			types [2] = typeof(BladeItem);
 		}
 
 		public static Item LoadItem(Stream reader)

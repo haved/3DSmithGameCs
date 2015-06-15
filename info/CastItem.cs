@@ -6,7 +6,7 @@ namespace DSmithGameCs
 	public class CastItem : Item
 	{
 		public static CastItemInfo IngotCast = new CastItemInfo (0, MeshCollection.IngotCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Ingot", 1, 0.63f, new IngotItemCreator());
-		public static CastItemInfo GreatsowordCast = new CastItemInfo (1, MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Greatsword", 2, 0.4f, null);
+		public static CastItemInfo GreatsowordCast = new CastItemInfo (1, MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Greatsword", BladeItem.GreatswordBlade.Volume, 0.4f, new BladeCreator(BladeItem.GreatswordBlade));
 
 		public struct CastItemInfo
 		{
