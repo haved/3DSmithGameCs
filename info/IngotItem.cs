@@ -48,17 +48,25 @@ namespace DSmithGameCs
 			return Metal.Color;
 		}
 
-		public override string GetTooltipName()
+		public string GetTooltipName()
 		{
 			return Metal.Name + Localization.GetLocalization("ui.item.ingot");
 		}
 
-		public override Vector4 GetTooltipColor()
+		public Vector4 GetTooltipColor()
 		{
 			return Metal.Color;
 		}
 
-		public override void DrawTooltip(TextWriter writer)
+		public override void DrawTooltip (TextWriter writer)
+		{
+			if(Metal.Subtitle==null)
+				DrawStandardTooltip (writer, new []{GetTooltipName(), Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, (int)(purity*100+0.5f)+"%"});
+			else
+				DrawStandardTooltip (writer, new []{GetTooltipName(), null, Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, Metal.Subtitle, (int)(purity*100+0.5f)+"%"});
+		}
+
+		/*public override void DrawTooltip(TextWriter writer)
 		{
 			writer.Clear ();
 			string name = GetTooltipName ();
@@ -74,7 +82,7 @@ namespace DSmithGameCs
 			writer.DrawString (name, 0, 0, c);
 			writer.DrawString (purityText, 0, writer.GetLineHeight(), c);
 			writer.DrawString (purityValue, writer.Width-purityValudeWidth, writer.GetLineHeight(), Color.White);
-		}
+		}*/
 
 		public float Melt(float temprature)
 		{

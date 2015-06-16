@@ -41,7 +41,7 @@ namespace DSmithGameCs
 			Purity = purity;
 		}
 
-		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2)*Matrix4.CreateRotationX(0.2f)*Matrix4.CreateRotationY(-0.3f)*Matrix4.CreateRotationZ(-0.2f)*Matrix4.CreateTranslation(0, 0, -2.8f)
+		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2-0.2f)*Matrix4.CreateRotationX(0.2f)*Matrix4.CreateRotationY(-0.3f)*Matrix4.CreateTranslation(0, 0, -2.8f)
 			*Matrix4.CreatePerspectiveFieldOfView(0.85f, 1, 0.1f, 4);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
@@ -53,12 +53,12 @@ namespace DSmithGameCs
 			return 2;
 		}
 
-		public override string GetTooltipName()
+		public string GetTooltipName()
 		{
 			return KnownMetal.GetName (Metal) + Localization.GetLocalization("ui.blade."+Type.Name) + Localization.GetLocalization("ui.item.blade");
 		}
 
-		public override Vector4 GetTooltipColor()
+		public Vector4 GetTooltipColor()
 		{
 			return KnownMetal.GetColor(Metal);
 		}

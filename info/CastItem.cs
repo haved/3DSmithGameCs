@@ -76,9 +76,15 @@ namespace DSmithGameCs
 			return 2;
 		}
 
-		public override string GetTooltipName()
+		public string GetTooltipName()
 		{
 			return Localization.GetLocalization("ui.cast." + info.Name) + Localization.GetLocalization("ui.item.cast");
+		}
+
+		public override void DrawTooltip (TextWriter writer)
+		{
+			DrawStandardTooltip (writer, new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.volume:") }, 
+				new []{ Util.GetColorFromVector (info.Color) }, new []{null, info.Volume + " " + Localization.GetLocalization("ui.item.ingot")});
 		}
 
 		public float GetVolume()
@@ -89,11 +95,6 @@ namespace DSmithGameCs
 		public float FillHeight
 		{
 			get { return info.Height; }
-		}
-
-		public override Vector4 GetTooltipColor()
-		{
-			return info.Color;
 		}
 
 		public Item CreateItem(Smith2DGame game, int metal, float purity)

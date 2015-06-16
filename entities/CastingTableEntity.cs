@@ -39,7 +39,7 @@ namespace DSmithGameCs
 						if (metal == null)
 							continue;
 						float newPurity = metal.GetPurityFrom (input);
-						if (newPurity > metal.MinimumPurity & newPurity > bestPurity) {
+						if (newPurity > metal.GetMinimumPurity() & newPurity > bestPurity) {
 							bestPurity = newPurity;
 							bestMetal = metal;
 						}

@@ -24,6 +24,8 @@ ui.metal.Tin===Tinn
 ui.metal.Zinc===Sink
 ui.metal.Carbon===Karbon
 ui.metal.Bronze===Bronse
+ui.metal.subtitle.HiTinBronze===Ekstra tinnholdig
+ui.metal.subtitle.LowTinBronze===Mindre tinn
 ui.cast.Ingot===Barre
 ui.cast.Greatsword===Storsverd
 ui.blade.Greatsword===Storsverd
