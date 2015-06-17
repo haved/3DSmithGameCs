@@ -92,14 +92,18 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (wallMesh, 0, -10, 0, -0.2f, 0, PI, 30, 1));
 			smithScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
 			smithScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
-			smithScene.AddEntity (new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 9, 0, 8, 3));
+			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 9, 0, 8, 3);
+			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6);
+			anvil.SetCoalStripTable(table);
+			table.SetAnvil(anvil);
+			smithScene.AddEntity(anvil);
+			smithScene.AddEntity(table);
 			smithScene.AddEntity (new CastingTableEntity (this, new Mesh ("../../res/mesh/castingTable.ply"), new Mesh ("../../res/mesh/castFill.ply"), new Mesh ("../../res/mesh/moltenMetalFall.ply"), -11.5f, -1f, 1.55f, 6.25f, 3.3f));
 			smithScene.AddEntity (new FoundryEntity (this, new Mesh ("../../res/mesh/foundry.ply"), new Mesh("../../res/mesh/foundryMoltenMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.99f), -11.5f, -6.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BellowEntity(this, new Mesh("../../res/mesh/bellow.ply"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/mesh/coalTableSmall.ply"), new Mesh ("../../res/mesh/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
-			smithScene.AddEntity (new MailboxEntity(this, new Mesh("../../res/mesh/mailboxBox.ply"),new Mesh("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation(0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
-			smithScene.AddEntity (new SlimCoalTableEntity(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6));
+			smithScene.AddEntity (new MailboxEntity (this, new Mesh ("../../res/mesh/mailboxBox.ply"), new Mesh ("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
 			return smithScene;
 		}
 
@@ -132,6 +136,17 @@ namespace DSmithGameCs
 			TooltipHelper.UnClaim ();
 			ErrortipHelper.UnClaim ();
 			v.OnViewUsed (CurrentView);
+			CurrentView = v;
+		}
+
+		/*<summary>
+			A SetView method perfect for a view-in-the-middle attack
+		</summary>*/
+		public void SetView (View v, View prevView)
+		{
+			TooltipHelper.UnClaim ();
+			ErrortipHelper.UnClaim ();
+			v.OnViewUsed (prevView);
 			CurrentView = v;
 		}
 
@@ -170,7 +185,7 @@ namespace DSmithGameCs
 
 		public static void Main (string[] args)
 		{
-			using (SmithGameWindow gw = new SmithGameWindow (new Smith2DGame ())) {
+			using (var gw = new SmithGameWindow (new Smith2DGame ())) {
 				gw.Run (1, 60.00);
 			}
 		}

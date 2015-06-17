@@ -3,12 +3,13 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class SlimCoalTableEntity : InteractiveEntity, IEntityEventListener, View
+	public class CoalStripTable : InteractiveEntity, IEntityEventListener, View
 	{
 		readonly Smith2DGame game;
+		AnvilEntity anvil;
 		readonly Mesh table, coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
-		public SlimCoalTableEntity (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize) : base(null, x,y,z,xSize,ySize)
+		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize) : base(null, x,y,z,xSize,ySize)
 		{
 			this.game = game;
 			this.table = table;
@@ -44,9 +45,11 @@ namespace DSmithGameCs
 		#region View implementation
 
 		Transition transition = new Transition();
+		View parentView;
 		public void OnViewUsed (View prevView)
 		{
 			transition.SetStart (prevView);
+			parentView = prevView;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -57,6 +60,12 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta () * 2f);
+			if (Input.MousePressed) {
+				game.SetView (anvil);
+				anvil.SetParentView (parentView);
+			}
+			if (Input.CloseKeyPressed)
+				game.SetView (parentView);
 		}
 
 		public bool ShouldRenderScene ()
@@ -66,7 +75,7 @@ namespace DSmithGameCs
 
 		readonly Vector3 eyeTarget;
 		readonly Vector3 eyePos;
-		static readonly Vector3 eyeUp =	Vector3.UnitY;
+		static readonly Vector3 eyeUp =	-Vector3.UnitX;
 		public Vector3 GetEyePos ()
 		{
 			return transition.GetEyePos (eyePos);
@@ -88,6 +97,16 @@ namespace DSmithGameCs
 		}
 
 		#endregion
+
+		public void SetAnvil(AnvilEntity anvil)
+		{
+			this.anvil = anvil;
+		}
+
+		public void SetParentView(View parentView)
+		{
+			this.parentView = parentView;
+		}
 	}
 }
 

@@ -5,11 +5,12 @@ namespace DSmithGameCs
 {
 	public class AnvilEntity : InteractiveEntity, IEntityEventListener, View
 	{
-		private readonly Smith2DGame game;
+		readonly Smith2DGame game;
+		CoalStripTable table;
 
 		public AnvilEntity(Smith2DGame game, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, xSize, ySize){
 			this.game = game;
-			this.EventHandler = this;
+			EventHandler = this;
 		}
 
 		public void InteractionPerformed(InteractiveEntity entity, object source)
@@ -19,11 +20,11 @@ namespace DSmithGameCs
 
 		//Stuff related to the view
 		Transition transition = new Transition();
-		View prevView;
+		View parentView;
 		public void OnViewUsed(View prevView)
 		{
 			transition.SetStart (prevView);
-			this.prevView = prevView;
+			parentView = prevView;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -34,10 +35,12 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta()*2);
-
-			if (Input.CloseKeyPressed) {
-				game.SetView (prevView);
+			if (Input.MousePressed) {
+				game.SetView (table);
+				table.SetParentView (parentView);
 			}
+			if (Input.CloseKeyPressed)
+				game.SetView (parentView);
 		}
 
 		public bool ShouldRenderScene ()
@@ -63,7 +66,17 @@ namespace DSmithGameCs
 
 		public void RenderView (Scene s)
 		{
-			game.GameStats.PlayerInventory.Render (game);
+			
+		}
+
+		public void SetCoalStripTable(CoalStripTable table)
+		{
+			this.table = table;
+		}
+
+		public void SetParentView(View parentView)
+		{
+			this.parentView = parentView;
 		}
 	}
 }
