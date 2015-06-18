@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class SmithingView : View
+	public class SmithingView : IView
 	{
 		Transition transition;
 		private readonly Smith2DGame game;
@@ -14,7 +14,7 @@ namespace DSmithGameCs
 			transition = new Transition ();
 		}
 
-		public void OnViewUsed(View prevView)
+		public void OnViewUsed(IView prevView)
 		{
 			if (prevView != null)
 				transition.SetStart (prevView.GetEyePos (), prevView.GetEyeTarget (), prevView.GetEyeUp ());
@@ -56,7 +56,7 @@ namespace DSmithGameCs
 			return transition.GetEyeUp (Vector3.UnitY);
 		}
 
-		public void RenderView (Scene s)
+		public void RenderView (Matrix4 VP, Scene s)
 		{
 			game.GameStats.PlayerInventory.Render (game);
 		}

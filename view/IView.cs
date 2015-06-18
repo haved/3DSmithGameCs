@@ -3,9 +3,9 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public interface View
+	public interface IView
 	{
-		void OnViewUsed(View prevView);
+		void OnViewUsed(IView prevView);
 
 		bool ShouldUpdateScene();
 
@@ -19,7 +19,7 @@ namespace DSmithGameCs
 
 		Vector3 GetEyeUp();
 
-		void RenderView(Scene s);
+		void RenderView(Matrix4 VP, Scene s);
 	}
 }
 

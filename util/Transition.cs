@@ -14,7 +14,7 @@ namespace DSmithGameCs
 			SetTransition(1);
 		}
 
-		public void SetStart(View prevView)
+		public void SetStart(IView prevView)
 		{
 			SetStart (prevView.GetEyePos(), prevView.GetEyeTarget(), prevView.GetEyeUp());
 		}

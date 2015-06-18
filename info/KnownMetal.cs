@@ -67,8 +67,10 @@ namespace DSmithGameCs
 
 			foreach (Part p in parts)
 				for (int i = 0; i < alloy.MetalCount; i++)
-					if (p.Metal == alloy.GetMetalID (i))
-						purity += Math.Min (alloy.GetMetalFraction (i), p.Amount) * alloy.Purity;
+					foreach(Part ip in alloy[i].parts){
+						if (p.Metal == ip.Metal)
+							purity += Math.Min (alloy.GetMetalFraction (i)*ip.Amount, p.Amount) * alloy.Purity;
+					}
 
 			return purity;
 		}

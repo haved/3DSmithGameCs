@@ -3,13 +3,14 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class CoalStripTable : InteractiveEntity, IEntityEventListener, View
+	public class CoalStripTable : InteractiveEntity, IEntityEventListener, IView
 	{
 		readonly Smith2DGame game;
 		AnvilEntity anvil;
 		readonly Mesh table, coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
-		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize) : base(null, x,y,z,xSize,ySize)
+		readonly float height;
+		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize, float height) : base(null, x,y,z,xSize,ySize)
 		{
 			this.game = game;
 			this.table = table;
@@ -17,6 +18,7 @@ namespace DSmithGameCs
 			EventHandler = this;
 			eyeTarget = new Vector3 (x, y, 0);
 			eyePos = eyeTarget + new Vector3 (0, 0, 10);
+			this.height = height;
 		}
 
 		public override void Render(Scene s, Matrix4 VP)
@@ -38,7 +40,8 @@ namespace DSmithGameCs
 		public void InteractionPerformed (InteractiveEntity entity, object source)
 		{
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
-				var blade = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;
+				var bladeItem = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;
+				blade = bladeItem;
 				if (blade != null) {
 					parentView = game.CurrentView;
 					anvil.SetParentView (parentView);
@@ -55,8 +58,9 @@ namespace DSmithGameCs
 		#region View implementation
 
 		Transition transition = new Transition();
-		View parentView;
-		public void OnViewUsed (View prevView)
+		IView parentView;
+		BladeItem blade;
+		public void OnViewUsed (IView prevView)
 		{
 			transition.SetStart (prevView);
 		}
@@ -98,9 +102,9 @@ namespace DSmithGameCs
 			return transition.GetEyeUp (eyeUp);
 		}
 
-		public void RenderView (Scene s)
+		public void RenderView (Matrix4 VP, Scene s)
 		{
-			
+			blade.RenderBlade (VP, Pos.X,Pos.Y,height, Util.PI);
 		}
 
 		#endregion

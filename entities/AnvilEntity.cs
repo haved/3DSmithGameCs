@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class AnvilEntity : InteractiveEntity, IEntityEventListener, View
+	public class AnvilEntity : InteractiveEntity, IEntityEventListener, IView
 	{
 		readonly Smith2DGame game;
 		CoalStripTable table;
@@ -20,8 +20,8 @@ namespace DSmithGameCs
 
 		//Stuff related to the view
 		Transition transition = new Transition();
-		View parentView;
-		public void OnViewUsed(View prevView)
+		IView parentView;
+		public void OnViewUsed(IView prevView)
 		{
 			transition.SetStart (prevView);
 		}
@@ -61,7 +61,7 @@ namespace DSmithGameCs
 			return transition.GetEyeUp (Vector3.UnitY);
 		}
 
-		public void RenderView (Scene s)
+		public void RenderView (Matrix4 VP, Scene s)
 		{
 			
 		}
@@ -71,7 +71,7 @@ namespace DSmithGameCs
 			this.table = table;
 		}
 
-		public void SetParentView(View parentView)
+		public void SetParentView(IView parentView)
 		{
 			this.parentView = parentView;
 		}

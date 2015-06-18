@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public abstract class MenuView : View
+	public abstract class MenuView : IView
 	{
 		const float barXPos = 100;
 		const int barWidth=240;
@@ -31,8 +31,8 @@ namespace DSmithGameCs
 
 		#region View implementation
 
-		protected View PrevView;
-		public void OnViewUsed (View prevView)
+		protected IView PrevView;
+		public void OnViewUsed (IView prevView)
 		{
 			PrevView = prevView;
 			if (Localization.GetCurrentLanguageID () != languageID) {
@@ -70,10 +70,10 @@ namespace DSmithGameCs
 
 		public abstract Vector3 GetEyeUp ();
 
-		public void RenderView (Scene s)
+		public void RenderView (Matrix4 VP, Scene s)
 		{
 			if (PrevView != null)
-				PrevView.RenderView (s);
+				PrevView.RenderView (VP, s);
 			OrthoRenderEngine.DrawColorOnEntireScreen (gradiantColor);
 			OrthoRenderEngine.DrawColoredBox (Vector4.UnitW, barXPos, 0, barWidth, OrthoRenderEngine.GetCanvasHeight());
 			float maxY = OrthoRenderEngine.GetCanvasHeight () * 0.55f;

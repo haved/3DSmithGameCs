@@ -8,22 +8,30 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 2);
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.3f, 0.5f, 0.7f, 0.9f});
 
 		public class BladeType
 		{
 			public readonly int Id;
 			public readonly string Name;
 			public readonly Mesh Mesh;
+			public readonly float MeshScale;
+			public readonly Matrix4 MeshScaleMatrix;
+			public readonly Matrix4 CenteredScaledMeshMatirx;
 			public readonly float Volume;
+			public readonly float[] Points;
 
-			public BladeType(int id, string name, Mesh mesh, float volume)
+			public BladeType(int id, string name, Mesh mesh, float meshScale, float volume, float[] points)
 			{
 				Id = id;
 				BladeItem.BladeTypes[id] = this;
 				Name = name;
 				Mesh = mesh;
+				MeshScale = meshScale;
+				MeshScaleMatrix = Matrix4.CreateScale(MeshScale);
+				CenteredScaledMeshMatirx = Matrix4.CreateTranslation(-0.5f,0,0)*MeshScaleMatrix;
 				Volume = volume;
+				Points = points;
 			}
 		}
 
@@ -45,7 +53,26 @@ namespace DSmithGameCs
 			*Matrix4.CreatePerspectiveFieldOfView(0.85f, 1, 0.1f, 4);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
-			OrthoRenderEngine.DrawColoredMesh (Type.Mesh, ItemMatrix, KnownMetal.GetColor(Metal), x+4, y+4, width-8, height-8, -1, -2, 2, 4);
+			OrthoRenderEngine.DrawColoredMesh (Type.Mesh, Type.CenteredScaledMeshMatirx*ItemMatrix, KnownMetal.GetColor(Metal), x+4, y+4, width-8, height-8, -1, -2, 2, 4);
+		}
+
+		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);
+		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot)
+		{
+			BasicShader Instance = BasicShader.GetInstance ();
+			Instance.Bind ();
+			Matrix4 modelspace = Type.MeshScaleMatrix * Matrix4.CreateRotationZ(zRot) * Matrix4.CreateTranslation (x, y, z);
+			Instance.SetModelspaceMatrix(modelspace);
+			Instance.SetMVP (modelspace * VP);
+			Instance.SetColor (KnownMetal.GetColor(Metal));
+			Type.Mesh.Draw ();
+			for (int i = 0; i < Type.Points.Length; i++) {
+				Matrix4 diamondModelspace = modelspace * Matrix4.CreateTranslation (-Type.Points[i]*Type.MeshScale, Type.MeshScale*0.15f+(float)Math.Sin(Time.CurrentTime()*4)*0.03f, 0);
+				Instance.SetModelspaceMatrix (diamondModelspace);
+				Instance.SetMVP (diamondModelspace * VP);
+				Instance.SetColor (diamondColor);
+				MeshCollection.Diamond.Draw ();
+			}
 		}
 
 		public override uint GetSize()

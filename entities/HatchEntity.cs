@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class HatchEntity : InteractiveEntity, IEntityEventListener, View
+	public class HatchEntity : InteractiveEntity, IEntityEventListener, IView
 	{
 		private readonly Smith2DGame game;
 		readonly Mesh hatchHole;
@@ -61,9 +61,9 @@ namespace DSmithGameCs
 		}
 
 		//Stuff related to the view
-		Transition transition = new Transition();
-		View prevView;
-		public void OnViewUsed(View prevView)
+		readonly Transition transition = new Transition();
+		IView prevView;
+		public void OnViewUsed(IView prevView)
 		{
 			hatchSpeed = 0;
 			transition.SetStart (prevView);
@@ -165,7 +165,7 @@ namespace DSmithGameCs
 
 		static float inventoryXPos {get { return OrthoRenderEngine.GetCanvasWidth () / 2 - iconSize * iconsPerDir; }}
 		static float inventoryYPos {get { return OrthoRenderEngine.GetCanvasHeight () / 2 - iconSize * iconsPerDir; }}
-		public void RenderView(Scene s)
+		public void RenderView(Matrix4 VP, Scene s)
 		{
 			Inventory playerInv = game.GameStats.PlayerInventory;
 			playerInv.Render (game);

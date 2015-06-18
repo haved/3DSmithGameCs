@@ -11,7 +11,7 @@ namespace DSmithGameCs
 
 		public Matrix4 ProjectionMatrix;
 
-		public View CurrentView;
+		public IView CurrentView;
 
 		public GameInfo GameStats;
 		public Scene CurrentScene;
@@ -93,7 +93,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
 			smithScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
 			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 9, 0, 8, 3);
-			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6);
+			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 4.3f);
 			anvil.SetCoalStripTable(table);
 			table.SetAnvil(anvil);
 			smithScene.AddEntity(anvil);
@@ -118,9 +118,10 @@ namespace DSmithGameCs
 
 		public void Render ()
 		{
+			Matrix4 VP = Matrix4.LookAt (CurrentView.GetEyePos (), CurrentView.GetEyeTarget (), CurrentView.GetEyeUp ()) * ProjectionMatrix;
 			if (CurrentView.ShouldRenderScene ())
-				CurrentScene.Render (Matrix4.LookAt (CurrentView.GetEyePos (), CurrentView.GetEyeTarget (), CurrentView.GetEyeUp ()) * ProjectionMatrix);
-			CurrentView.RenderView (CurrentScene);
+				CurrentScene.Render (VP);
+			CurrentView.RenderView (VP, CurrentScene);
 			ErrortipHelper.Render ();
 		}
 
@@ -131,7 +132,7 @@ namespace DSmithGameCs
 			OrthoRenderEngine.OnResize (width, height);
 		}
 
-		public void SetView (View v)
+		public void SetView (IView v)
 		{
 			TooltipHelper.UnClaim ();
 			ErrortipHelper.UnClaim ();
@@ -142,7 +143,7 @@ namespace DSmithGameCs
 		/*<summary>
 			A SetView method perfect for a view-in-the-middle attack
 		</summary>*/
-		public void SetView (View v, View prevView)
+		public void SetView (IView v, IView prevView)
 		{
 			TooltipHelper.UnClaim ();
 			ErrortipHelper.UnClaim ();
