@@ -13,7 +13,7 @@ ui.tooltip.unit.ingot.plural===Barrer
 ui.tooltip.notenoughmoltenmetal===Ikke nok flytende metall
 ui.error.inventoryfull===Beholdningen har ikke nok plass
 ui.error.notanalloy===Smelteovnens innhold er ikke en ren legering
-ui.item.ingot===barre
+ui.error.nobladeselected===Ingen sverdblad valgt i beholdningen
 ui.item.blade===blad
 ui.item.cast===støpeform
 ui.metal.Copper===Kobber

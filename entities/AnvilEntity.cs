@@ -15,7 +15,7 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed(InteractiveEntity entity, object source)
 		{
-			game.SetView (this);
+			table.InteractionPerformed (entity, source);
 		}
 
 		//Stuff related to the view
@@ -24,7 +24,6 @@ namespace DSmithGameCs
 		public void OnViewUsed(View prevView)
 		{
 			transition.SetStart (prevView);
-			parentView = prevView;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -35,11 +34,9 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta()*2);
-			if (Input.MousePressed) {
+			if (Input.MousePressed)
 				game.SetView (table);
-				table.SetParentView (parentView);
-			}
-			if (Input.CloseKeyPressed)
+			else if (Input.CloseKeyPressed)
 				game.SetView (parentView);
 		}
 

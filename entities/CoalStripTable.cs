@@ -37,7 +37,17 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed (InteractiveEntity entity, object source)
 		{
-			game.SetView (this);
+			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
+				var blade = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;
+				if (blade != null) {
+					parentView = game.CurrentView;
+					anvil.SetParentView (parentView);
+					game.SetView (this);
+					return;
+				}
+			}
+
+			game.ErrortipHelper.ShowError (Localization.GetLocalization ("ui.error.nobladeselected"), Input.OrthoMouseX, Input.OrthoMouseY, 1.4f, false);
 		}
 
 		#endregion
@@ -49,7 +59,6 @@ namespace DSmithGameCs
 		public void OnViewUsed (View prevView)
 		{
 			transition.SetStart (prevView);
-			parentView = prevView;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -60,11 +69,9 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta () * 2f);
-			if (Input.MousePressed) {
+			if (Input.MousePressed)
 				game.SetView (anvil);
-				anvil.SetParentView (parentView);
-			}
-			if (Input.CloseKeyPressed)
+			else if (Input.CloseKeyPressed)
 				game.SetView (parentView);
 		}
 
@@ -101,11 +108,6 @@ namespace DSmithGameCs
 		public void SetAnvil(AnvilEntity anvil)
 		{
 			this.anvil = anvil;
-		}
-
-		public void SetParentView(View parentView)
-		{
-			this.parentView = parentView;
 		}
 	}
 }

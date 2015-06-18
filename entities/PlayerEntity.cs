@@ -84,8 +84,10 @@ namespace DSmithGameCs
 				var interactiveEntity = e as InteractiveEntity;
 				if(interactiveEntity != null)
 				{
-					if(IsLookingAt(interactiveEntity))
+					if (IsLookingAt (interactiveEntity)) {
 						interactiveEntity.Interact (this);
+						break;
+					}
 				}
 			}
 		}
