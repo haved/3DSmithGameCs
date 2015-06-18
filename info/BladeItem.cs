@@ -67,7 +67,7 @@ namespace DSmithGameCs
 			Instance.SetColor (KnownMetal.GetColor(Metal));
 			Type.Mesh.Draw ();
 			for (int i = 0; i < Type.Points.Length; i++) {
-				Matrix4 diamondModelspace = modelspace * Matrix4.CreateTranslation (-Type.Points[i]*Type.MeshScale, Type.MeshScale*0.15f+(float)Math.Sin(Time.CurrentTime()*4)*0.03f, 0);
+				Matrix4 diamondModelspace = modelspace * Matrix4.CreateTranslation (-Type.Points[i]*Type.MeshScale, Type.MeshScale*0.15f+(float)Math.Sin(Time.CurrentTime()*4+Type.Points[i]*Util.PI)*0.03f, 0);
 				Instance.SetModelspaceMatrix (diamondModelspace);
 				Instance.SetMVP (diamondModelspace * VP);
 				Instance.SetColor (diamondColor);
