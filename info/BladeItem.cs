@@ -71,8 +71,8 @@ namespace DSmithGameCs
 				Instance.SetHotspotEmission (Util.DefaultEmission.Xyz * redEmission);
 				Console.Out.WriteLine (redEmission);
 				if (redEmission > 0) {
-					Instance.SetHotspotMin (Type.Points [hotspot] - 0.06f);
-					Instance.SetHotspotMax (Type.Points [hotspot] + 0.06f);
+					Instance.SetHotspotMin (Type.Points [hotspot] - 0.12f);
+					Instance.SetHotspotMax (Type.Points [hotspot] + 0.12f);
 				}
 			}
 			Type.Mesh.Draw ();
@@ -104,20 +104,15 @@ namespace DSmithGameCs
 
 		public override void DrawTooltip(TextWriter writer)
 		{
-			writer.Clear ();
-			string name = GetTooltipName ();
-			string purityText = Localization.GetLocalization ("ui.tooltip.purity:");
-			string purityValue = (int)(Purity * 100 + 0.5f) + "%";
-
-			float purityValudeWidth = writer.GetLineWidth (purityValue);
-			int width = Math.Max((int)writer.GetLineWidth(name), (int)(writer.GetLineWidth(purityText)+purityValudeWidth));
-
-			writer.Resize (width, (int)writer.GetLineHeight ()*2);
-
-			Color c = Util.GetColorFromVector (GetTooltipColor ());
-			writer.DrawString (name, 0, 0, c);
-			writer.DrawString (purityText, 0, writer.GetLineHeight(), c);
-			writer.DrawString (purityValue, writer.Width-purityValudeWidth, writer.GetLineHeight(), Color.White);
+			string subtitle = KnownMetal.Metals [Metal].Subtitle;
+			if (subtitle != null)
+				DrawStandardTooltip (writer, new []{ GetTooltipName (), null, Localization.GetLocalization ("ui.tooltip.purity:") }, 
+					new [] { Util.GetColorFromVector (GetTooltipColor ()) },
+					new [] { null, subtitle, (int)(Purity * 100 + 0.5f) + "%" });
+			else
+				DrawStandardTooltip (writer, new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.purity:") }, 
+					new [] { Util.GetColorFromVector (GetTooltipColor ()) },
+					new [] { null, (int)(Purity * 100 + 0.5f) + "%" });
 		}
 
 		public override void LoadInfoFromFile(Stream reader)

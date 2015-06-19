@@ -61,6 +61,8 @@ namespace DSmithGameCs
 
 		public string Subtitle {get{ return subtitle == null ? null : Localization.GetLocalization ("ui.metal.subtitle." + subtitle); }}
 
+		public bool HasSubtitle { get { return subtitle != null; }}
+
 		public float GetPurityFrom(Alloy alloy)
 		{
 			float purity = 0;
@@ -102,7 +104,7 @@ namespace DSmithGameCs
 
 		public static float GetRedEmmission(int id, float temperature)
 		{
-			return Math.Max(0, Math.Min(4, (temperature - (Metals[id].MeltingPoint/2.5f)) / Metals[id].MeltingPoint*4));
+			return Math.Max(0, Math.Min(10, (temperature - (Metals[id].MeltingPoint/2.5f)) / Metals[id].MeltingPoint*10));
 		}
 	}
 }
