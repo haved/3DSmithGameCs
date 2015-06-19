@@ -99,6 +99,11 @@ namespace DSmithGameCs
 		{
 			return Metals [id].Name;
 		}
+
+		public static float GetRedEmmission(int id, float temperature)
+		{
+			return Math.Max(0, Math.Min(4, (temperature - (Metals[id].MeltingPoint/2.5f)) / Metals[id].MeltingPoint*4));
+		}
 	}
 }
 

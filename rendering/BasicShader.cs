@@ -20,11 +20,6 @@ namespace DSmithGameCs
 			SetColor (Util.White);
 		}
 
-		public override void Bind()
-		{
-			base.Bind ();
-		}
-
 		public void SetModelspaceMatrix(Matrix4 modelspace)
 		{
 			SetMatrix4 (modelspaceID, modelspace);

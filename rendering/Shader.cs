@@ -44,7 +44,7 @@ namespace DSmithGameCs
 			GL.ValidateProgram (programID);
 		}
 
-		public virtual void Bind()
+		public void Bind()
 		{
 			GL.UseProgram (programID);
 		}

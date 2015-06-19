@@ -61,6 +61,8 @@ namespace DSmithGameCs
 		IView parentView;
 		BladeItem blade;
 		int diamond = -1;
+		int hotspot = -1;
+		float temperature = 25;
 		float panAngle = 0;
 
 		public void OnViewUsed (IView prevView)
@@ -94,6 +96,13 @@ namespace DSmithGameCs
 				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
+
+			if (hotspot != diamond & temperature > 25)
+				temperature -= Time.Delta () * 200;
+			if (temperature <= 25)
+				hotspot = diamond;
+			if (hotspot == diamond & hotspot >= 0 & temperature < 1927) //Temperature of coal
+				temperature += Time.Delta () * 100;
 		}
 
 		public bool ShouldRenderScene ()
@@ -120,7 +129,7 @@ namespace DSmithGameCs
 
 		public void RenderView (Matrix4 VP, Scene s)
 		{
-			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI);
+			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, hotspot, temperature);
 		}
 
 		#endregion

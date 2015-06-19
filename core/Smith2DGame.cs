@@ -35,6 +35,7 @@ namespace DSmithGameCs
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
 			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
+			BladeShader.MakeInstance ();
 			OrthoRenderEngine.Init ();
 			TooltipHelper = new TooltipHelper ();
 			ErrortipHelper = new ErrorTooltipHelper ();
