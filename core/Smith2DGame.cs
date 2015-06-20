@@ -60,11 +60,14 @@ namespace DSmithGameCs
 
 		public void LoadGame()
 		{
+			GameStats = new GameInfo ();
+			if (!GameStats.LoadGame ()) {
+				ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.savecorruption"), Input.OrthoMouseX, Input.OrthoMouseY, 2, false);
+				return;
+			}
 			CurrentView = null;
 			SetView(new SmithingView (this));
-			GameStats = new GameInfo ();
-			GameStats.LoadGame ();
-
+				
 			CurrentScene = MakeSmithScene ();
 		}
 
@@ -94,7 +97,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
 			smithScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
 			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 9, 0, 8, 3);
-			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 4.3f);
+			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 3.5f);
 			anvil.SetCoalStripTable(table);
 			table.SetAnvil(anvil);
 			smithScene.AddEntity(anvil);

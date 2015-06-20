@@ -111,11 +111,19 @@ namespace DSmithGameCs
 			}
 		}
 
-		public void LoadGame()
+		public bool LoadGame()
 		{
-			using (var reader = new FileStream (GetSaveGamePath () + "save.sav", FileMode.Open, FileAccess.Read)) {
-				LoadGame (reader);
-				reader.Close ();
+			try {
+				var reader = new FileStream (GetSaveGamePath () + "save.sav", FileMode.Open, FileAccess.Read);
+				try {
+					LoadGame (reader);
+				} finally {
+					reader.Close ();
+				}
+				return true;
+			} catch (Exception e) {
+				Console.Error.WriteLine (e);
+				return false;
 			}
 		}
 

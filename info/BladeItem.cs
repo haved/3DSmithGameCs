@@ -41,12 +41,14 @@ namespace DSmithGameCs
 		public BladeType Type { get; private set; }
 		public int Metal { get; private set; }
 		public float Purity { get; private set; }
+		public float[] Sharpness { get; set;}
 
 		public BladeItem (BladeType type, int metal, float purity)
 		{
 			Type = type;
 			Metal = metal;
 			Purity = purity;
+			Sharpness = new float[Type.Points.Length];
 		}
 
 		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2-0.2f)*Matrix4.CreateRotationX(0.2f)*Matrix4.CreateRotationY(-0.3f)*Matrix4.CreateTranslation(0, 0, -2.8f)
@@ -119,8 +121,12 @@ namespace DSmithGameCs
 		{
 			Type = BladeTypes [reader.ReadByte ()]; //Type.Id
 			Metal = reader.ReadByte(); //MetalId
-			var buffer = new byte[sizeof(float)];
+			Sharpness = new float[Type.Points.Length];
+			var buffer = new byte[sizeof(float)*Sharpness.Length];
 			reader.Read (buffer, 0, buffer.Length);
+			for (int i = 0; i < Sharpness.Length; i++)
+				Sharpness [i] = BitConverter.ToSingle (buffer, sizeof(float) * i); //Shaprness [0-Type.Points.Length]
+			reader.Read (buffer, 0, sizeof(float));
 			Purity = BitConverter.ToSingle (buffer, 0); //Purity
 		}
 
@@ -128,6 +134,8 @@ namespace DSmithGameCs
 		{
 			writer.WriteByte ((byte)Type.Id);  //Type.Id
 			writer.WriteByte ((byte)Metal); //MetalId
+			for(int i = 0; i < Sharpness.Length; i++)
+				writer.Write(BitConverter.GetBytes(Sharpness[i]), 0, sizeof(float)); //Sharpness [0-Sharpness.Length]
 			writer.Write (BitConverter.GetBytes (Purity), 0, sizeof(float)); //Purity
 		}
 	}
