@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -79,13 +80,13 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta () * 2f);
-			if (Input.MousePressed) {
-				game.SetView (anvil);
-				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
-			}
-			else if (Input.CloseKeyPressed) {
+			if (Input.CloseKeyPressed) {
 				game.SetView (parentView);
 				return;
+			}
+			if (Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
+				game.SetView (anvil);
+				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
 			}
 
 			if (Input.UpKeyPressed & diamond < blade.Type.Points.Length - 1)
@@ -128,9 +129,13 @@ namespace DSmithGameCs
 			return transition.GetEyeUp (eyeUp);
 		}
 
+		Matrix4 projection = Matrix4.CreateRotationX (-Util.PI / 2) * Matrix4.CreateRotationY (0.5f) * Matrix4.CreateTranslation (0, -4.2f, -7)
+				*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 60, 1, 0.1f, 100)*Matrix4.CreateTranslation(0.25f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
 			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, hotspot, temperature);
+			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
+			OrthoRenderEngine.DrawColoredMesh (anvil.Mesh, projection, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
 		}
 
 		#endregion
@@ -145,6 +150,7 @@ namespace DSmithGameCs
 			this.hotspot = hotspot;
 			this.diamond = hotspot;
 			this.temperature = temperature;
+			panAngle = 0;
 		}
 	}
 }

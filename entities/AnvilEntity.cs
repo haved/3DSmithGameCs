@@ -94,6 +94,7 @@ namespace DSmithGameCs
 			this.blade = blade;
 			this.hotspot = hotspot;
 			this.temperature = temperature;
+			panAngle = 0;
 		}
 	}
 }

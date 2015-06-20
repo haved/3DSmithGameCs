@@ -18,7 +18,7 @@ namespace DSmithGameCs
 			this.hatchHole = hatchHole;
 			this.hatch = hatch;
 			this.hatchTranslation = Matrix4.CreateTranslation(hatchTranslation);
-			this.solid = false;
+			this.Solid = false;
 			this.EventHandler = this;
 		}
 

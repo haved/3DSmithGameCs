@@ -51,11 +51,11 @@ namespace DSmithGameCs
 			Sharpness = new float[Type.Points.Length];
 		}
 
-		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2-0.2f)*Matrix4.CreateRotationX(0.2f)*Matrix4.CreateRotationY(-0.3f)*Matrix4.CreateTranslation(0, 0, -2.8f)
-			*Matrix4.CreatePerspectiveFieldOfView(0.85f, 1, 0.1f, 4);
+		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ (Util.PI / 2 - 0.2f) * Matrix4.CreateRotationX (0.2f) * Matrix4.CreateRotationY (-0.3f) * Matrix4.CreateTranslation (0, 0, -2.8f)
+		                                               * Matrix4.CreatePerspectiveFieldOfView (0.85f, 1, 0.1f, 4) * Matrix4.CreateScale (1, 0.5f, 1);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
-			OrthoRenderEngine.DrawColoredMesh (Type.Mesh, Type.CenteredScaledMeshMatirx*ItemMatrix, KnownMetal.GetColor(Metal), x+4, y+4, width-8, height-8, -1, -2, 2, 4);
+			OrthoRenderEngine.DrawColoredMesh (Type.Mesh, Type.CenteredScaledMeshMatirx*ItemMatrix, KnownMetal.GetColor(Metal), x+4, y+4, width-8, height-8);
 		}
 
 		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);

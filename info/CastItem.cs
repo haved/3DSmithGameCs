@@ -55,10 +55,10 @@ namespace DSmithGameCs
 		}
 
 		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ(Util.PI/2)*Matrix4.CreateRotationX(0.1f)*Matrix4.CreateRotationY(-0.1f)*Matrix4.CreateTranslation(0, 0, -2.8f)
-			*Matrix4.CreatePerspectiveFieldOfView(0.85f, 1, 0.1f, 4);
+			*Matrix4.CreatePerspectiveFieldOfView(0.85f, 1, 0.1f, 4)*Matrix4.CreateScale(1, 0.5f, 1);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
-			OrthoRenderEngine.DrawColoredMesh (info.Mesh, ItemMatrix, info.Color, x+4, y+4, width-8, height-8, -1, -2, 2, 4);
+			OrthoRenderEngine.DrawColoredMesh (info.Mesh, ItemMatrix, info.Color, x+4, y+4, width-8, height-8);
 		}
 
 		public Mesh GetMesh()

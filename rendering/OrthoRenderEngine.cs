@@ -104,19 +104,19 @@ namespace DSmithGameCs
 			flat.Draw ();
 		}
 
-		public static void DrawColoredMesh(Mesh mesh, Vector4 color, float x, float y, float width, float height, float meshX1, float meshY1, float meshWidth, float meshHeight)
+		public static void DrawColoredMesh(Mesh mesh, Vector4 color, float x, float y, float width, float height)
 		{
-			DrawColoredMesh (mesh, Matrix4.Identity, color, x, y, width, height, meshX1, meshY1, meshWidth, meshHeight);
+			DrawColoredMesh (mesh, Matrix4.Identity, color, x, y, width, height);
 		}
 
-		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height, float meshX1, float meshY1, float meshWidth, float meshHeight)
+		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height)
 		{
 			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateTranslation(-meshX1, -meshY1, 0)*Matrix4.CreateScale(width/meshWidth, height/meshHeight, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
+			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateScale(width/orthoWidth, height/orthoHeight, 0)*
+				Matrix4.CreateTranslation((width+2*x)/orthoWidth-1, (height+2*y)/orthoHeight-1, 0));
 			BasicShader.GetInstance ().SetModelspaceMatrix (Matrix4.Identity);
 			BasicShader.GetInstance ().SetColor (color);
 			mesh.Draw ();
-			BasicShader.GetInstance ().ResetColor ();
 		}
 
 		const float barSize = 16;
