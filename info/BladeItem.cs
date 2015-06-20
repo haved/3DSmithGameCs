@@ -61,7 +61,6 @@ namespace DSmithGameCs
 		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);
 		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, int hotspot, float tempereture)
 		{
-			Console.Out.WriteLine (hotspot + "   " + tempereture + "    " + KnownMetal.GetMeltingPoint (Metal) + "   " + (hotspot > 0) + "   " + (tempereture > KnownMetal.GetMeltingPoint (Metal)));
 			Matrix4 modelspace = Type.MeshScaleMatrix * Matrix4.CreateRotationZ (zRot) * Matrix4.CreateTranslation (x, y, z);
 			BladeShader Instance = BladeShader.GetInstance ();
 			Instance.Bind ();
@@ -71,7 +70,6 @@ namespace DSmithGameCs
 			if (hotspot >= 0) {
 				float redEmission = KnownMetal.GetRedEmmission (Metal, tempereture);
 				Instance.SetHotspotEmission (Util.DefaultEmission.Xyz * redEmission);
-				Console.Out.WriteLine (redEmission);
 				if (redEmission > 0) {
 					Instance.SetHotspotMin (Type.Points [hotspot] - 0.12f);
 					Instance.SetHotspotMax (Type.Points [hotspot] + 0.12f);
@@ -81,7 +79,7 @@ namespace DSmithGameCs
 
 			BasicShader Instance0 = BasicShader.GetInstance ();
 			for (int i = 0; i < Type.Points.Length; i++) {
-				Matrix4 diamondModelspace = modelspace * Matrix4.CreateTranslation (-Type.Points [i] * Type.MeshScale, Type.MeshScale * 0.15f + (float)Math.Sin (Time.CurrentTime () * 4 + Type.Points [i] * Util.PI) * 0.03f, 0);
+				Matrix4 diamondModelspace = Matrix4.CreateTranslation (Type.Points [i], -0.15f + (float)Math.Sin (Time.CurrentTime () * 4 + Type.Points [i] * Util.PI) * 0.03f, 0) * modelspace;
 				Instance0.SetModelspaceMatrix (diamondModelspace);
 				Instance0.SetMVP (diamondModelspace * VP);
 				Instance0.SetColor (diamondColor);

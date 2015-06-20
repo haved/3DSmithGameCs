@@ -17,9 +17,18 @@ out vec3 vertexNormal0;
 void main()
 {
     gl_Position = MVP * vec4(vertexPosition_modelspace,1);
-
-	vertexColor0 = vec4(vertexColor, 1) * color;
+	
+	vec3 vertCol = vertexColor * color.xyz;
 	if(hotspotMax > vertexPosition_modelspace.x && vertexPosition_modelspace.x > hotspotMin)
-		vertexColor0 = vec4(normalize(hotspotEmission+vertexColor0.xyz),1);
+	{
+		vertCol += hotspotEmission;
+		if(vertCol.x>1)
+			vertCol /= vertCol.x;
+		if(vertCol.y>1)
+			vertCol /= vertCol.y;
+		if(vertCol.z>1)
+			vertCol /= vertCol.z;
+	}
+	vertexColor0 = vec4(vertCol, color.w);
 	vertexNormal0 = normalize((  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz);
 }

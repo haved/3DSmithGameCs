@@ -16,7 +16,6 @@ namespace DSmithGameCs
 			this.table = table;
 			this.coal = coal;
 			EventHandler = this;
-			eyeTarget = new Vector3 (x, y, 0);
 			this.height = height;
 		}
 
@@ -43,8 +42,10 @@ namespace DSmithGameCs
 				if (bladeItem != null) {
 					game.GameStats.PlayerInventory.Deselect ();
 					blade = bladeItem;
+					diamond = -1;
+					hotspot = -1;
+					temperature = -1;
 					parentView = game.CurrentView;
-					anvil.SetParentView (parentView);
 					game.SetView (this);
 					return;
 				}
@@ -68,7 +69,6 @@ namespace DSmithGameCs
 		public void OnViewUsed (IView prevView)
 		{
 			transition.SetStart (prevView);
-			diamond = -1;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -79,8 +79,10 @@ namespace DSmithGameCs
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta () * 2f);
-			if (Input.MousePressed)
+			if (Input.MousePressed) {
 				game.SetView (anvil);
+				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
+			}
 			else if (Input.CloseKeyPressed) {
 				game.SetView (parentView);
 				return;
@@ -109,17 +111,16 @@ namespace DSmithGameCs
 		{
 			return true;
 		}
-
-		readonly Vector3 eyeTarget;
+			
 		static readonly Vector3 eyeUp =	-Vector3.UnitX;
 		public Vector3 GetEyePos ()
 		{
-			return transition.GetEyePos (eyeTarget+new Vector3(0,(float)Math.Sin(panAngle)*10,(float)Math.Cos(panAngle)*10));
+			return transition.GetEyePos (Pos+new Vector3(0,(float)Math.Sin(panAngle)*10,(float)Math.Cos(panAngle)*10));
 		}
 
 		public Vector3 GetEyeTarget ()
 		{
-			return transition.GetEyeTarget (eyeTarget);
+			return transition.GetEyeTarget (Pos);
 		}
 
 		public Vector3 GetEyeUp ()
@@ -137,6 +138,13 @@ namespace DSmithGameCs
 		public void SetAnvil(AnvilEntity anvil)
 		{
 			this.anvil = anvil;
+		}
+
+		public void OnTableUsed(int hotspot, float temperature)
+		{
+			this.hotspot = hotspot;
+			this.diamond = hotspot;
+			this.temperature = temperature;
 		}
 	}
 }
