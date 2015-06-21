@@ -109,12 +109,13 @@ namespace DSmithGameCs
 			DrawColoredMesh (mesh, Matrix4.Identity, color, x, y, width, height);
 		}
 
+		static readonly Matrix4 modelspace = Matrix4.CreateRotationX(0.1f);
 		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height)
 		{
 			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateScale(width/orthoWidth, height/orthoHeight, 0)*
+			BasicShader.GetInstance ().SetMVP (matrix*Matrix4.CreateScale(width/orthoWidth, height/orthoHeight, 0.9f)*
 				Matrix4.CreateTranslation((width+2*x)/orthoWidth-1, (height+2*y)/orthoHeight-1, 0));
-			BasicShader.GetInstance ().SetModelspaceMatrix (Matrix4.Identity);
+			BasicShader.GetInstance ().SetModelspaceMatrix (modelspace);
 			BasicShader.GetInstance ().SetColor (color);
 			mesh.Draw ();
 		}

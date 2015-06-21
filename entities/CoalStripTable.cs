@@ -8,14 +8,13 @@ namespace DSmithGameCs
 	{
 		readonly Smith2DGame game;
 		AnvilEntity anvil;
-		readonly Mesh table, coal;
+		public readonly Mesh Coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
 		readonly float height;
-		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize, float height) : base(null, x,y,z,xSize,ySize)
+		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize, float height) : base(table, x,y,z,xSize,ySize)
 		{
 			this.game = game;
-			this.table = table;
-			this.coal = coal;
+			Coal = coal;
 			EventHandler = this;
 			this.height = height;
 		}
@@ -26,12 +25,12 @@ namespace DSmithGameCs
 			BasicShader.GetInstance ().Bind ();
 			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
 			BasicShader.GetInstance ().SetMVP (MVP);
-			table.Draw ();
+			Mesh.Draw ();
 			ColorShader.GetInstance ().Bind ();
 			ColorShader.GetInstance ().SetMVP (MVP);
 			coalColor.X = coalColor.Y = coalColor.Z = 1.3f + (float)Math.Sin(Time.CurrentTime()*2)/6;
 			ColorShader.GetInstance ().SetColor (coalColor);
-			coal.Draw ();
+			Coal.Draw ();
 		}
 
 		#region IEntityEventListener implementation
@@ -87,6 +86,7 @@ namespace DSmithGameCs
 			if (Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (anvil);
 				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
+				return;
 			}
 
 			if (Input.UpKeyPressed & diamond < blade.Type.Points.Length - 1)

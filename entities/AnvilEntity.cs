@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -41,6 +42,18 @@ namespace DSmithGameCs
 		{
 			transition.UpdateTransition (Time.Delta()*2);
 
+			if (Input.CloseKeyPressed) {
+				game.SetView (parentView);
+				return;
+			}
+			if (Input.MousePressed & Input.OrthoMouseX > 50 & Input.OrthoMouseX < 300 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
+				game.SetView (table);
+				table.OnTableUsed (hotspot, temperature);
+				return;
+			}
+
+
+
 			if (Input.LeftKey) {
 				if (!Input.RightKey)
 					panAngle -= (panAngle + 0.4f) * Time.Delta () * 3;
@@ -49,13 +62,6 @@ namespace DSmithGameCs
 				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
-
-			if (Input.MousePressed) {
-				game.SetView (table);
-				table.OnTableUsed (hotspot, temperature);
-			}
-			else if (Input.CloseKeyPressed)
-				game.SetView (parentView);
 		}
 
 		public bool ShouldRenderScene ()
@@ -78,9 +84,15 @@ namespace DSmithGameCs
 			return transition.GetEyeUp (Vector3.UnitY);
 		}
 
+		Matrix4 projection = Matrix4.CreateRotationX (-Util.PI / 2) * Matrix4.CreateRotationY (0.9f) * Matrix4.CreateTranslation (0, -4.2f, -7)
+			*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 62, 1, 0.1f, 100)*Matrix4.CreateTranslation(-0.1f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
 			blade.RenderBlade (VP, Pos.X, Pos.Y- (hotspot<0?-0.6f:blade.Type.Points[hotspot]*blade.Type.MeshScale), height, Util.PI/2, hotspot, temperature);
+			GL.Enable (EnableCap.DepthTest);
+			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, 50, 50, 250, 250);
+			OrthoRenderEngine.DrawColoredMesh (table.Mesh, projection, Util.White, 50, 50, 250, 250);
+			OrthoRenderEngine.DrawColoredMesh (table.Coal, projection, Util.White, 50, 50, 250, 250);
 		}
 
 		public void SetCoalStripTable(CoalStripTable table)
