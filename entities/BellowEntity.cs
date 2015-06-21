@@ -48,10 +48,10 @@ namespace DSmithGameCs
 		public override void Render(Scene s, Matrix4 VP)
 		{
 			Matrix4 newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
-			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().ResetColor ();
-			BasicShader.GetInstance ().SetModelspaceMatrix (newModelspace);
-			BasicShader.GetInstance ().SetMVP (newModelspace * VP);
+			BasicShader.Instance.Bind ();
+			BasicShader.Instance.ResetColor ();
+			BasicShader.Instance.SetModelspaceMatrix (newModelspace);
+			BasicShader.Instance.SetMVP (newModelspace * VP);
 			Draw (s);
 			if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);

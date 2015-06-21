@@ -22,14 +22,14 @@ namespace DSmithGameCs
 		public override void Render(Scene s, Matrix4 VP)
 		{
 			Matrix4 MVP = Modelspace * VP;
-			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
-			BasicShader.GetInstance ().SetMVP (MVP);
+			BasicShader.Instance.Bind ();
+			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
+			BasicShader.Instance.SetMVP (MVP);
 			Mesh.Draw ();
-			ColorShader.GetInstance ().Bind ();
-			ColorShader.GetInstance ().SetMVP (MVP);
+			ColorShader.Instance.Bind ();
+			ColorShader.Instance.SetMVP (MVP);
 			coalColor.X = coalColor.Y = coalColor.Z = 1.3f + (float)Math.Sin(Time.CurrentTime()*2)/6;
-			ColorShader.GetInstance ().SetColor (coalColor);
+			ColorShader.Instance.SetColor (coalColor);
 			Coal.Draw ();
 		}
 

@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class BasicShader : Shader, INormalShader
 	{
-		static BasicShader instance;
+		public static BasicShader Instance { get; private set; }
 
 		int modelspaceID, MVP_id, colorId;
 
@@ -40,16 +40,10 @@ namespace DSmithGameCs
 			SetVector4 (colorId, Util.White);
 		}
 
-		public static BasicShader MakeInstance()
+		public static void MakeInstance()
 		{
-			if (instance == null)
-				instance = new BasicShader ();
-			return instance;
-		}
-
-		public static BasicShader GetInstance()
-		{
-			return instance;
+			if (Instance == null)
+				Instance = new BasicShader ();
 		}
 	}
 }

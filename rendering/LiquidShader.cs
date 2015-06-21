@@ -6,7 +6,7 @@ namespace DSmithGameCs
 {
 	public class LiquidShader : Shader, INormalShader
 	{
-		static LiquidShader instance;
+		public static LiquidShader Instance { get; private set; }
 
 		readonly int modelspaceID, MVP_id, colorId, emissionId, textureId, pan0Id, pan1Id;
 		readonly Texture liquidTexture;
@@ -81,13 +81,8 @@ namespace DSmithGameCs
 
 		public static void MakeInstance(Texture texture)
 		{
-			if (instance == null)
-				instance = new LiquidShader (texture);
-		}
-
-		public static LiquidShader GetInstance()
-		{
-			return instance;
+			if (Instance == null)
+				Instance = new LiquidShader (texture);
 		}
 	}
 }

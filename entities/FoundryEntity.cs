@@ -94,10 +94,10 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().ResetColor ();
-			BasicShader.GetInstance ().SetModelspaceMatrix(Modelspace);
-			BasicShader.GetInstance ().SetMVP(Modelspace * VP);
+			BasicShader.Instance.Bind ();
+			BasicShader.Instance.ResetColor ();
+			BasicShader.Instance.SetModelspaceMatrix(Modelspace);
+			BasicShader.Instance.SetMVP(Modelspace * VP);
 			Draw (s);
 			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++)
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
@@ -107,13 +107,13 @@ namespace DSmithGameCs
 				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.Amount) * liquidTransform * Modelspace;
 				INormalShader shader;
 				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
-					shader = LiquidShader.GetInstance ();
+					shader = LiquidShader.Instance;
 					shader.Bind ();
-					LiquidShader.GetInstance ().UseTexture ();
-					LiquidShader.GetInstance ().AutoPan ();
-					LiquidShader.GetInstance ().SetEmission (Util.DefaultEmission);
+					LiquidShader.Instance.UseTexture ();
+					LiquidShader.Instance.AutoPan ();
+					LiquidShader.Instance.SetEmission (Util.DefaultEmission);
 				} else
-					shader = BasicShader.GetInstance ();
+					shader = BasicShader.Instance;
 
 				shader.SetModelspaceMatrix (m);
 				shader.SetMVP (m * VP);

@@ -62,7 +62,7 @@ namespace DSmithGameCs
 		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, int hotspot, float tempereture)
 		{
 			Matrix4 modelspace = Type.MeshScaleMatrix * Matrix4.CreateRotationZ (zRot) * Matrix4.CreateTranslation (x, y, z);
-			BladeShader Instance = BladeShader.GetInstance ();
+			BladeShader Instance = BladeShader.Instance;
 			Instance.Bind ();
 			Instance.SetModelspaceMatrix (modelspace);
 			Instance.SetMVP (modelspace * VP);
@@ -77,7 +77,7 @@ namespace DSmithGameCs
 			}
 			Type.Mesh.Draw ();
 
-			BasicShader Instance0 = BasicShader.GetInstance ();
+			BasicShader Instance0 = BasicShader.Instance;
 			for (int i = 0; i < Type.Points.Length; i++) {
 				Matrix4 diamondModelspace = Matrix4.CreateTranslation (Type.Points [i], -0.15f + (float)Math.Sin (Time.CurrentTime () * 4 + Type.Points [i] * Util.PI) * 0.03f, 0) * modelspace;
 				Instance0.SetModelspaceMatrix (diamondModelspace);

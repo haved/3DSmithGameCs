@@ -5,7 +5,7 @@ namespace DSmithGameCs
 {
 	public class BladeShader : Shader, INormalShader
 	{
-		static BladeShader instance;
+		public static BladeShader Instance { get; private set; }
 
 		int modelspaceID, MVP_id, colorId, hotspotMinId, hotspotMaxId, hotspotEmissionId;
 
@@ -60,13 +60,8 @@ namespace DSmithGameCs
 
 		public static void MakeInstance()
 		{
-			if (instance == null)
-				instance = new BladeShader ();
-		}
-
-		public static BladeShader GetInstance()
-		{
-			return instance;
+			if (Instance == null)
+				Instance = new BladeShader ();
 		}
 	}
 }

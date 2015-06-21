@@ -5,9 +5,9 @@ namespace DSmithGameCs
 {
 	public class ColorShader : Shader
 	{
-		private static ColorShader instance;
+		public static ColorShader Instance { get; private set; }
 
-		private int MVP_id, colorId;
+		int MVP_id, colorId;
 
 		public ColorShader ()
 		{
@@ -31,13 +31,8 @@ namespace DSmithGameCs
 
 		public static void MakeInstance()
 		{
-			if (instance == null)
-				instance = new ColorShader ();
-		}
-
-		public static ColorShader GetInstance()
-		{
-			return instance;
+			if (Instance == null)
+				Instance = new ColorShader ();
 		}
 	}
 }

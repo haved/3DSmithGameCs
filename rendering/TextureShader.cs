@@ -6,9 +6,9 @@ namespace DSmithGameCs
 {
 	public class TextureShader : Shader
 	{
-		private static TextureShader instance;
+		public static TextureShader Instance { get; private set; }
 
-		private int MVP_id, colorId, diffuseId, sampleUV_id, sampleSizeId;
+		int MVP_id, colorId, diffuseId, sampleUV_id, sampleSizeId;
 
 		public TextureShader ()
 		{
@@ -76,13 +76,8 @@ namespace DSmithGameCs
 
 		public static void MakeInstance()
 		{
-			if (instance == null)
-				instance = new TextureShader ();
-		}
-
-		public static TextureShader GetInstance()
-		{
-			return instance;
+			if (Instance == null)
+				Instance = new TextureShader ();
 		}
 	}
 }

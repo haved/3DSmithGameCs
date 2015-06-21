@@ -102,16 +102,16 @@ namespace DSmithGameCs
 		{
 			this.VP = VP;
 			Matrix4 MVP = Modelspace * VP;
-			ColorShader.GetInstance ().Bind ();
-			ColorShader.GetInstance ().SetMVP (MVP);
-			ColorShader.GetInstance ().SetColor (shadowColor);
+			ColorShader.Instance.Bind ();
+			ColorShader.Instance.SetMVP (MVP);
+			ColorShader.Instance.SetColor (shadowColor);
 			GL.Disable (EnableCap.DepthTest);
 			shadow.Draw ();
 			GL.Enable (EnableCap.DepthTest);
-			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().ResetColor ();
-			BasicShader.GetInstance ().SetModelspaceMatrix (Modelspace);
-			BasicShader.GetInstance ().SetMVP (MVP);
+			BasicShader.Instance.Bind ();
+			BasicShader.Instance.ResetColor ();
+			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
+			BasicShader.Instance.SetMVP (MVP);
 			mesh.Draw ();
 		}
 

@@ -20,10 +20,10 @@ namespace DSmithGameCs
 
 		public virtual void Render(Scene s, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().Bind ();
-			BasicShader.GetInstance ().ResetColor ();
-			BasicShader.GetInstance ().SetModelspaceMatrix(Modelspace);
-			BasicShader.GetInstance ().SetMVP(Modelspace * VP);
+			BasicShader.Instance.Bind ();
+			BasicShader.Instance.ResetColor ();
+			BasicShader.Instance.SetModelspaceMatrix(Modelspace);
+			BasicShader.Instance.SetMVP(Modelspace * VP);
 			Draw (s);
 		}
 

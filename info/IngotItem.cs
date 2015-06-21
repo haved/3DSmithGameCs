@@ -31,11 +31,11 @@ namespace DSmithGameCs
 
 		public void RenderMesh(Matrix4 location, Matrix4 VP)
 		{
-			BasicShader.GetInstance ().SetColor (Metal.Color);
-			BasicShader.GetInstance ().SetModelspaceMatrix (location);
-			BasicShader.GetInstance ().SetMVP (location*VP);
+			BasicShader.Instance.SetColor (Metal.Color);
+			BasicShader.Instance.SetModelspaceMatrix (location);
+			BasicShader.Instance.SetMVP (location*VP);
 			MeshCollection.Ingot.Draw();
-			BasicShader.GetInstance ().ResetColor ();
+			BasicShader.Instance.ResetColor ();
 		}
 
 		public override uint GetSize()
