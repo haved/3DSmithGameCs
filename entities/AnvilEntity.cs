@@ -38,6 +38,10 @@ namespace DSmithGameCs
 			return false;
 		}
 
+		float hammerMove;
+		float hammerX;
+		float hammerY;
+		bool hammerDown = true;
 		public void UpdateView (Scene s)
 		{
 			transition.UpdateTransition (Time.Delta()*2);
@@ -52,7 +56,23 @@ namespace DSmithGameCs
 				return;
 			}
 
+			if (!hammerDown && Input.MousePressed & hammerMove < 0.3f & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth () / 2 - 100 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth () / 2 + 100 &
+			   Input.OrthoMouseY > OrthoRenderEngine.GetCanvasHeight () / 2 - 70 & Input.OrthoMouseY < OrthoRenderEngine.GetCanvasHeight () / 2 + 70) {
+				hammerDown = true;
+				hammerX = Util.NextFloat () - 0.5f;
+				hammerY = Util.NextFloat () - 0.5f;
+			}
 
+			if (hammerDown) {
+				if (hammerMove < 1) {
+					hammerMove += Time.Delta () * 10;
+					if (hammerMove >= 1) {
+						hammerDown = false;
+						hammerMove = 1;
+					}
+				}
+			} else if (hammerMove > 0)
+				hammerMove = Math.Max(0, hammerMove-Time.Delta () * 4);
 
 			if (Input.LeftKey) {
 				if (!Input.RightKey)
@@ -89,7 +109,15 @@ namespace DSmithGameCs
 		public void RenderView (Matrix4 VP, Scene s)
 		{
 			blade.RenderBlade (VP, Pos.X, Pos.Y- (hotspot<0?-0.6f:blade.Type.Points[hotspot]*blade.Type.MeshScale), height, Util.PI/2, hotspot, temperature);
-			GL.Enable (EnableCap.DepthTest);
+
+			BasicShader.Instance.Bind ();
+			Matrix4 modelspace = Matrix4.CreateTranslation(0, 1, 0) * Matrix4.CreateRotationX(-hammerMove) * Matrix4.CreateTranslation(0, 2.5f+hammerY*hammerMove/4, 0) * Matrix4.CreateRotationX(0.9f-hammerMove) *
+				Matrix4.CreateRotationZ(0.7f+hammerX*hammerMove/4) * Matrix4.CreateTranslation (1.9f, -2.4f, height+1) * Modelspace;
+			BasicShader.Instance.SetMVP (modelspace*VP);
+			BasicShader.Instance.SetModelspaceMatrix (modelspace);
+			BasicShader.Instance.ResetColor ();
+			MeshCollection.Hammer.Draw ();
+
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, 50, 50, 250, 250);
 			OrthoRenderEngine.DrawColoredMesh (table.Mesh, projection, Util.White, 50, 50, 250, 250);
 			OrthoRenderEngine.DrawColoredMesh (table.Coal, projection, Util.White, 50, 50, 250, 250);
