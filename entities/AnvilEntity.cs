@@ -25,9 +25,9 @@ namespace DSmithGameCs
 		Transition transition = new Transition();
 		IView parentView;
 		BladeItem blade;
-		int hotspot = -1;
-		float temperature = 25;
-		float panAngle = 0;
+		int hotspot;
+		float temperature;
+		float panAngle;
 		public void OnViewUsed(IView prevView)
 		{
 			transition.SetStart (prevView);
@@ -47,12 +47,14 @@ namespace DSmithGameCs
 			transition.UpdateTransition (Time.Delta()*2);
 
 			if (Input.CloseKeyPressed) {
+				OnAnvilNotUsed ();
 				game.SetView (parentView);
 				return;
 			}
 			if (Input.MousePressed & Input.OrthoMouseX > 50 & Input.OrthoMouseX < 300 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (table);
-				table.OnTableUsed (hotspot, temperature);
+				table.OnTableUsed (hotspot, temperature, blade);
+				OnAnvilNotUsed ();
 				return;
 			}
 
@@ -69,6 +71,10 @@ namespace DSmithGameCs
 					if (hammerMove >= 1) {
 						hammerDown = false;
 						hammerMove = 1;
+						if (hotspot >= 0) {
+							blade.Sharpness [hotspot] = Math.Min (1, blade.Sharpness [hotspot] + KnownMetal.GetRedEmmission (blade.Metal, temperature) * 0.01f * (1 - blade.Sharpness [hotspot]));
+							blade.UpdateSharpnessMap ();
+						}
 					}
 				}
 			} else if (hammerMove > 0)
@@ -82,6 +88,9 @@ namespace DSmithGameCs
 				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
+
+			if(temperature > 25)
+				temperature -= Time.Delta () * 70;
 		}
 
 		public bool ShouldRenderScene ()
@@ -134,6 +143,11 @@ namespace DSmithGameCs
 			this.blade = blade;
 			this.hotspot = hotspot;
 			this.temperature = temperature;
+		}
+
+		public void OnAnvilNotUsed()
+		{
+			blade = null;
 			panAngle = 0;
 		}
 	}

@@ -10,15 +10,15 @@ namespace DSmithGameCs
 {
 	public class Mesh
 	{
-		private int vbo;
-		private int ibo;
-		private int indicesCount;
+		int vbo;
+		int ibo;
+		int indicesCount;
 
 		public Mesh(string filename)
 		{
 			try
 			{
-				string[] lines = System.IO.File.ReadAllLines(filename);
+				string[] lines = File.ReadAllLines(filename);
 
 				uint vertexAmount = 0;
 				uint faceAmount = 0;
@@ -32,10 +32,8 @@ namespace DSmithGameCs
 						vertexAmount = UInt32.Parse (lines [i].Substring (15));
 					if (lines [i].StartsWith ("element face ", StringComparison.Ordinal))
 						faceAmount = UInt32.Parse (lines [i].Substring (13));
-					if (lines [i].StartsWith ("property float nx", StringComparison.Ordinal))
-						normals = true;
-					if (lines [i].StartsWith ("property uchar red", StringComparison.Ordinal))
-						colors = true; 
+					normals |= lines [i].StartsWith ("property float nx", StringComparison.Ordinal);
+					colors |= lines [i].StartsWith ("property uchar red", StringComparison.Ordinal); 
 					if (lines [i].StartsWith ("end_header", StringComparison.Ordinal))
 						break;
 				}
@@ -64,7 +62,7 @@ namespace DSmithGameCs
 					i++;
 				}
 
-				List<uint> indices = new List<uint>();
+				var indices = new List<uint>();
 
 				for(uint j = 0; j < faceAmount; j++)
 				{
@@ -118,11 +116,13 @@ namespace DSmithGameCs
 				GL.DeleteBuffer (vbo);
 				GL.DeleteBuffer (ibo);
 			}
+			Console.Out.WriteLine ("Deleted vbo:" + vbo);
 		}
 
-		private void LoadMeshData (Vertex[] vertices, uint[] indices)
+		void LoadMeshData (Vertex[] vertices, uint[] indices)
 		{
 			vbo = GL.GenBuffer ();
+			Console.Out.WriteLine ("Assigned vbo:" + vbo);
 			ibo = GL.GenBuffer ();
 			indicesCount = indices.Length;
 
@@ -154,7 +154,7 @@ namespace DSmithGameCs
 			GL.DisableVertexAttribArray( 2 );
 		}
 
-		private void CalcNormals(Vertex[] vertices, uint[] indices)
+		static void CalcNormals(Vertex[] vertices, uint[] indices)
 		{
 			for(int i = 0; i < indices.Length; i += 3)
 			{
@@ -162,8 +162,8 @@ namespace DSmithGameCs
 				uint i1 = indices[i + 1];
 				uint i2 = indices[i + 2];
 
-				Vector3 v1 = new Vector3(vertices[i1].X - vertices[i0].X, vertices[i1].Y - vertices[i0].Y, vertices[i1].Z - vertices[i0].Z);
-				Vector3 v2 = new Vector3(vertices[i2].X - vertices[i0].X, vertices[i2].Y - vertices[i0].Y, vertices[i2].Z - vertices[i0].Z);
+				var v1 = new Vector3(vertices[i1].X - vertices[i0].X, vertices[i1].Y - vertices[i0].Y, vertices[i1].Z - vertices[i0].Z);
+				var v2 = new Vector3(vertices[i2].X - vertices[i0].X, vertices[i2].Y - vertices[i0].Y, vertices[i2].Z - vertices[i0].Z);
 
 				Vector3 normal = Vector3.Cross(v1, v2).Normalized();
 

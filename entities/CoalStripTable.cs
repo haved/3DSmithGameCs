@@ -41,10 +41,7 @@ namespace DSmithGameCs
 				var bladeItem = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;
 				if (bladeItem != null) {
 					game.GameStats.PlayerInventory.Deselect ();
-					blade = bladeItem;
-					diamond = -1;
-					hotspot = -1;
-					temperature = -1;
+					OnTableUsed (-1, 25, bladeItem);
 					parentView = game.CurrentView;
 					game.SetView (this);
 					return;
@@ -61,10 +58,10 @@ namespace DSmithGameCs
 		Transition transition = new Transition();
 		IView parentView;
 		BladeItem blade;
-		int diamond = -1;
-		int hotspot = -1;
-		float temperature = 25;
-		float panAngle = 0;
+		int diamond;
+		int hotspot;
+		float temperature;
+		float panAngle;
 
 		public void OnViewUsed (IView prevView)
 		{
@@ -80,12 +77,14 @@ namespace DSmithGameCs
 		{
 			transition.UpdateTransition (Time.Delta () * 2f);
 			if (Input.CloseKeyPressed) {
+				OnTableNotUsed ();
 				game.SetView (parentView);
 				return;
 			}
 			if (Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (anvil);
 				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
+				OnTableNotUsed ();
 				return;
 			}
 
@@ -145,11 +144,17 @@ namespace DSmithGameCs
 			this.anvil = anvil;
 		}
 
-		public void OnTableUsed(int hotspot, float temperature)
+		public void OnTableUsed(int hotspot, float temperature, BladeItem blade)
 		{
 			this.hotspot = hotspot;
-			this.diamond = hotspot;
+			diamond = hotspot;
 			this.temperature = temperature;
+			this.blade = blade;
+		}
+
+		public void OnTableNotUsed()
+		{
+			blade = null;
 			panAngle = 0;
 		}
 	}

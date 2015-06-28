@@ -1,5 +1,5 @@
-﻿using System;
-using OpenTK;
+﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -7,7 +7,7 @@ namespace DSmithGameCs
 	{
 		public static BladeShader Instance { get; private set; }
 
-		int modelspaceID, MVP_id, colorId, hotspotMinId, hotspotMaxId, hotspotEmissionId;
+		int modelspaceID, MVP_id, colorId, hotspotMinId, hotspotMaxId, hotspotEmissionId, sharpnessMapId;
 
 		public BladeShader ()
 		{
@@ -20,7 +20,9 @@ namespace DSmithGameCs
 			hotspotMinId = AddUniform ("hotspotMin");
 			hotspotMaxId = AddUniform ("hotspotMax");
 			hotspotEmissionId = AddUniform("hotspotEmission");
+			sharpnessMapId = AddUniform ("sharpnessMap");
 			SetColor (Util.White);
+			SetInteger (sharpnessMapId, 0);
 		}
 
 		public void SetModelspaceMatrix(Matrix4 modelspace)
@@ -56,6 +58,13 @@ namespace DSmithGameCs
 		public void SetHotspotEmission(Vector3 color)
 		{
 			SetVector3 (hotspotEmissionId, color);
+		}
+
+		public void SetSharpnessMap(int texture)
+		{
+			//GL.ActiveTexture(TextureUnit.Texture0); //This is default
+			//SetInteger (diffuseId, 0); //This is done in the constructor
+			GL.BindTexture(TextureTarget.Texture1D, texture);
 		}
 
 		public static void MakeInstance()

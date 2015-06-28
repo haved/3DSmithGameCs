@@ -22,6 +22,11 @@ namespace DSmithGameCs
 		public float CoalPercent;
 		public float FoundryTemprature;
 
+		~GameInfo()
+		{
+			Console.Out.WriteLine ("GameInfo destructed");
+		}
+
 		public void NewGame()
 		{
 			PlayerInventory = new Inventory ();

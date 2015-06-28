@@ -52,7 +52,7 @@ namespace DSmithGameCs
 
 		public void UpdateView (Scene s)
 		{
-			if (hovering != -16 & Input.MousePressed) {
+			if (hovering != -1 & Input.MousePressed) {
 				OnButtonPressed (hovering);
 			}
 		}
@@ -90,4 +90,3 @@ namespace DSmithGameCs
 		#endregion
 	}
 }
-

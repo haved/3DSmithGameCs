@@ -1,6 +1,6 @@
 ﻿#version 330
 
-layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 0) in vec3 vP;
 layout(location = 1) in vec3 vertexNormal;
 layout(location = 2) in vec3 vertexColor;
 
@@ -10,16 +10,18 @@ uniform vec4 color;
 uniform float hotspotMin;
 uniform float hotspotMax;
 uniform vec3 hotspotEmission;
+uniform sampler1D sharpnessMap;
 
 out vec4 vertexColor0;
 out vec3 vertexNormal0;
 
 void main()
 {
-    gl_Position = MVP * vec4(vertexPosition_modelspace,1);
+	vec2 mapData = texture(sharpnessMap, vP.x).xy;
+    gl_Position = MVP * vec4(vP.x, vP.y*(1+mapData.y), vP.z*(1-mapData.x),1);
 	
-	vec3 vertCol = vertexColor * color.xyz;
-	if(hotspotMax > vertexPosition_modelspace.x && vertexPosition_modelspace.x > hotspotMin)
+	vec3 vertCol = vec3(mapData, 0) * color.xyz;
+	if(hotspotMax > vP.x && vP.x > hotspotMin)
 	{
 		vertCol += hotspotEmission;
 		if(vertCol.x>1)

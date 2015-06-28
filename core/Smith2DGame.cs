@@ -96,7 +96,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (wallMesh, 0, -10, 0, -0.2f, 0, PI, 30, 1));
 			smithScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
 			smithScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
-			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 9, 0, 8, 3, 3f);
+			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 8.7f, 0, 8, 3, 3f);
 			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 3.5f);
 			anvil.SetCoalStripTable(table);
 			table.SetAnvil(anvil);
@@ -157,6 +157,8 @@ namespace DSmithGameCs
 
 		public void ShowMainMenu()
 		{
+			GameStats = null;
+			smithScene = null;
 			CurrentView = null;
 			SetView (MainMenu);
 			CurrentScene = MakeMenuScene ();
@@ -196,4 +198,3 @@ namespace DSmithGameCs
 		}
 	}
 }
-
