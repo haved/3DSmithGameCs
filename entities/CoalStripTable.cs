@@ -19,6 +19,12 @@ namespace DSmithGameCs
 			this.height = height;
 		}
 
+		public override void DisposeEntity()
+		{
+			base.DisposeEntity ();
+			Coal.Dispose ();
+		}
+
 		public override void Render(Scene s, Matrix4 VP)
 		{
 			Matrix4 MVP = Modelspace * VP;

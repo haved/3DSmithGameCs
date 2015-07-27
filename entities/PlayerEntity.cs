@@ -25,7 +25,13 @@ namespace DSmithGameCs
 			this.xSize = xSize/2;
 			this.ySize = ySize/2;
 		}
-			
+
+		public override void DisposeEntity()
+		{
+			mesh.Dispose ();
+			shadow.Dispose ();
+		}
+
 		public override void Update(Scene s)
 		{
 			Move (s);

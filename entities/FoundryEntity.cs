@@ -15,8 +15,14 @@ namespace DSmithGameCs
 			this.game = game;
 			this.molten = molten;
 			this.liquidTransform = liquidTransform;
-			this.EventHandler = this;
-			this.IngotMatrices = ingotMatrices;
+			EventHandler = this;
+			IngotMatrices = ingotMatrices;
+		}
+
+		public override void DisposeEntity()
+		{
+			base.DisposeEntity ();
+			molten.Dispose ();
 		}
 
 		const float foundryHeatingSpeed = 1f;//0.4f;

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DSmithGameCs
 {
-	public class GameInfo
+	public class GameInfo : IDisposable
 	{
 		public Inventory PlayerInventory;
 		public HatchInventory HatchInv;
@@ -24,7 +24,28 @@ namespace DSmithGameCs
 
 		~GameInfo()
 		{
+			if (!disposed)
+				Console.Error.WriteLine ("GameInfo was not disposed before finalizer");
+			Dispose ();
 			Console.Out.WriteLine ("GameInfo destructed");
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (disposed)
+				return;
+
+			PlayerInventory.Dispose ();
+			HatchInv.Dispose ();
+			if (CurrentCast != null)
+				CurrentCast.Dispose ();
+			for (int i = 0; i < FoundryIngots.Capacity; i++)
+				if(FoundryIngots[i]!=null)
+					FoundryIngots[i].Dispose ();
+
+			disposed = true;
+			Console.Out.WriteLine ("GameInfo disposed");
 		}
 
 		public void NewGame()

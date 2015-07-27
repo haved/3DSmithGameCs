@@ -13,7 +13,9 @@ namespace DSmithGameCs
 
 		public IView CurrentView;
 
-		public GameInfo GameStats;
+		GameInfo gameInfo;
+		/** <summary> A Property that calls Dispose to the old value when overridden </summary>*/
+		public GameInfo GameStats { private set { if (gameInfo != null) { gameInfo.Dispose (); } gameInfo = value; } get { return gameInfo; } }
 		public Scene CurrentScene;
 		public PlayerEntity Player;
 
@@ -60,6 +62,8 @@ namespace DSmithGameCs
 
 		public void LoadGame()
 		{
+			if(GameStats!=null)
+				GameStats.Dispose ();
 			GameStats = new GameInfo ();
 			if (!GameStats.LoadGame ()) {
 				ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.savecorruption"), Input.OrthoMouseX, Input.OrthoMouseY, 2, false);
@@ -69,6 +73,16 @@ namespace DSmithGameCs
 			SetView(new SmithingView (this));
 				
 			CurrentScene = MakeSmithScene ();
+		}
+
+		public void ShowMainMenu()
+		{
+			GameStats = null;//Automaticly disposes
+			smithScene.Dispose ();
+			smithScene = null;
+			CurrentView = null;
+			SetView (MainMenu);
+			CurrentScene = MakeMenuScene ();
 		}
 
 		public Scene MakeMenuScene()
@@ -153,15 +167,6 @@ namespace DSmithGameCs
 			ErrortipHelper.UnClaim ();
 			v.OnViewUsed (prevView);
 			CurrentView = v;
-		}
-
-		public void ShowMainMenu()
-		{
-			GameStats = null;
-			smithScene = null;
-			CurrentView = null;
-			SetView (MainMenu);
-			CurrentScene = MakeMenuScene ();
 		}
 
 		int frames;

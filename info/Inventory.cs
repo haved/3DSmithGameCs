@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class Inventory
+	public class Inventory : IDisposable
 	{
 		public const int SIZE = 4;
 		readonly List<Item> items;
@@ -15,6 +14,23 @@ namespace DSmithGameCs
 		public Inventory ()
 		{
 			items = new List<Item> (SIZE);
+		}
+
+		~Inventory()
+		{
+			if (!disposed)
+				Console.Out.WriteLine ("Inventory was not disposed before finalizer");
+			Dispose ();
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (disposed)
+				return;
+			foreach (Item i in items)
+				i.Dispose ();
+			disposed = true;
 		}
 
 		public bool AddItem(Item i)

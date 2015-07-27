@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class Mesh
+	public class Mesh : IDisposable
 	{
 		int vbo;
 		int ibo;
@@ -112,9 +112,16 @@ namespace DSmithGameCs
 
 		~Mesh()
 		{
-			if (GraphicsContext.CurrentContext != null) {
+			Dispose ();
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (GraphicsContext.CurrentContext != null & !disposed) {
 				GL.DeleteBuffer (vbo);
 				GL.DeleteBuffer (ibo);
+				disposed = true;
 			}
 			Console.Out.WriteLine ("Deleted vbo:" + vbo);
 		}

@@ -9,7 +9,7 @@ namespace DSmithGameCs
 
 		public InteractiveEntity (IEntityEventListener eventHandler, Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, 0, 0, 0, xSize, ySize)
 		{
-			this.EventHandler = eventHandler;
+			EventHandler = eventHandler;
 		}
 
 		protected InteractiveEntity (Mesh m, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, 0, 0, 0, xSize, ySize){}

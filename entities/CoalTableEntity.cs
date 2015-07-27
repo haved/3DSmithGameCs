@@ -14,6 +14,12 @@ namespace DSmithGameCs
 			this.coal = coal;
 		}
 
+		public override void DisposeEntity()
+		{
+			table.Dispose ();
+			coal.Dispose ();
+		}
+
 		float flickr = 0;
 		public override void Update(Scene s)
 		{

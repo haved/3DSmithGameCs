@@ -23,6 +23,13 @@ namespace DSmithGameCs
 			fillMatrix = Matrix4.CreateTranslation (0, 0, height-0.08f);
 		}
 
+		public override void DisposeEntity()
+		{
+			base.DisposeEntity ();
+			fill.Dispose ();
+			fall.Dispose ();
+		}
+
 		public override void Update(Scene s)
 		{
 			UpdateDialog ();

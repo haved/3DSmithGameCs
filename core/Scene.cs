@@ -4,13 +4,28 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class Scene
+	public class Scene : IDisposable
 	{
-		private readonly List<Entity> entities;
+		static uint instances;
+		static uint undisposed;
+
+		readonly List<Entity> entities;
+
+		bool disposed;
 
 		public Scene ()
 		{
 			entities = new List<Entity>();
+			instances++;
+			undisposed++;
+			Console.WriteLine ("Scene constructed. New total instances: " + instances + "  Total undisposed scenes: " + undisposed);
+		}
+
+		~Scene()
+		{
+			Dispose ();
+			instances--;
+			Console.WriteLine ("Scene destructed. New total instances: " + instances);
 		}
 
 		public void AddEntity(Entity e)
@@ -38,6 +53,18 @@ namespace DSmithGameCs
 		public List<Entity> GetEntities()
 		{
 			return entities;
+		}
+
+		public void Dispose()
+		{
+			if (!disposed) {
+				foreach (Entity e in entities) {
+					e.Dispose ();
+				}
+				disposed = true;
+				undisposed--;
+				Console.Out.WriteLine ("Scene disposed. New total undisposed: " + undisposed);
+			}
 		}
 	}
 }

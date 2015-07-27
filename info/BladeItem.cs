@@ -57,7 +57,7 @@ namespace DSmithGameCs
 			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 
-		~BladeItem()
+		public override void DisposeItem()
 		{
 			if(GraphicsContext.CurrentContext != null)
 				GL.DeleteTexture (sharpnessMap);

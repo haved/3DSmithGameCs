@@ -18,8 +18,14 @@ namespace DSmithGameCs
 			this.hatchHole = hatchHole;
 			this.hatch = hatch;
 			this.hatchTranslation = Matrix4.CreateTranslation(hatchTranslation);
-			this.Solid = false;
-			this.EventHandler = this;
+			Solid = false;
+			EventHandler = this;
+		}
+
+		public override void DisposeEntity()
+		{
+			hatchHole.Dispose ();
+			hatch.Dispose ();
 		}
 
 		public override void Update(Scene s)

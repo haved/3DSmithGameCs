@@ -4,8 +4,23 @@ using System.IO;
 
 namespace DSmithGameCs
 {
-	public abstract class Item
+	public abstract class Item : IDisposable
 	{
+		~Item()
+		{
+			Dispose ();
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (!disposed)
+				DisposeItem ();
+			disposed = true;
+		}
+
+		public virtual void DisposeItem () {}
+
 		public abstract uint GetSize ();
 
 		public abstract void DrawTooltip (TextWriter writer);

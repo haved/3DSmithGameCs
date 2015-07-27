@@ -13,9 +13,9 @@ namespace DSmithGameCs
 
 		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ, float xSize, float ySize) : this(m, x, y, z, rotX, rotY, rotZ)
 		{
-			this.XSize = xSize / 2;
-			this.YSize = ySize / 2;
-			this.Solid = true;
+			XSize = xSize / 2;
+			YSize = ySize / 2;
+			Solid = true;
 		}
 
 		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ)
@@ -60,6 +60,11 @@ namespace DSmithGameCs
 		public override float GetSolidY2()
 		{
 			return Pos.Y + YSize;
+		}
+
+		public override void DisposeEntity()
+		{
+			Mesh.Dispose ();
 		}
 	}
 }

@@ -20,6 +20,12 @@ namespace DSmithGameCs
 			EventHandler = this;
 		}
 
+		public override void DisposeEntity()
+		{
+			box.Dispose ();
+			lid.Dispose ();
+		}
+
 		public override void Update(Scene s)
 		{
 			lidRotation += lidSpeed * Time.Delta ()*3;

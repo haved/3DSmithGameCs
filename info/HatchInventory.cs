@@ -1,15 +1,33 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace DSmithGameCs
 {
-	public class HatchInventory
+	public class HatchInventory : IDisposable
 	{
 		readonly List<Item> items;
 
 		public HatchInventory ()
 		{
 			items = new List<Item> ();
+		}
+
+		~HatchInventory()
+		{
+			if (!disposed)
+				Console.Out.WriteLine ("HatchInventory was not disposed before finalizer");
+			Dispose ();
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (!disposed)
+				foreach (Item i in items)
+					i.Dispose ();
+
+			disposed = true;
 		}
 
 		public int GetItemAmount()

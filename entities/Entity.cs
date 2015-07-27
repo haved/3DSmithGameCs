@@ -3,13 +3,18 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public abstract class Entity
+	public abstract class Entity : IDisposable
 	{
 		bool dead = false;
 
 		public Vector3 Pos;
 		public Vector3 Rot;
 		public Matrix4 Modelspace = Matrix4.Identity;
+
+		~Entity()
+		{
+			Dispose ();
+		}
 
 		public abstract void Update(Scene s);
 
@@ -83,6 +88,17 @@ namespace DSmithGameCs
 		{
 			return Pos.Y+1;
 		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (!disposed) {
+				DisposeEntity ();
+				disposed = true;
+			}
+		}
+
+		public abstract void DisposeEntity();
 	}
 }
 
