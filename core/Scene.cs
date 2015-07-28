@@ -20,7 +20,6 @@ namespace DSmithGameCs
 		{
 			entities = new List<Entity>();
 			lights = new List<ILight> ();
-			lights.Add (new DirectionalLight(new Vector3(1,1,1), 1f, Vector3.UnitZ));
 			instances++;
 			undisposed++;
 			Console.WriteLine ("Scene constructed. New total instances: " + instances + "  Total undisposed scenes: " + undisposed);
@@ -38,6 +37,16 @@ namespace DSmithGameCs
 			entities.Add (e);
 		}
 
+		public void AddLight(ILight light)
+		{
+			lights.Add (light);
+		}
+
+		public void RemoveLight(ILight light)
+		{
+			lights.Remove (light);
+		}
+
 		public void Update()
 		{
 			for (int i = 0; i < entities.Count; i++) {
@@ -49,7 +58,7 @@ namespace DSmithGameCs
 			}
 		}
 
-		public void Render(Matrix4 VP)
+		public void Render(Matrix4 VP, Vector3 eyePos)
 		{
 			foreach (Entity e in entities)
 				e.PreRender (this, VP);
@@ -65,7 +74,7 @@ namespace DSmithGameCs
 
 			foreach (ILight light in lights)
 			{
-				INormalShader shader = light.GetUseShader();
+				INormalShader shader = light.GetUseShader(eyePos);
 				foreach (Entity e in entities)
 					e.Render (this, VP, shader);
 			}

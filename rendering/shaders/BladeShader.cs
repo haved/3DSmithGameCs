@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class BladeShader : Shader, INormalShader
+	public class BladeShader : Shader, ISimpleShader
 	{
 		public static BladeShader Instance { get; private set; }
 

@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class LiquidShader : Shader, INormalShader
+	public class LiquidShader : Shader, ISimpleShader
 	{
 		public static LiquidShader Instance { get; private set; }
 

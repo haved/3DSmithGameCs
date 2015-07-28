@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BasicShader : Shader, INormalShader
+	public class BasicShader : Shader, INormalShader, ISimpleShader
 	{
 		public static BasicShader Instance { get; private set; }
 
@@ -44,6 +44,16 @@ namespace DSmithGameCs
 		{
 			if (Instance == null)
 				Instance = new BasicShader ();
+		}
+
+		public void SetSpecular (float spec, float power)
+		{
+			//throw new NotImplementedException ();
+		}
+
+		public void NonSpecular ()
+		{
+			//throw new NotImplementedException ();
 		}
 	}
 }

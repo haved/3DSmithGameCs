@@ -7,18 +7,18 @@ namespace DSmithGameCs
 {
 	public class PlayerEntity : Entity
 	{
-		private readonly float walkSpeed = 100f;
-		private readonly float friction = 8f;
-		private Vector2 speed = new Vector2();
+		readonly float walkSpeed = 100f;
+		readonly float friction = 8f;
+		Vector2 speed;
 
 		Mesh mesh;
 		Mesh shadow;
 		Vector4 shadowColor;
-		private float xSize, ySize;
+		float xSize, ySize;
 		public PlayerEntity(float x, float y, Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
 		{
-			this.Pos.X = x;
-			this.Pos.Y = y;
+			Pos.X = x;
+			Pos.Y = y;
 			this.mesh = mesh;
 			this.shadow = shadow;
 			this.shadowColor = shadowColor;

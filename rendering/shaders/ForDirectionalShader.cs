@@ -63,6 +63,16 @@ namespace DSmithGameCs
 			if (Instance == null)
 				Instance = new ForDirectionalShader ();
 		}
+
+		public void SetSpecular (float spec, float power)
+		{
+			//throw new System.NotImplementedException ();
+		}
+
+		public void NonSpecular ()
+		{
+			//throw new System.NotImplementedException ();
+		}
 	}
 }
 

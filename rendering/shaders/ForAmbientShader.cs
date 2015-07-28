@@ -46,6 +46,16 @@ namespace DSmithGameCs
 			if (Instance == null)
 				Instance = new ForAmbientShader ();
 		}
+
+		public void SetSpecular (float spec, float power)
+		{
+			//throw new System.NotImplementedException ();
+		}
+
+		public void NonSpecular ()
+		{
+			//throw new System.NotImplementedException ();
+		}
 	}
 }
 

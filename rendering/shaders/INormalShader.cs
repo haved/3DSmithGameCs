@@ -3,12 +3,10 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public interface INormalShader
+	public interface INormalShader : ISimpleShader
 	{
-		void Bind();
-		void SetModelspaceMatrix(Matrix4 modelspace);
-		void SetMVP(Matrix4 MVP);
-		void SetColor(Vector4 color);
+		void SetSpecular(float spec, float power);
+		void NonSpecular();
 		void ResetColor();
 	}
 }

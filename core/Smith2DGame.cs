@@ -36,6 +36,7 @@ namespace DSmithGameCs
 			BasicShader.MakeInstance ();
 			ForAmbientShader.MakeInstance ();
 			ForDirectionalShader.MakeInstance ();
+			ForPointShader.MakeInstance ();
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
 			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
@@ -94,6 +95,8 @@ namespace DSmithGameCs
 			Console.WriteLine ("MenuScene made");
 			menuScene = new Scene ();
 			menuScene.AddEntity(new MeshEntity(new Mesh("../../res/mesh/menuBG.ply")));
+			menuScene.AddLight(new DirectionalLight(Util.White3, 1f, -Vector3.UnitZ));
+			menuScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
 			return menuScene;
 		}
 
@@ -124,6 +127,11 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/mesh/coalTableSmall.ply"), new Mesh ("../../res/mesh/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
 			smithScene.AddEntity (new MailboxEntity (this, new Mesh ("../../res/mesh/mailboxBox.ply"), new Mesh ("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
+
+			smithScene.AddLight (new DirectionalLight(Util.White3, 1f, -Vector3.UnitZ));
+			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
+			smithScene.AddLight (new PointLight(new Vector3(1, 0, 0), new Vector3(1, -7.5f, 2.2f), 8, 12, 0.1f, 1f, 1.5f));
+
 			return smithScene;
 		}
 
@@ -138,9 +146,10 @@ namespace DSmithGameCs
 
 		public void Render ()
 		{
-			Matrix4 VP = Matrix4.LookAt (CurrentView.GetEyePos (), CurrentView.GetEyeTarget (), CurrentView.GetEyeUp ()) * ProjectionMatrix;
+			Vector3 eyePos = CurrentView.GetEyePos ();
+			Matrix4 VP = Matrix4.LookAt (eyePos, CurrentView.GetEyeTarget (), CurrentView.GetEyeUp ()) * ProjectionMatrix;
 			if (CurrentView.ShouldRenderScene ())
-				CurrentScene.Render (VP);
+				CurrentScene.Render (VP, eyePos);
 			CurrentView.RenderView (VP, CurrentScene);
 			ErrortipHelper.Render ();
 		}

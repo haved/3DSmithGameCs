@@ -4,11 +4,12 @@ in vec4 vertexColor0;
 in vec3 vertexNormal0;
 
 uniform vec3 lightColor;
-uniform vec3 lightDirection;
 uniform float lightIntensity;
+uniform vec3 lightDirection;
 
 out vec4 fragColor;
 
 void main(){
-    fragColor = vec4(vertexColor0.xyz * lightColor * dot(vertexNormal0, lightDirection) * lightIntensity, vertexColor0.w);
+    fragColor = vec4(vertexColor0.xyz * lightColor * lightIntensity * 
+							dot(normalize(vertexNormal0), -lightDirection), vertexColor0.w);
 }

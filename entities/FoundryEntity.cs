@@ -110,7 +110,7 @@ namespace DSmithGameCs
 		{
 			if (game.GameStats.FoundryAlloy.Amount >= 0.01f) {
 				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.Amount) * liquidTransform * Modelspace;
-				INormalShader shader;
+				ISimpleShader shader;
 				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 					shader = LiquidShader.Instance;
 					shader.Bind ();

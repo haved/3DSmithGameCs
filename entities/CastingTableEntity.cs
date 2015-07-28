@@ -152,7 +152,7 @@ namespace DSmithGameCs
 				Matrix4 fallModelspace = fillMatrix*Modelspace;
 				Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
 
-				INormalShader shader;
+				ISimpleShader shader;
 				if (game.GameStats.CastingTemprature > 25) {
 					shader = LiquidShader.Instance;
 					shader.Bind ();

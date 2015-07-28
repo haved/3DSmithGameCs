@@ -10,6 +10,7 @@ uniform vec4 color;
 
 out vec4 vertexColor0;
 out vec3 vertexNormal0;
+out vec3 worldPos0;
 
 void main()
 {
@@ -17,4 +18,5 @@ void main()
 
 	vertexColor0 = vec4(vertexColor, 1) * color;
 	vertexNormal0 = (  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz;
+	worldPos0 = (modelspaceMatrix*vec4(vertexPosition_modelspace,1)).xyz;
 }

@@ -15,13 +15,14 @@ namespace DSmithGameCs
 			LightDirection = direction;
 		}
 
-		public INormalShader GetUseShader()
+		public INormalShader GetUseShader(Vector3 eyePos)
 		{
-			ForDirectionalShader.Instance.Bind ();
-			ForDirectionalShader.Instance.SetLightColor (LightColor);
-			ForDirectionalShader.Instance.SetLightIntensity (LightIntensity);
-			ForDirectionalShader.Instance.SetLightDirection (LightDirection);
-			return ForDirectionalShader.Instance;
+			ForDirectionalShader shader = ForDirectionalShader.Instance;
+			shader.Bind ();
+			shader.SetLightColor (LightColor);
+			shader.SetLightIntensity (LightIntensity);
+			shader.SetLightDirection (LightDirection);
+			return shader;
 		}
 	}
 }
