@@ -10,6 +10,7 @@ namespace DSmithGameCs
 		public static Vector2 X1Y1 = new Vector2(1,1);
 		public static Vector3 X1Y1Z1 = new Vector3(1,1,1);
 		public static Vector4 White = new Vector4(1,1,1,1);
+		public static Vector3 White3 = new Vector3 (1,1,1);
 		public static Vector4 White60 = new Vector4(1,1,1,.6f);
 		public static Vector4 LightRed60 = new Vector4(1,0.4f,0.4f,.6f);
 		public static Vector4 DefaultEmission = new Vector4(0.7f, 0.1f, 0, 0.3f);

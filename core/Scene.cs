@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
@@ -10,13 +11,16 @@ namespace DSmithGameCs
 		static uint undisposed;
 
 		readonly List<Entity> entities;
-		public Vector4 AmbientLight=new Vector4(0.1f,0.1f,0.1f,1f);
+		public Vector4 AmbientLight=new Vector4(0.5f,0.5f,0.5f,1f);
+		List<ILight> lights;
 
 		bool disposed;
 
 		public Scene ()
 		{
 			entities = new List<Entity>();
+			lights = new List<ILight> ();
+			lights.Add (new DirectionalLight(new Vector3(1,1,1), 1f, Vector3.UnitZ));
 			instances++;
 			undisposed++;
 			Console.WriteLine ("Scene constructed. New total instances: " + instances + "  Total undisposed scenes: " + undisposed);
@@ -49,10 +53,27 @@ namespace DSmithGameCs
 		{
 			foreach (Entity e in entities)
 				e.PreRender (this, VP);
+			
 			ForAmbientShader.Instance.Bind ();
 			ForAmbientShader.Instance.SetAmbientLight (AmbientLight);
 			foreach (Entity e in entities)
 				e.Render (this, VP, ForAmbientShader.Instance);
+
+			GL.DepthFunc (DepthFunction.Equal);
+			GL.DepthMask (false);
+			GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
+
+			foreach (ILight light in lights)
+			{
+				INormalShader shader = light.GetUseShader();
+				foreach (Entity e in entities)
+					e.Render (this, VP, shader);
+			}
+
+			GL.DepthFunc (DepthFunction.Lequal);
+			GL.DepthMask (true);
+			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
 			foreach (Entity e in entities)
 				e.PostRender (this, VP);
 		}

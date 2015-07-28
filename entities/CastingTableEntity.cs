@@ -144,8 +144,6 @@ namespace DSmithGameCs
 				shader.SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
 			}
-			if (game.TooltipHelper.GetOwner () == this)
-				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)
@@ -181,6 +179,8 @@ namespace DSmithGameCs
 					fall.Draw ();
 				}
 			}
+			if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}
 
 		#region EntityEventListener implementation

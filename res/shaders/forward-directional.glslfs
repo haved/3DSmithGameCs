@@ -1,0 +1,14 @@
+﻿#version 330 core
+
+in vec4 vertexColor0;
+in vec3 vertexNormal0;
+
+uniform vec3 lightColor;
+uniform vec3 lightDirection;
+uniform float lightIntensity;
+
+out vec4 fragColor;
+
+void main(){
+    fragColor = vec4(vertexColor0.xyz * lightColor * dot(vertexNormal0, lightDirection) * lightIntensity, vertexColor0.w);
+}

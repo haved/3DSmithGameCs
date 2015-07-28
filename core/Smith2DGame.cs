@@ -35,6 +35,7 @@ namespace DSmithGameCs
 			MeshCollection.Load ();
 			BasicShader.MakeInstance ();
 			ForAmbientShader.MakeInstance ();
+			ForDirectionalShader.MakeInstance ();
 			ColorShader.MakeInstance ();
 			TextureShader.MakeInstance ();
 			LiquidShader.MakeInstance (new Texture("../../res/textures/liquid.png"));
