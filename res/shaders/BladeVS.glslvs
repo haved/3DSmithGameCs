@@ -17,10 +17,10 @@ out vec3 vertexNormal0;
 
 void main()
 {
-	vec2 mapData = texture(sharpnessMap, vP.x).xy;
+	vec4 mapData = texture(sharpnessMap, vP.x);
     gl_Position = MVP * vec4(vP.x, vP.y*(1+mapData.y), vP.z*(1-mapData.x),1);
 	
-	vec3 vertCol = vec3(mapData, 0) * color.xyz;
+	vec3 vertCol = vertexColor * color.xyz;
 	if(hotspotMax > vP.x && vP.x > hotspotMin)
 	{
 		vertCol += hotspotEmission;
@@ -32,5 +32,5 @@ void main()
 			vertCol /= vertCol.z;
 	}
 	vertexColor0 = vec4(vertCol, color.w);
-	vertexNormal0 = normalize((  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz);
+	vertexNormal0 = (  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz;
 }

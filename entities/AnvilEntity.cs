@@ -50,7 +50,7 @@ namespace DSmithGameCs
 				game.SetView (parentView);
 				return;
 			}
-			if (Input.MousePressed & Input.OrthoMouseX > 50 & Input.OrthoMouseX < 300 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
+			if (Input.InteractKeyPressed | Input.MousePressed & Input.OrthoMouseX > 50 & Input.OrthoMouseX < 300 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (table);
 				table.OnTableUsed (hotspot, temperature, blade);
 				OnAnvilNotUsed ();

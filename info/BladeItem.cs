@@ -44,6 +44,9 @@ namespace DSmithGameCs
 
 		public BladeItem(){
 			sharpnessMap = GL.GenTexture ();
+			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
+			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 
@@ -94,6 +97,7 @@ namespace DSmithGameCs
 			Type.Mesh.Draw ();
 
 			BasicShader Instance0 = BasicShader.Instance;
+			Instance0.Bind ();
 			for (int i = 0; i < Type.Points.Length; i++) {
 				Matrix4 diamondModelspace = Matrix4.CreateTranslation (Type.Points [i], -0.15f + (float)Math.Sin (Time.CurrentTime () * 4 + Type.Points [i] * Util.PI) * 0.03f, 0) * modelspace;
 				Instance0.SetModelspaceMatrix (diamondModelspace);
@@ -132,15 +136,23 @@ namespace DSmithGameCs
 		}
 
 		const int pixelCount = 16;
+		const int pixelSize = 2;
 		public void UpdateSharpnessMap()
 		{
-			var buffer = new byte[2*pixelCount]; //2 colors, 16 pixels, 1 byte per color
+			var buffer = new byte[pixelSize*pixelCount];
 			for (int i = 0; i < Sharpness.Length; i++) {
-				int pixel = Math.Min (1, Math.Max (0, (int)(Type.Points [i] * pixelCount))) * 2;
+				int pixel = Math.Min ((pixelCount-1)*pixelSize, Math.Max (0, (int)(Type.Points [i] * pixelCount))) * pixelSize;
 				buffer [pixel]   = (byte)(Sharpness [i]*255);
 				buffer [pixel+1] = (byte)(Sharpness [i]*255);
 			}
-			GL.TexImage1D(TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, pixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer); 
+			for (int i = 0; i < pixelCount; i++) {
+				for (int j = 0; j < pixelSize; j++) {
+					Console.Write (buffer [i*pixelSize + j] + ", ");
+				}
+				Console.WriteLine ();
+			}
+			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
+			GL.TexImage1D<byte>(TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, pixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
 		}
 
 		public override void LoadInfoFromFile(Stream reader)

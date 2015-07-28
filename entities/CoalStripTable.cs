@@ -89,7 +89,7 @@ namespace DSmithGameCs
 				game.SetView (parentView);
 				return;
 			}
-			if (Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
+			if (Input.InteractKeyPressed | Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (anvil);
 				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
 				OnTableNotUsed ();
