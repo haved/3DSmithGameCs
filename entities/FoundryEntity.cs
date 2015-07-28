@@ -98,17 +98,16 @@ namespace DSmithGameCs
 				game.TooltipHelper.UnClaim ();
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix(Modelspace);
-			BasicShader.Instance.SetMVP(Modelspace * VP);
-			Draw (s);
+			base.Render (s, VP, shader);
 			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++)
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
-					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * Modelspace, VP);
+					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * Modelspace, VP, shader);
+		}
 
+		public override void PostRender(Scene s, Matrix4 VP)
+		{
 			if (game.GameStats.FoundryAlloy.Amount >= 0.01f) {
 				Matrix4 m = Matrix4.CreateScale (1, 1, game.GameStats.FoundryAlloy.Amount) * liquidTransform * Modelspace;
 				INormalShader shader;

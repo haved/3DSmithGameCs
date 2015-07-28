@@ -29,13 +29,12 @@ namespace DSmithGameCs
 			OrthoRenderEngine.DrawColoredMesh (MeshCollection.Ingot, ItemMatrix, Metal.Color, x+4, y+4, width-8, height-8);
 		}
 
-		public void RenderMesh(Matrix4 location, Matrix4 VP)
+		public void RenderMesh(Matrix4 location, Matrix4 VP, INormalShader shader)
 		{
-			BasicShader.Instance.SetColor (Metal.Color);
-			BasicShader.Instance.SetModelspaceMatrix (location);
-			BasicShader.Instance.SetMVP (location*VP);
+			shader.SetColor (Metal.Color);
+			shader.SetModelspaceMatrix (location);
+			shader.SetMVP (location*VP);
 			MeshCollection.Ingot.Draw();
-			BasicShader.Instance.ResetColor ();
 		}
 
 		public override uint GetSize()

@@ -45,14 +45,24 @@ namespace DSmithGameCs
 				game.TooltipHelper.UnClaim ();
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		Matrix4 newModelspace;
+		Matrix4 newMVP;
+		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			Matrix4 newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix (newModelspace);
-			BasicShader.Instance.SetMVP (newModelspace * VP);
+			newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
+			newMVP = newModelspace * VP;
+		}
+
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
+		{
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix (newModelspace);
+			shader.SetMVP (newMVP);
 			Draw (s);
+		}
+
+		public override void PostRender(Scene s, Matrix4 VP)
+		{
 			if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}

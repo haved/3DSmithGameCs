@@ -32,13 +32,13 @@ namespace DSmithGameCs
 			coalColor.X = coalColor.Y = coalColor.Z = 1 + (float)Math.Sin(flickr)/6;
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		public override void Draw(Scene s)
 		{
-			Matrix4 MVP = Modelspace * VP;
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
-			BasicShader.Instance.SetMVP (MVP);
 			table.Draw ();
+		}
+
+		public override void PostRender(Scene s, Matrix4 VP)
+		{
 			ColorShader.Instance.Bind ();
 			ColorShader.Instance.SetMVP (MVP);
 			ColorShader.Instance.SetColor (coalColor);

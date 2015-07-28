@@ -10,6 +10,7 @@ namespace DSmithGameCs
 		static uint undisposed;
 
 		readonly List<Entity> entities;
+		public Vector4 AmbientLight=new Vector4(0.1f,0.1f,0.1f,1f);
 
 		bool disposed;
 
@@ -47,7 +48,13 @@ namespace DSmithGameCs
 		public void Render(Matrix4 VP)
 		{
 			foreach (Entity e in entities)
-				e.Render (this, VP);
+				e.PreRender (this, VP);
+			ForAmbientShader.Instance.Bind ();
+			ForAmbientShader.Instance.SetAmbientLight (AmbientLight);
+			foreach (Entity e in entities)
+				e.Render (this, VP, ForAmbientShader.Instance);
+			foreach (Entity e in entities)
+				e.PostRender (this, VP);
 		}
 
 		public List<Entity> GetEntities()

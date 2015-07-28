@@ -40,17 +40,21 @@ namespace DSmithGameCs
 			}
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		Matrix4 hatchTransform;
+		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			Matrix4 MVP = Modelspace * VP;
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
-			BasicShader.Instance.SetMVP (MVP);
+			base.PreRender (s, VP);
+			hatchTransform = Matrix4.CreateRotationY (hatchRotation) * hatchTranslation;
+		}
+
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
+		{
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix (Modelspace);
+			shader.SetMVP (MVP);
 			hatchHole.Draw ();
-			Matrix4 hatchTransform = Matrix4.CreateRotationY (hatchRotation) * hatchTranslation;
-			BasicShader.Instance.SetModelspaceMatrix (hatchTransform*Modelspace);
-			BasicShader.Instance.SetMVP (hatchTransform*MVP);
+			shader.SetModelspaceMatrix (hatchTransform*Modelspace);
+			shader.SetMVP (hatchTransform*MVP);
 			hatch.Draw ();
 		}
 

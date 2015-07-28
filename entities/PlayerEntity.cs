@@ -102,22 +102,22 @@ namespace DSmithGameCs
 		{
 			return e.IsInField (Pos.Xy + new Vector2 ((float)Math.Cos (Rot.Z), (float)Math.Sin (Rot.Z)) * 3.5f);
 		}
-
-		Matrix4 VP;
-		public override void Render(Scene s, Matrix4 VP)
+			
+		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			this.VP = VP;
-			Matrix4 MVP = Modelspace * VP;
+			base.PreRender (s, VP);
 			ColorShader.Instance.Bind ();
 			ColorShader.Instance.SetMVP (MVP);
 			ColorShader.Instance.SetColor (shadowColor);
 			GL.Disable (EnableCap.DepthTest);
 			shadow.Draw ();
 			GL.Enable (EnableCap.DepthTest);
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
-			BasicShader.Instance.SetMVP (MVP);
+		}
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
+		{
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix (Modelspace);
+			shader.SetMVP (MVP);
 			mesh.Draw ();
 		}
 

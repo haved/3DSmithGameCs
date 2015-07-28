@@ -36,17 +36,24 @@ namespace DSmithGameCs
 				lidSpeed += Time.Delta ()*2;
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		Matrix4 lidModelMatrix;
+		Matrix4 lidMVP;
+		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			Matrix4 MVP = Modelspace * VP;
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
-			BasicShader.Instance.SetMVP (MVP);
-			box.Draw ();
+			base.PreRender (s, VP);
 			Matrix4 lidMatrix = Matrix4.CreateRotationX (lidRotation) * lidOffset;
-			BasicShader.Instance.SetModelspaceMatrix (lidMatrix*Modelspace);
-			BasicShader.Instance.SetMVP (lidMatrix*MVP);
+			lidModelMatrix = lidMatrix * Modelspace;
+			lidMVP = lidMatrix * MVP;
+		}
+
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
+		{
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix (Modelspace);
+			shader.SetMVP (MVP);
+			box.Draw ();
+			shader.SetModelspaceMatrix (lidModelMatrix);
+			shader.SetMVP (lidMVP);
 			lid.Draw ();
 		}
 

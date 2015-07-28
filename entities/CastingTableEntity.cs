@@ -132,51 +132,55 @@ namespace DSmithGameCs
 				game.TooltipHelper.UnClaim ();
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.SetModelspaceMatrix(Modelspace);
-			BasicShader.Instance.SetMVP(Modelspace * VP);
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix(Modelspace);
+			shader.SetMVP(MVP);
 			Draw (s);
 			if (game.GameStats.CurrentCast != null) {
-				BasicShader.Instance.SetModelspaceMatrix(castModelspace*Modelspace);
-				BasicShader.Instance.SetMVP(castModelspace*Modelspace * VP);
-				BasicShader.Instance.SetColor (game.GameStats.CurrentCast.GetColor());
+				shader.SetModelspaceMatrix(castModelspace*Modelspace);
+				shader.SetMVP(castModelspace*MVP);
+				shader.SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
-				if (game.GameStats.CastFilling > 0) {
-					Matrix4 fallModelspace = fillMatrix*Modelspace;
-					Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
-
-					INormalShader shader;
-					if (game.GameStats.CastingTemprature > 25) {
-						shader = LiquidShader.Instance;
-						shader.Bind ();
-						LiquidShader.Instance.UseTexture ();
-						LiquidShader.Instance.AutoPan ();
-						LiquidShader.Instance.SetEmission (Util.DefaultEmission);
-					} else
-						shader = BasicShader.Instance;
-
-					shader.SetModelspaceMatrix(fillModelspace);
-					shader.SetMVP (fillModelspace*VP);
-					shader.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
-					fill.Draw ();
-					if (game.GameStats.CastFilling < 1) {
-						LiquidShader.Instance.SetModelspaceMatrix(fallModelspace);
-						LiquidShader.Instance.SetMVP (fallModelspace*VP);
-						if (!(shader is LiquidShader)) {
-							LiquidShader.Instance.Bind ();
-							LiquidShader.Instance.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
-							LiquidShader.Instance.UseTexture ();
-							LiquidShader.Instance.AutoPan ();
-							LiquidShader.Instance.SetEmission (Util.DefaultEmission);
-						}
-						fall.Draw ();
-					}
-				}
 			}
 			if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
+		}
+
+		public override void PostRender(Scene s, Matrix4 VP)
+		{
+			if (game.GameStats.CastFilling > 0) {
+				Matrix4 fallModelspace = fillMatrix*Modelspace;
+				Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
+
+				INormalShader shader;
+				if (game.GameStats.CastingTemprature > 25) {
+					shader = LiquidShader.Instance;
+					shader.Bind ();
+					LiquidShader.Instance.UseTexture ();
+					LiquidShader.Instance.AutoPan ();
+					LiquidShader.Instance.SetEmission (Util.DefaultEmission);
+				} else
+					shader = BasicShader.Instance;
+
+				shader.SetModelspaceMatrix(fillModelspace);
+				shader.SetMVP (fillModelspace*VP);
+				shader.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
+				fill.Draw ();
+				if (game.GameStats.CastFilling < 1) {
+					LiquidShader.Instance.SetModelspaceMatrix(fallModelspace);
+					LiquidShader.Instance.SetMVP (fallModelspace*VP);
+					if (!(shader is LiquidShader)) {
+						LiquidShader.Instance.Bind ();
+						LiquidShader.Instance.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
+						LiquidShader.Instance.UseTexture ();
+						LiquidShader.Instance.AutoPan ();
+						LiquidShader.Instance.SetEmission (Util.DefaultEmission);
+					}
+					fall.Draw ();
+				}
+			}
 		}
 
 		#region EntityEventListener implementation

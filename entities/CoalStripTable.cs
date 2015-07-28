@@ -25,13 +25,15 @@ namespace DSmithGameCs
 			Coal.Dispose ();
 		}
 
-		public override void Render(Scene s, Matrix4 VP)
+		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			Matrix4 MVP = Modelspace * VP;
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.SetModelspaceMatrix (Modelspace);
-			BasicShader.Instance.SetMVP (MVP);
+			shader.SetModelspaceMatrix (Modelspace);
+			shader.SetMVP (MVP);
 			Mesh.Draw ();
+		}
+
+		public override void PostRender(Scene s, Matrix4 VP)
+		{
 			ColorShader.Instance.Bind ();
 			ColorShader.Instance.SetMVP (MVP);
 			coalColor.X = coalColor.Y = coalColor.Z = 1.3f + (float)Math.Sin(Time.CurrentTime()*2)/6;

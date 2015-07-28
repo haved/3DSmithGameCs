@@ -23,12 +23,18 @@ namespace DSmithGameCs
 			Modelspace = Matrix4.CreateRotationX (Rot.X) * Matrix4.CreateRotationY (Rot.Y) * Matrix4.CreateRotationZ (Rot.Z) * Matrix4.CreateTranslation (Pos);
 		}
 
-		public virtual void Render(Scene s, Matrix4 VP)
+		protected Matrix4 MVP;
+		public virtual void PreRender(Scene s, Matrix4 VP)
 		{
-			BasicShader.Instance.Bind ();
-			BasicShader.Instance.ResetColor ();
-			BasicShader.Instance.SetModelspaceMatrix(Modelspace);
-			BasicShader.Instance.SetMVP(Modelspace * VP);
+			MVP = Modelspace * VP;
+		}
+		public virtual void PostRender(Scene s, Matrix4 VP){}
+
+		public virtual void Render(Scene s, Matrix4 VP, INormalShader shader)
+		{
+			shader.ResetColor ();
+			shader.SetModelspaceMatrix(Modelspace);
+			shader.SetMVP(MVP);
 			Draw (s);
 		}
 
