@@ -61,6 +61,14 @@ namespace DSmithGameCs
 			GL.BindTexture(TextureTarget.Texture1D, sharpnessMap);
 		}
 
+		public void SetMaps(int sharpnessMap)
+		{
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture1D, 0);
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture1D, sharpnessMap);
+		}
+
 		public static void MakeInstance()
 		{
 			if (Instance == null)

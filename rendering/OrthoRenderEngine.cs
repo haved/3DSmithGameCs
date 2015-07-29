@@ -107,15 +107,21 @@ namespace DSmithGameCs
 			DrawColoredMesh (mesh, Matrix4.Identity, color, x, y, width, height);
 		}
 
-		static readonly Matrix4 modelspace = Matrix4.CreateRotationX(0.1f);
+		public static readonly Matrix4 DefaultModelspace = Matrix4.CreateRotationX(0.1f);
 		public static void DrawColoredMesh(Mesh mesh, Matrix4 matrix, Vector4 color, float x, float y, float width, float height)
 		{
 			BasicShader.Instance.Bind ();
 			BasicShader.Instance.SetMVP (matrix*Matrix4.CreateScale(width/orthoWidth, height/orthoHeight, 0.9f)*
 				Matrix4.CreateTranslation((width+2*x)/orthoWidth-1, (height+2*y)/orthoHeight-1, 0));
-			BasicShader.Instance.SetModelspaceMatrix (modelspace);
+			BasicShader.Instance.SetModelspaceMatrix (DefaultModelspace);
 			BasicShader.Instance.SetColor (color);
 			mesh.Draw ();
+		}
+
+		public static Matrix4 GetMVPForMesh(Matrix4 matrix, float x, float y, float width, float height)
+		{
+			return matrix * Matrix4.CreateScale (width / orthoWidth, height / orthoHeight, 0.9f) *
+			Matrix4.CreateTranslation ((width + 2 * x) / orthoWidth - 1, (height + 2 * y) / orthoHeight - 1, 0);
 		}
 
 		const float barSize = 16;

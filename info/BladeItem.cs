@@ -75,7 +75,13 @@ namespace DSmithGameCs
 		                                               * Matrix4.CreatePerspectiveFieldOfView (0.85f, 1, 0.1f, 4) * Matrix4.CreateScale (1, 0.5f, 1);
 		public override void RenderItem(float x, float y, float width, float height)
 		{
-			OrthoRenderEngine.DrawColoredMesh (Type.Mesh, Type.CenteredScaledMeshMatirx*ItemMatrix, KnownMetal.GetColor(Metal), x+4, y+4, width-8, height-8);
+			BladeShader Instance = BladeShader.Instance;
+			Instance.Bind ();
+			Instance.SetMVP (OrthoRenderEngine.GetMVPForMesh (Type.CenteredScaledMeshMatirx*ItemMatrix, x+4, y+4, width-8, height-8));
+			Instance.SetModelspaceMatrix (OrthoRenderEngine.DefaultModelspace);
+			Instance.SetColor (KnownMetal.GetColor(Metal));
+			Instance.SetMaps (sharpnessMap);
+			Type.Mesh.Draw ();
 		}
 
 		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);
@@ -152,19 +158,16 @@ namespace DSmithGameCs
 		public void UpdateHeatMap(float[] heat)
 		{
 			GL.BindTexture (TextureTarget.Texture1D, heatMap);
-			if (heat != null) {
-				var buffer = new byte[heatPixelSize * heatPixelCount];
-				for (int i = 0; i < heatPixelCount; i++) {
-					float pHeat = 0;
-					for (int j = 0; j < heat.Length; j++) {
-						pHeat += Math.Max (0, heat [j] * (1 - 8 * Math.Abs (Type.Points [j] - (i / (heatPixelCount - 1f)))));
-					}
-					buffer [i * heatPixelSize] = (byte)(KnownMetal.GetRedEmmission (Metal, pHeat) * 25);
-					buffer [i * heatPixelSize + 1] = (byte)(KnownMetal.GetGreenEmmission (Metal, pHeat) * 25);
+			var buffer = new byte[heatPixelSize * heatPixelCount];
+			for (int i = 0; i < heatPixelCount; i++) {
+				float pHeat = 0;
+				for (int j = 0; j < heat.Length; j++) {
+					pHeat += Math.Max (0, heat [j] * (1 - 8 * Math.Abs (Type.Points [j] - (i / (heatPixelCount - 1f)))));
 				}
-				GL.TexImage1D<byte> (TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, heatPixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
-			} else
-				GL.TexImage1D (TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, 0, 0, PixelFormat.Rg, PixelType.UnsignedByte, (IntPtr)0);
+				buffer [i * heatPixelSize] = (byte)(KnownMetal.GetRedEmmission (Metal, pHeat) * 25);
+				buffer [i * heatPixelSize + 1] = (byte)(KnownMetal.GetGreenEmmission (Metal, pHeat) * 25);
+			}
+			GL.TexImage1D<byte> (TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, heatPixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
 		}
 
 		public override void LoadInfoFromFile(Stream reader)
