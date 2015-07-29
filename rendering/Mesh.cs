@@ -123,13 +123,11 @@ namespace DSmithGameCs
 				GL.DeleteBuffer (ibo);
 				disposed = true;
 			}
-			Console.Out.WriteLine ("Deleted vbo:" + vbo);
 		}
 
 		void LoadMeshData (Vertex[] vertices, uint[] indices)
 		{
 			vbo = GL.GenBuffer ();
-			Console.Out.WriteLine ("Assigned vbo:" + vbo);
 			ibo = GL.GenBuffer ();
 			indicesCount = indices.Length;
 

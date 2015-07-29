@@ -41,30 +41,34 @@ namespace DSmithGameCs
 		public float Purity { get; private set; }
 		public float[] Sharpness { get; set;}
 		int sharpnessMap = -1;
+		int heatMap = -1;
 
 		public BladeItem(){
 			sharpnessMap = GL.GenTexture ();
+			heatMap = GL.GenTexture ();
 			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
 			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+			GL.BindTexture (TextureTarget.Texture1D, heatMap);
+			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 
-		public BladeItem (BladeType type, int metal, float purity)
+		public BladeItem (BladeType type, int metal, float purity) : this()
 		{
 			Type = type;
 			Metal = metal;
 			Purity = purity;
 			Sharpness = new float[Type.Points.Length];
-			sharpnessMap = GL.GenTexture ();
-			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 
 		public override void DisposeItem()
 		{
-			if(GraphicsContext.CurrentContext != null)
+			if (GraphicsContext.CurrentContext != null) {
 				GL.DeleteTexture (sharpnessMap);
-			Console.Out.WriteLine("Deleted texture: " + sharpnessMap);
+				GL.DeleteTexture (heatMap);
+			}
 		}
 
 		protected static readonly Matrix4 ItemMatrix = Matrix4.CreateRotationZ (Util.PI / 2 - 0.2f) * Matrix4.CreateRotationX (0.2f) * Matrix4.CreateRotationY (-0.3f) * Matrix4.CreateTranslation (0, 0, -2.8f)
@@ -77,7 +81,7 @@ namespace DSmithGameCs
 		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);
 		static readonly Vector4 sharperDiamondColor = new Vector4 (204/255f, 65/255f, 75/255f, 0.5f);
 		static readonly Vector4 sharpDiamondColor = new Vector4 (diamondColor.Xyz, 1);
-		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, int hotspot, float tempereture)
+		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, float[] heat)
 		{
 			Matrix4 modelspace = Type.MeshScaleMatrix * Matrix4.CreateRotationZ (zRot) * Matrix4.CreateTranslation (x, y, z);
 			BladeShader Instance = BladeShader.Instance;
@@ -85,15 +89,8 @@ namespace DSmithGameCs
 			Instance.SetModelspaceMatrix (modelspace);
 			Instance.SetMVP (modelspace * VP);
 			Instance.SetColor (KnownMetal.GetColor (Metal));
-			Instance.SetSharpnessMap (sharpnessMap);
-			if (hotspot >= 0) {
-				float redEmission = KnownMetal.GetRedEmmission (Metal, tempereture);
-				Instance.SetHotspotEmission (Util.DefaultEmission.Xyz * redEmission);
-				if (redEmission > 0) {
-					Instance.SetHotspotMin (Type.Points [hotspot] - 0.12f);
-					Instance.SetHotspotMax (Type.Points [hotspot] + 0.12f);
-				}
-			}
+			UpdateHeatMap (heat);
+			Instance.SetMaps (sharpnessMap, heatMap);
 			Type.Mesh.Draw ();
 
 			BasicShader Instance0 = BasicShader.Instance;
@@ -135,24 +132,39 @@ namespace DSmithGameCs
 					new [] { null, (int)(Purity * 100 + 0.5f) + "%" });
 		}
 
-		const int pixelCount = 16;
-		const int pixelSize = 2;
+		const int sharpnessPixelCount = 8;
+		const int sharpnessPixelSize = 2;
 		public void UpdateSharpnessMap()
 		{
-			var buffer = new byte[pixelSize*pixelCount];
+			var buffer = new byte[sharpnessPixelSize*sharpnessPixelCount];
 			for (int i = 0; i < Sharpness.Length; i++) {
-				int pixel = Math.Min ((pixelCount-1)*pixelSize, Math.Max (0, (int)(Type.Points [i] * pixelCount))) * pixelSize;
+				int pixel = Math.Min ((sharpnessPixelCount-1)*sharpnessPixelSize, Math.Max (0, (int)(Type.Points [i] * sharpnessPixelCount))) * sharpnessPixelSize;
 				buffer [pixel]   = (byte)(Sharpness [i]*255);
 				buffer [pixel+1] = (byte)(Sharpness [i]*255);
 			}
-			for (int i = 0; i < pixelCount; i++) {
-				for (int j = 0; j < pixelSize; j++) {
-					Console.Write (buffer [i*pixelSize + j] + ", ");
-				}
-				Console.WriteLine ();
-			}
+
 			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
-			GL.TexImage1D<byte>(TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, pixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
+			GL.TexImage1D<byte>(TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, sharpnessPixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
+		}
+
+		const int heatPixelCount = 64;
+		const int heatPixelSize = 2;
+		public void UpdateHeatMap(float[] heat)
+		{
+			GL.BindTexture (TextureTarget.Texture1D, heatMap);
+			if (heat != null) {
+				var buffer = new byte[heatPixelSize * heatPixelCount];
+				for (int i = 0; i < heatPixelCount; i++) {
+					float pHeat = 0;
+					for (int j = 0; j < heat.Length; j++) {
+						pHeat += Math.Max (0, heat [j] * (1 - 8 * Math.Abs (Type.Points [j] - (i / (heatPixelCount - 1f)))));
+					}
+					buffer [i * heatPixelSize] = (byte)(KnownMetal.GetRedEmmission (Metal, pHeat) * 25);
+					buffer [i * heatPixelSize + 1] = (byte)(KnownMetal.GetGreenEmmission (Metal, pHeat) * 25);
+				}
+				GL.TexImage1D<byte> (TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, heatPixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
+			} else
+				GL.TexImage1D (TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, 0, 0, PixelFormat.Rg, PixelType.UnsignedByte, (IntPtr)0);
 		}
 
 		public override void LoadInfoFromFile(Stream reader)

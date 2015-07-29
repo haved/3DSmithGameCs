@@ -203,6 +203,17 @@ namespace DSmithGameCs
 
 		public void Exit()
 		{
+			int buffer = GL.GenBuffer ();
+			int texture = GL.GenTexture ();
+
+			Console.Out.WriteLine ("Biggest GL buffer: " + buffer);
+			Console.Out.WriteLine ("Biggest GL texture: " + texture);
+
+			GL.DeleteBuffer (buffer);
+			GL.DeleteTexture (texture);
+
+			Console.In.Read ();
+
 			closeable.Close ();
 		}
 

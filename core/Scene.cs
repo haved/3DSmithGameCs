@@ -35,6 +35,7 @@ namespace DSmithGameCs
 		public void AddEntity(Entity e)
 		{
 			entities.Add (e);
+			e.OnAddedToScene (this);
 		}
 
 		public void AddLight(ILight light)
@@ -52,6 +53,7 @@ namespace DSmithGameCs
 			for (int i = 0; i < entities.Count; i++) {
 				entities [i].Update (this);
 				if (entities [i].IsDead ()) {
+					entities [i].OnRemovedFromScene (this);
 					entities.RemoveAt (i);
 					i--;
 				}

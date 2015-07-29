@@ -13,6 +13,10 @@ namespace DSmithGameCs
 		public SmithGameWindow (Smith2DGame game) : base(1600, 900, new GraphicsMode(32, 24, 0, 8), "Smith")
 		{
 			this.game = game;
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
 			game.Init ();
 			game.SetCloser (this);
 			GL.Enable (EnableCap.CullFace);

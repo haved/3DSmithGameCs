@@ -24,8 +24,8 @@ namespace DSmithGameCs
 		Transition transition = new Transition();
 		IView parentView;
 		BladeItem blade;
-		int hotspot;
-		float temperature;
+		float[] heat;
+		int diamond;
 		float panAngle;
 		public void OnViewUsed(IView prevView)
 		{
@@ -52,9 +52,14 @@ namespace DSmithGameCs
 			}
 			if (Input.InteractKeyPressed | Input.MousePressed & Input.OrthoMouseX > 50 & Input.OrthoMouseX < 300 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (table);
-				table.OnTableUsed (hotspot, temperature, blade);
+				table.OnTableUsed (heat, blade);
 				OnAnvilNotUsed ();
 				return;
+			}
+
+			for (int i = 0; i < heat.Length; i++) {
+				if(heat[i]>25)
+					heat [i] -= Time.Delta () * (i==diamond? 100 : 200);
 			}
 
 			if (!hammerDown && Input.MousePressed & hammerMove < 0.3f & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth () / 2 - 100 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth () / 2 + 100 &
@@ -70,8 +75,8 @@ namespace DSmithGameCs
 					if (hammerMove >= 1) {
 						hammerDown = false;
 						hammerMove = 1;
-						if (hotspot >= 0) {
-							blade.Sharpness [hotspot] = Math.Min (1, blade.Sharpness [hotspot] + KnownMetal.GetRedEmmission (blade.Metal, temperature) * 0.01f * (1 - blade.Sharpness [hotspot]));
+						if (diamond >= 0) {
+							blade.Sharpness [diamond] = Math.Min (1, blade.Sharpness [diamond] + KnownMetal.GetRedEmmission (blade.Metal, heat[diamond]) * 0.01f * (1 - blade.Sharpness [diamond]));
 							blade.UpdateSharpnessMap ();
 						}
 					}
@@ -87,9 +92,6 @@ namespace DSmithGameCs
 				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
-
-			if(temperature > 25)
-				temperature -= Time.Delta () * 70;
 		}
 
 		public bool ShouldRenderScene ()
@@ -116,7 +118,7 @@ namespace DSmithGameCs
 			*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 62, 1, 0.1f, 100)*Matrix4.CreateTranslation(-0.1f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
-			blade.RenderBlade (VP, Pos.X, Pos.Y- (hotspot<0?-0.6f:blade.Type.Points[hotspot]*blade.Type.MeshScale), height, Util.PI/2, hotspot, temperature);
+			blade.RenderBlade (VP, Pos.X, Pos.Y- (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale), height, Util.PI/2, heat);
 
 			BasicShader.Instance.Bind ();
 			Matrix4 modelspace = Matrix4.CreateTranslation(0, 1, 0) * Matrix4.CreateRotationX(-hammerMove) * Matrix4.CreateTranslation(0, 2.5f+hammerY*hammerMove/4, 0) * Matrix4.CreateRotationX(0.9f-hammerMove) *
@@ -136,12 +138,12 @@ namespace DSmithGameCs
 			this.table = table;
 		}
 
-		public void OnAnvilUsed(IView parentView, BladeItem blade, int hotspot, float temperature)
+		public void OnAnvilUsed(IView parentView, BladeItem blade, float[] heat, int diamond)
 		{
 			this.parentView = parentView;
 			this.blade = blade;
-			this.hotspot = hotspot;
-			this.temperature = temperature;
+			this.heat = heat;
+			this.diamond = diamond;
 		}
 
 		public void OnAnvilNotUsed()

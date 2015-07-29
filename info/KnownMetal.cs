@@ -106,6 +106,11 @@ namespace DSmithGameCs
 		{
 			return Math.Max(0, Math.Min(10, (temperature - (Metals[id].MeltingPoint/2.5f)) / Metals[id].MeltingPoint*10));
 		}
+
+		public static float GetGreenEmmission(int id, float temperature)
+		{
+			return Math.Max(0, Math.Min(10, (temperature - (Metals[id].MeltingPoint/1.5f)) / Metals[id].MeltingPoint*10));
+		}
 	}
 }
 

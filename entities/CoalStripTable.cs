@@ -1,12 +1,12 @@
 ﻿using System;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
 	public class CoalStripTable : InteractiveEntity, IEntityEventListener, IView
 	{
 		readonly Smith2DGame game;
+		readonly PointLight light = new PointLight (new Vector3(1,0,0), Vector3.Zero, 8, 12, 0.1f, 0.3f, 1.2f);
 		AnvilEntity anvil;
 		public readonly Mesh Coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
@@ -23,6 +23,22 @@ namespace DSmithGameCs
 		{
 			base.DisposeEntity ();
 			Coal.Dispose ();
+		}
+
+		public override void OnAddedToScene(Scene s)
+		{
+			s.AddLight (light);
+		}
+
+		public override void OnRemovedFromScene(Scene s)
+		{
+			s.RemoveLight (light);
+		}
+
+		public override void UpdateModelspaceMatrix()
+		{
+			base.UpdateModelspaceMatrix ();
+			light.Position = Pos+new Vector3(0, height, 0);
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
@@ -49,7 +65,7 @@ namespace DSmithGameCs
 				var bladeItem = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;
 				if (bladeItem != null) {
 					game.GameStats.PlayerInventory.Deselect ();
-					OnTableUsed (-1, 25, bladeItem);
+					OnTableUsed (new float[bladeItem.Type.Points.Length], bladeItem);
 					parentView = game.CurrentView;
 					game.SetView (this);
 					return;
@@ -67,13 +83,13 @@ namespace DSmithGameCs
 		IView parentView;
 		BladeItem blade;
 		int diamond;
-		int hotspot;
-		float temperature;
+		float[] heat;
 		float panAngle;
 
 		public void OnViewUsed (IView prevView)
 		{
 			transition.SetStart (prevView);
+			Input.InteractKeyPressed = false;
 		}
 
 		public bool ShouldUpdateScene ()
@@ -91,7 +107,7 @@ namespace DSmithGameCs
 			}
 			if (Input.InteractKeyPressed | Input.MousePressed & Input.OrthoMouseX > OrthoRenderEngine.GetCanvasWidth()-300 & Input.OrthoMouseX < OrthoRenderEngine.GetCanvasWidth()-50 & Input.OrthoMouseY > 50 & Input.OrthoMouseY < 300) {
 				game.SetView (anvil);
-				anvil.OnAnvilUsed (parentView, blade, hotspot, temperature);
+				anvil.OnAnvilUsed (parentView, blade, heat, diamond);
 				OnTableNotUsed ();
 				return;
 			}
@@ -107,12 +123,12 @@ namespace DSmithGameCs
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
 
-			if (hotspot != diamond & temperature > 25)
-				temperature -= Time.Delta () * 200;
-			if (temperature <= 25)
-				hotspot = diamond;
-			if (hotspot == diamond & hotspot >= 0 & temperature < 1927) //Temperature of coal
-				temperature += Time.Delta () * 100;
+			for (int i = 0; i < heat.Length; i++) {
+				if (i != diamond & heat [i] > 25)
+					heat [i] -= Time.Delta () * 200;
+				else if (heat [i] < 1927)
+					heat [i] += Time.Delta () * 100;
+			}
 		}
 
 		public bool ShouldRenderScene ()
@@ -140,7 +156,7 @@ namespace DSmithGameCs
 				*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 60, 1, 0.1f, 100)*Matrix4.CreateTranslation(0.25f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
-			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, hotspot, temperature);
+			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, heat);
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
 			OrthoRenderEngine.DrawColoredMesh (anvil.Mesh, projection, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
 		}
@@ -152,11 +168,9 @@ namespace DSmithGameCs
 			this.anvil = anvil;
 		}
 
-		public void OnTableUsed(int hotspot, float temperature, BladeItem blade)
+		public void OnTableUsed(float[] heat, BladeItem blade)
 		{
-			this.hotspot = hotspot;
-			diamond = hotspot;
-			this.temperature = temperature;
+			this.heat = heat;
 			this.blade = blade;
 		}
 

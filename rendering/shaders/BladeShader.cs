@@ -7,7 +7,7 @@ namespace DSmithGameCs
 	{
 		public static BladeShader Instance { get; private set; }
 
-		int modelspaceID, MVP_id, colorId, hotspotMinId, hotspotMaxId, hotspotEmissionId, sharpnessMapId;
+		int modelspaceID, MVP_id, colorId, sharpnessMapId, heatMapId;
 
 		public BladeShader ()
 		{
@@ -17,12 +17,13 @@ namespace DSmithGameCs
 			modelspaceID = AddUniform("modelspaceMatrix");
 			MVP_id = AddUniform ("MVP");
 			colorId = AddUniform ("color");
-			hotspotMinId = AddUniform ("hotspotMin");
-			hotspotMaxId = AddUniform ("hotspotMax");
-			hotspotEmissionId = AddUniform("hotspotEmission");
 			sharpnessMapId = AddUniform ("sharpnessMap");
+			heatMapId = AddUniform ("heatMap");
 			SetColor (Util.White);
+			Bind ();
 			SetInteger (sharpnessMapId, 0);
+			SetInteger (heatMapId, 1);
+			GL.Enable (EnableCap.Texture1D);
 		}
 
 		public void SetModelspaceMatrix(Matrix4 modelspace)
@@ -45,26 +46,19 @@ namespace DSmithGameCs
 			SetVector4 (colorId, Util.White);
 		}
 
-		public void SetHotspotMin(float f)
-		{
-			SetFloat (hotspotMinId, f);
-		}
-
-		public void SetHotspotMax(float f)
-		{
-			SetFloat (hotspotMaxId, f);
-		}
-
-		public void SetHotspotEmission(Vector3 color)
-		{
-			SetVector3 (hotspotEmissionId, color);
-		}
-
-		public void SetSharpnessMap(int texture)
+		/*public void SetSharpnessMap(int texture)
 		{
 			//GL.ActiveTexture(TextureUnit.Texture0); //This is default
 			//SetInteger (diffuseId, 0); //This is done in the constructor
 			GL.BindTexture(TextureTarget.Texture1D, texture);
+		}*/
+
+		public void SetMaps(int sharpnessMap, int heatMap)
+		{
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture1D, heatMap);
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture1D, sharpnessMap);
 		}
 
 		public static void MakeInstance()

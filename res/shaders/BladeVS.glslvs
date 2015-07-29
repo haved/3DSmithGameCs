@@ -7,30 +7,24 @@ layout(location = 2) in vec3 vertexColor;
 uniform mat4 modelspaceMatrix;
 uniform mat4 MVP;
 uniform vec4 color;
-uniform float hotspotMin;
-uniform float hotspotMax;
-uniform vec3 hotspotEmission;
 uniform sampler1D sharpnessMap;
 
 out vec4 vertexColor0;
 out vec3 vertexNormal0;
 
+out vec3 fragmentPos0;
+
 void main()
 {
 	vec4 mapData = texture(sharpnessMap, vP.x);
-    gl_Position = MVP * vec4(vP.x, vP.y*(1+mapData.y), vP.z*(1-mapData.x),1);
+	vec3 newPos = vP * vec3(1, 1+mapData.y, 1-mapData.x);
+    gl_Position = MVP * vec4(newPos,1);
+	
+	vertexNormal0 = cross(normalize(newPos - vec3(vP.x, 0, vP.z)), vec3(1, 0, 0));
 	
 	vec3 vertCol = vertexColor * color.xyz;
-	if(hotspotMax > vP.x && vP.x > hotspotMin)
-	{
-		vertCol += hotspotEmission;
-		if(vertCol.x>1)
-			vertCol /= vertCol.x;
-		if(vertCol.y>1)
-			vertCol /= vertCol.y;
-		if(vertCol.z>1)
-			vertCol /= vertCol.z;
-	}
+	
 	vertexColor0 = vec4(vertCol, color.w);
 	vertexNormal0 = (  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz;
+	fragmentPos0 = vP;
 }
