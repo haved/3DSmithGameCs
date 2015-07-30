@@ -30,7 +30,7 @@ namespace DSmithGameCs
 			Console.Out.WriteLine ("GameInfo destructed");
 		}
 
-		bool disposed;
+		bool disposed=true;
 		public void Dispose()
 		{
 			if (disposed)
@@ -50,6 +50,7 @@ namespace DSmithGameCs
 
 		public void NewGame()
 		{
+			disposed = false;
 			PlayerInventory = new Inventory ();
 			HatchInv = new HatchInventory ();
 			PlayerInventory.AddItem (new IngotItem(KnownMetal.Iron, 1));
@@ -102,6 +103,7 @@ namespace DSmithGameCs
 
 		public void LoadGame(Stream reader)
 		{
+			disposed = false;
 			Console.WriteLine ("Loading game!");
 			PlayerInventory = new Inventory ();
 			PlayerInventory.LoadFromFile (reader); 									//PlayerInventory
@@ -149,6 +151,18 @@ namespace DSmithGameCs
 				return true;
 			} catch (Exception e) {
 				Console.Error.WriteLine (e);
+				if (!disposed) {
+					disposed = true;
+					GC.SuppressFinalize(this);
+					try
+					{
+						Dispose();
+					}
+					catch(Exception e2)
+					{
+						Console.Error.WriteLine(e2);
+					}
+				}
 				return false;
 			}
 		}

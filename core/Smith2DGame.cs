@@ -13,9 +13,7 @@ namespace DSmithGameCs
 
 		public IView CurrentView;
 
-		GameInfo gameInfo;
-		/** <summary> A Property that calls Dispose to the old value when overridden </summary>*/
-		public GameInfo GameStats { private set { if (gameInfo != null) { gameInfo.Dispose (); } gameInfo = value; } get { return gameInfo; } }
+		public GameInfo GameStats; // { private set { if (gameInfo != null) { gameInfo.Dispose (); } gameInfo = value; } get { return gameInfo; } }
 		public Scene CurrentScene;
 		public PlayerEntity Player;
 
@@ -57,6 +55,8 @@ namespace DSmithGameCs
 		{
 			CurrentView = null;
 			SetView(new SmithingView (this));
+			if (GameStats != null)
+				GameStats.Dispose ();
 			GameStats = new GameInfo ();
 			GameStats.NewGame ();
 
@@ -65,13 +65,14 @@ namespace DSmithGameCs
 
 		public void LoadGame()
 		{
-			if(GameStats!=null)
-				GameStats.Dispose ();
-			GameStats = new GameInfo ();
-			if (!GameStats.LoadGame ()) {
+			GameInfo loadedGame = new GameInfo ();
+			if (!loadedGame.LoadGame ()) {
 				ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.savecorruption"), Input.OrthoMouseX, Input.OrthoMouseY, 2, false);
 				return;
 			}
+			if (GameStats != null)
+				GameStats.Dispose ();
+			GameStats = loadedGame;
 			CurrentView = null;
 			SetView(new SmithingView (this));
 				
@@ -80,7 +81,9 @@ namespace DSmithGameCs
 
 		public void ShowMainMenu()
 		{
-			GameStats = null;//Automaticly disposes
+			if (GameStats != null)
+				GameStats.Dispose ();
+			GameStats = null;
 			smithScene.Dispose ();
 			smithScene = null;
 			CurrentView = null;

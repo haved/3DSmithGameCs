@@ -9,7 +9,7 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.3f, 0.5f, 0.7f, 0.9f});
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.2f, 0.3f, 0.5f, 0.7f, 0.9f, 1});
 
 		public class BladeType
 		{
@@ -138,13 +138,13 @@ namespace DSmithGameCs
 					new [] { null, (int)(Purity * 100 + 0.5f) + "%" });
 		}
 
-		const int sharpnessPixelCount = 8;
+		const int sharpnessPixelCount = 16;
 		const int sharpnessPixelSize = 2;
 		public void UpdateSharpnessMap()
 		{
 			var buffer = new byte[sharpnessPixelSize*sharpnessPixelCount];
 			for (int i = 0; i < Sharpness.Length; i++) {
-				int pixel = Math.Min ((sharpnessPixelCount-1)*sharpnessPixelSize, Math.Max (0, (int)(Type.Points [i] * sharpnessPixelCount))) * sharpnessPixelSize;
+				int pixel = Math.Min (sharpnessPixelCount-1, Math.Max (0, (int)(Type.Points [i] * sharpnessPixelCount))) * sharpnessPixelSize;
 				buffer [pixel]   = (byte)(Sharpness [i]*255);
 				buffer [pixel+1] = (byte)(Sharpness [i]*255);
 			}

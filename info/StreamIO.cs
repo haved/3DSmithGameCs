@@ -18,7 +18,22 @@ namespace DSmithGameCs
 		{
 			int id = reader.ReadByte ();
 			var output = (Item)Activator.CreateInstance(types[id]);
-			output.LoadInfoFromFile (reader);
+			try{
+				output.LoadInfoFromFile (reader);
+			}
+			catch(Exception e) {
+				Console.Error.WriteLine (e);
+				try
+				{
+					output.Dispose();
+				}
+				catch(Exception e2)
+				{
+					Console.Error.WriteLine (e2);
+				}
+
+				throw e;
+			}
 			return output;
 		}
 
