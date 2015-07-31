@@ -16,15 +16,23 @@ out vec3 fragmentPos0;
 
 void main()
 {
-	vec4 mapData = texture(sharpnessMap, vP.x);
-	vec3 newPos = vP * vec3(1, 1+mapData.y, 1-mapData.x);
-    gl_Position = MVP * vec4(newPos,1);
-	
-	vertexNormal0 = cross(normalize(newPos - vec3(vP.x, 0, vP.z)), vec3(1, 0, 0));
+	if(abs(vP.y)>0.01){
+		vec4 mapData = texture(sharpnessMap, vP.x);
+		vec3 newPos = vP * vec3(1, 1+mapData.y, 1-mapData.x);
+		vertexNormal0 = cross(normalize(newPos-vec3(vP.x, 0, vP.z)), vec3(1, 0, 0));
+		if(sign(vP.z)!=sign(vertexNormal0.z))
+			vertexNormal0 = -vertexNormal0;
+		gl_Position = MVP * vec4(newPos,1);
+	}
+	else
+	{
+		gl_Position = MVP * vec4(vP, 1);
+		vertexNormal0 /= 20;
+	}
 	
 	vec3 vertCol = vertexColor * color.xyz;
 	
 	vertexColor0 = vec4(vertCol, color.w);
-	vertexNormal0 = (  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz;
+	vertexNormal0 = (  modelspaceMatrix*vec4(vertexNormal0, 0)  ).xyz;
 	fragmentPos0 = vP;
 }

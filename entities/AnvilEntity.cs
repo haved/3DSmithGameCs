@@ -27,6 +27,7 @@ namespace DSmithGameCs
 		float[] heat;
 		int diamond;
 		float panAngle;
+		float panAngleY;
 		public void OnViewUsed(IView prevView)
 		{
 			transition.SetStart (prevView);
@@ -84,14 +85,19 @@ namespace DSmithGameCs
 			} else if (hammerMove > 0)
 				hammerMove = Math.Max(0, hammerMove-Time.Delta () * 4);
 
-			if (Input.LeftKey) {
-				if (!Input.RightKey)
-					panAngle -= (panAngle + 0.4f) * Time.Delta () * 3;
-			}
+			if (Input.LeftKey)
+				panAngle -= (panAngle + 0.4f) * Time.Delta () * 3;
 			else if (Input.RightKey)
 				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
+
+			if (Input.DownKey)
+				panAngleY -= (panAngleY + 3.14f/2f) * Time.Delta () * 3;
+			else if (Input.UpKey)
+				panAngleY -= (panAngleY - 0.2f) * Time.Delta () * 3;
+			else
+				panAngleY -= panAngleY * Time.Delta () * 3;
 		}
 
 		public bool ShouldRenderScene ()
@@ -101,7 +107,7 @@ namespace DSmithGameCs
 			
 		public Vector3 GetEyePos()
 		{
-			return transition.GetEyePos (Pos+new Vector3((float)Math.Sin(panAngle)*10,0,(float)Math.Cos(panAngle)*10));
+			return transition.GetEyePos (Pos+new Vector3((float)Math.Sin(panAngle)*10,(float)Math.Sin(panAngleY)*10,(float)(Math.Cos(panAngle)*10*Math.Cos(panAngleY))));
 		}
 
 		public Vector3 GetEyeTarget()

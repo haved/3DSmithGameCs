@@ -9,7 +9,7 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.2f, 0.3f, 0.5f, 0.7f, 0.9f, 1});
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.19f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
 
 		public class BladeType
 		{
@@ -47,11 +47,13 @@ namespace DSmithGameCs
 			sharpnessMap = GL.GenTexture ();
 			heatMap = GL.GenTexture ();
 			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
-			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-			GL.BindTexture (TextureTarget.Texture1D, heatMap);
-			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);
+			GL.BindTexture 	(TextureTarget.Texture1D, heatMap);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);
 			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 

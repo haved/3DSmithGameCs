@@ -4,6 +4,7 @@ in vec4 vertexColor0;
 in vec3 vertexNormal0;
 in vec3 fragmentPos0;
 
+uniform sampler1D sharpnessMap;
 uniform sampler1D heatMap;
 
 out vec4 fragColor;
