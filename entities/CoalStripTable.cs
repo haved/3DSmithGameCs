@@ -156,7 +156,7 @@ namespace DSmithGameCs
 				*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 60, 1, 0.1f, 100)*Matrix4.CreateTranslation(0.25f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
-			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, heat);
+			blade.RenderBlade (VP, Pos.X+   (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale)    , Pos.Y, height, Util.PI, heat, GetEyePos());
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
 			OrthoRenderEngine.DrawColoredMesh (anvil.Mesh, projection, Util.White, OrthoRenderEngine.GetCanvasWidth () - 300, 50, 250, 250);
 		}

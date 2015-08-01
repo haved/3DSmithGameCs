@@ -7,7 +7,7 @@ namespace DSmithGameCs
 	{
 		public static BladeShader Instance { get; private set; }
 
-		int modelspaceID, MVP_id, colorId, sharpnessMapId, heatMapId;
+		int modelspaceID, MVP_id, colorId, sharpnessMapId, heatMapId, eyePosId;
 
 		public BladeShader ()
 		{
@@ -19,6 +19,7 @@ namespace DSmithGameCs
 			colorId = AddUniform ("color");
 			sharpnessMapId = AddUniform ("sharpnessMap");
 			heatMapId = AddUniform ("heatMap");
+			eyePosId = AddUniform ("eyePos");
 			SetColor (Util.White);
 			Bind ();
 			SetInteger (sharpnessMapId, 0);
@@ -67,6 +68,11 @@ namespace DSmithGameCs
 			GL.BindTexture(TextureTarget.Texture1D, 0);
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture1D, sharpnessMap);
+		}
+
+		public void SetEyePos(Vector3 pos)
+		{
+			SetVector3 (eyePosId, pos);
 		}
 
 		public static void MakeInstance()

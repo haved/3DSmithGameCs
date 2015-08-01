@@ -93,7 +93,7 @@ namespace DSmithGameCs
 				panAngle -= panAngle * Time.Delta () * 3;
 
 			if (Input.DownKey)
-				panAngleY -= (panAngleY + 3.14f/2f) * Time.Delta () * 3;
+				panAngleY -= (panAngleY + 0.2f) * Time.Delta () * 3;
 			else if (Input.UpKey)
 				panAngleY -= (panAngleY - 0.2f) * Time.Delta () * 3;
 			else
@@ -124,7 +124,7 @@ namespace DSmithGameCs
 			*Matrix4.CreatePerspectiveFieldOfView(Util.PI / 180 * 62, 1, 0.1f, 100)*Matrix4.CreateTranslation(-0.1f, 0.8f, 0);
 		public void RenderView (Matrix4 VP, Scene s)
 		{
-			blade.RenderBlade (VP, Pos.X, Pos.Y- (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale), height, Util.PI/2, heat);
+			blade.RenderBlade (VP, Pos.X, Pos.Y- (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale), height, Util.PI/2, heat, GetEyePos());
 
 			BasicShader.Instance.Bind ();
 			Matrix4 modelspace = Matrix4.CreateTranslation(0, 1, 0) * Matrix4.CreateRotationX(-hammerMove) * Matrix4.CreateTranslation(0, 2.5f+hammerY*hammerMove/4, 0) * Matrix4.CreateRotationX(0.9f-hammerMove) *

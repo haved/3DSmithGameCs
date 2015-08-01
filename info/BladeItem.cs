@@ -89,7 +89,7 @@ namespace DSmithGameCs
 		static readonly Vector4 diamondColor = new Vector4 (80/255f, 200/255f, 120/255f, 0.5f);
 		static readonly Vector4 sharperDiamondColor = new Vector4 (204/255f, 65/255f, 75/255f, 0.5f);
 		static readonly Vector4 sharpDiamondColor = new Vector4 (diamondColor.Xyz, 1);
-		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, float[] heat)
+		public void RenderBlade(Matrix4 VP, float x, float y, float z, float zRot, float[] heat, Vector3 eyePos)
 		{
 			Matrix4 modelspace = Type.MeshScaleMatrix * Matrix4.CreateRotationZ (zRot) * Matrix4.CreateTranslation (x, y, z);
 			BladeShader Instance = BladeShader.Instance;
@@ -99,6 +99,7 @@ namespace DSmithGameCs
 			Instance.SetColor (KnownMetal.GetColor (Metal));
 			UpdateHeatMap (heat);
 			Instance.SetMaps (sharpnessMap, heatMap);
+			Instance.SetEyePos (eyePos);
 			Type.Mesh.Draw ();
 
 			BasicShader Instance0 = BasicShader.Instance;
