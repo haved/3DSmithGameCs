@@ -9,20 +9,20 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.19f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.2f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
 
 		public class BladeType
 		{
 			public readonly int Id;
 			public readonly string Name;
-			public readonly Mesh Mesh;
+			public readonly BladeMesh Mesh;
 			public readonly float MeshScale;
 			public readonly Matrix4 MeshScaleMatrix;
 			public readonly Matrix4 CenteredScaledMeshMatirx;
 			public readonly float Volume;
 			public readonly float[] Points;
 
-			public BladeType(int id, string name, Mesh mesh, float meshScale, float volume, float[] points)
+			public BladeType(int id, string name, BladeMesh mesh, float meshScale, float volume, float[] points)
 			{
 				Id = id;
 				BladeItem.BladeTypes[id] = this;
@@ -142,18 +142,17 @@ namespace DSmithGameCs
 		}
 
 		const int sharpnessPixelCount = 16;
-		const int sharpnessPixelSize = 2;
+		const int sharpnessPixelSize = 1;
 		public void UpdateSharpnessMap()
 		{
 			var buffer = new byte[sharpnessPixelSize*sharpnessPixelCount];
 			for (int i = 0; i < Sharpness.Length; i++) {
 				int pixel = Math.Min (sharpnessPixelCount-1, Math.Max (0, (int)(Type.Points [i] * sharpnessPixelCount))) * sharpnessPixelSize;
 				buffer [pixel]   = (byte)(Sharpness [i]*255);
-				buffer [pixel+1] = (byte)(Sharpness [i]*255);
 			}
 
 			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
-			GL.TexImage1D<byte>(TextureTarget.Texture1D, 0, PixelInternalFormat.Rg8, sharpnessPixelCount, 0, PixelFormat.Rg, PixelType.UnsignedByte, buffer);
+			GL.TexImage1D<byte>(TextureTarget.Texture1D, 0, PixelInternalFormat.R8, sharpnessPixelCount, 0, PixelFormat.Red, PixelType.UnsignedByte, buffer);
 		}
 
 		const int heatPixelCount = 64;

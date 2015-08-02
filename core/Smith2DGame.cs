@@ -133,7 +133,6 @@ namespace DSmithGameCs
 
 			smithScene.AddLight (new DirectionalLight(Util.White3, 1f, -Vector3.UnitZ));
 			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
-			smithScene.AddLight (new PointLight(new Vector3(1, 0, 0), new Vector3(1, -7.5f, 2.2f), 8, 12, 0.1f, 1f, 1.5f));
 
 			return smithScene;
 		}

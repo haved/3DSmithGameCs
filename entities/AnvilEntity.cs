@@ -86,16 +86,16 @@ namespace DSmithGameCs
 				hammerMove = Math.Max(0, hammerMove-Time.Delta () * 4);
 
 			if (Input.LeftKey)
-				panAngle -= (panAngle + 0.4f) * Time.Delta () * 3;
+				panAngle -= (panAngle + 0.6f) * Time.Delta () * 3;
 			else if (Input.RightKey)
-				panAngle -= (panAngle - 0.4f) * Time.Delta () * 3;
+				panAngle -= (panAngle - 0.6f) * Time.Delta () * 3;
 			else
 				panAngle -= panAngle * Time.Delta () * 3;
 
 			if (Input.DownKey)
-				panAngleY -= (panAngleY + 0.2f) * Time.Delta () * 3;
+				panAngleY -= (panAngleY + 0.3f) * Time.Delta () * 3;
 			else if (Input.UpKey)
-				panAngleY -= (panAngleY - 0.2f) * Time.Delta () * 3;
+				panAngleY -= (panAngleY - 0.28f) * Time.Delta () * 3;
 			else
 				panAngleY -= panAngleY * Time.Delta () * 3;
 		}

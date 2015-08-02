@@ -126,7 +126,7 @@ namespace DSmithGameCs
 			selectedItem = -1;
 		}
 
-		bool tooFull = false;
+		bool tooFull;
 
 		const uint iconSize = 64;
 		const uint overscan = 20;
@@ -194,7 +194,9 @@ namespace DSmithGameCs
 			items.Clear ();
 
 			for (int i = 0; i < itemCount; i++) {
-				items.Add(StreamIO.LoadItem(reader));
+				Item item = StreamIO.LoadItem (reader);
+				items.Add(item);
+				freeSpace -= item.GetSize();
 			}
 		}
 	}
