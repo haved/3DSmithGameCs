@@ -136,11 +136,11 @@ namespace DSmithGameCs
 		{
 			shader.ResetColor ();
 			shader.SetModelspaceMatrix(Modelspace);
-			shader.SetMVP(MVP);
+			shader.SetMVP(Modelspace * VP);
 			Draw (s);
 			if (game.GameStats.CurrentCast != null) {
 				shader.SetModelspaceMatrix(castModelspace*Modelspace);
-				shader.SetMVP(castModelspace*MVP);
+				shader.SetMVP(castModelspace * Modelspace * VP);
 				shader.SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
 			}

@@ -58,7 +58,7 @@ namespace DSmithGameCs
 		public override void PostRender(Scene s, Matrix4 VP)
 		{
 			ColorShader.Instance.Bind ();
-			ColorShader.Instance.SetMVP (MVP);
+			ColorShader.Instance.SetMVP (Modelspace * VP);
 			ColorShader.Instance.SetColor (coalColor);
 			coal.Draw ();
 		}

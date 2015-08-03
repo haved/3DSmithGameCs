@@ -44,14 +44,14 @@ namespace DSmithGameCs
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
 			shader.SetModelspaceMatrix (Modelspace);
-			shader.SetMVP (MVP);
+			shader.SetMVP (Modelspace * VP);
 			Mesh.Draw ();
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)
 		{
 			ColorShader.Instance.Bind ();
-			ColorShader.Instance.SetMVP (MVP);
+			ColorShader.Instance.SetMVP (Modelspace * VP);
 			coalColor.X = coalColor.Y = coalColor.Z = 1.3f + (float)Math.Sin(Time.CurrentTime()*2)/6;
 			ColorShader.Instance.SetColor (coalColor);
 			Coal.Draw ();

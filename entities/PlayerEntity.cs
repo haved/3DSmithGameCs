@@ -12,15 +12,13 @@ namespace DSmithGameCs
 		Vector2 speed;
 
 		Mesh mesh;
-		Mesh shadow;
 		Vector4 shadowColor;
 		float xSize, ySize;
-		public PlayerEntity(float x, float y, Mesh mesh, Mesh shadow, Vector4 shadowColor, float xSize, float ySize)
+		public PlayerEntity(float x, float y, Mesh mesh, Vector4 shadowColor, float xSize, float ySize)
 		{
 			Pos.X = x;
 			Pos.Y = y;
 			this.mesh = mesh;
-			this.shadow = shadow;
 			this.shadowColor = shadowColor;
 			this.xSize = xSize/2;
 			this.ySize = ySize/2;
@@ -29,7 +27,6 @@ namespace DSmithGameCs
 		public override void DisposeEntity()
 		{
 			mesh.Dispose ();
-			shadow.Dispose ();
 		}
 
 		public override void Update(Scene s)
@@ -40,7 +37,7 @@ namespace DSmithGameCs
 		}
 
 		Vector2 accel = new Vector2 (0, 0);
-		private void Move(Scene s)
+		void Move(Scene s)
 		{
 			accel.X = 0;
 			accel.Y = 0;
@@ -102,22 +99,9 @@ namespace DSmithGameCs
 		{
 			return e.IsInField (Pos.Xy + new Vector2 ((float)Math.Cos (Rot.Z), (float)Math.Sin (Rot.Z)) * 3.5f);
 		}
-			
-		public override void PreRender(Scene s, Matrix4 VP)
+
+		public override void Draw(Scene s)
 		{
-			base.PreRender (s, VP);
-			ColorShader.Instance.Bind ();
-			ColorShader.Instance.SetMVP (MVP);
-			ColorShader.Instance.SetColor (shadowColor);
-			GL.Disable (EnableCap.DepthTest);
-			shadow.Draw ();
-			GL.Enable (EnableCap.DepthTest);
-		}
-		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
-		{
-			shader.ResetColor ();
-			shader.SetModelspaceMatrix (Modelspace);
-			shader.SetMVP (MVP);
 			mesh.Draw ();
 		}
 

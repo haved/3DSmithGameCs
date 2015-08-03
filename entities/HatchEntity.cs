@@ -51,10 +51,10 @@ namespace DSmithGameCs
 		{
 			shader.ResetColor ();
 			shader.SetModelspaceMatrix (Modelspace);
-			shader.SetMVP (MVP);
+			shader.SetMVP (Modelspace * VP);
 			hatchHole.Draw ();
 			shader.SetModelspaceMatrix (hatchTransform*Modelspace);
-			shader.SetMVP (hatchTransform*MVP);
+			shader.SetMVP (hatchTransform* Modelspace * VP);
 			hatch.Draw ();
 		}
 

@@ -37,23 +37,21 @@ namespace DSmithGameCs
 		}
 
 		Matrix4 lidModelMatrix;
-		Matrix4 lidMVP;
 		public override void PreRender(Scene s, Matrix4 VP)
 		{
 			base.PreRender (s, VP);
 			Matrix4 lidMatrix = Matrix4.CreateRotationX (lidRotation) * lidOffset;
 			lidModelMatrix = lidMatrix * Modelspace;
-			lidMVP = lidMatrix * MVP;
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
 			shader.ResetColor ();
 			shader.SetModelspaceMatrix (Modelspace);
-			shader.SetMVP (MVP);
+			shader.SetMVP (Modelspace * VP);
 			box.Draw ();
 			shader.SetModelspaceMatrix (lidModelMatrix);
-			shader.SetMVP (lidMVP);
+			shader.SetMVP (lidModelMatrix * VP);
 			lid.Draw ();
 		}
 

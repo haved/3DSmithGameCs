@@ -46,18 +46,16 @@ namespace DSmithGameCs
 		}
 
 		Matrix4 newModelspace;
-		Matrix4 newMVP;
 		public override void PreRender(Scene s, Matrix4 VP)
 		{
 			newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
-			newMVP = newModelspace * VP;
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
 			shader.ResetColor ();
 			shader.SetModelspaceMatrix (newModelspace);
-			shader.SetMVP (newMVP);
+			shader.SetMVP (newModelspace*VP);
 			Draw (s);
 		}
 
