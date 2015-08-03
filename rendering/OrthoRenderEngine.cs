@@ -41,7 +41,7 @@ namespace DSmithGameCs
 			flat.Draw ();
 		}
 
-		public static void DrawColoredTextureOnEntireScreen(Vector4 color, Texture texture)
+		public static void DrawColoredTextureOnEntireScreen(Vector4 color, int texture)
 		{
 			TextureShader.Instance.Bind ();
 			TextureShader.Instance.SetMVP (allScreen*orthoMatrix);
@@ -60,19 +60,9 @@ namespace DSmithGameCs
 			flat.Draw ();
 		}
 
-		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height)
-		{
-			DrawColoredTexturedBox (Util.White, texture.GetTextureID(), x, y, width, height);
-		}
-
 		public static void DrawTexturedBox(int texture, float x, float y, float width, float height)
 		{
 			DrawColoredTexturedBox (Util.White, texture, x, y, width, height);
-		}
-
-		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height)
-		{
-			DrawColoredTexturedBox (color, texture.GetTextureID(), x, y, width, height);
 		}
 
 		public static void DrawColoredTexturedBox(Vector4 color, int texture, float x, float y, float width, float height)
@@ -86,12 +76,12 @@ namespace DSmithGameCs
 			flat.Draw ();
 		}
 
-		public static void DrawTexturedBox(Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
+		public static void DrawTexturedBox(int texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
 		{
 			DrawColoredTexturedBox (Util.White, texture, x, y, width, height, texX, texY, texXSize, texYSize);
 		}
 
-		public static void DrawColoredTexturedBox(Vector4 color, Texture texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
+		public static void DrawColoredTexturedBox(Vector4 color, int texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
 		{
 			TextureShader.Instance.Bind ();
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(width, height, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
@@ -125,7 +115,7 @@ namespace DSmithGameCs
 		}
 
 		const float barSize = 16;
-		public static void DrawExtendedColoredTexturedBox(Texture texture, Vector4 color, float x, float y, float width, float height)
+		public static void DrawExtendedColoredTexturedBox(int texture, Vector4 color, float x, float y, float width, float height)
 		{
 			TextureShader.Instance.Bind ();
 			TextureShader.Instance.SetColor (color);

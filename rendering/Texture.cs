@@ -33,6 +33,10 @@ namespace DSmithGameCs
 				GL.DeleteTexture (textureID);
 		}
 
+		public static implicit operator int(Texture t){
+			return t.textureID;
+		}
+
 		public int GetTextureID()
 		{
 			return textureID;

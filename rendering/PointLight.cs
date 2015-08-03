@@ -24,6 +24,8 @@ namespace DSmithGameCs
 			AttenuationExponent = attenExpo;
 		}
 
+		public void Dispose() {}
+
 		public INormalShader GetUseShader(Scene s, Vector3 eyePos)
 		{
 			ForPointShader shader = ForPointShader.Instance;

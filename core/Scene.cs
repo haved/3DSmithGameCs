@@ -12,7 +12,7 @@ namespace DSmithGameCs
 
 		readonly List<Entity> entities;
 		public Vector4 AmbientLight=new Vector4(0.5f,0.5f,0.5f,1f);
-		List<ILight> lights;
+		readonly List<ILight> lights;
 
 		bool disposed;
 
@@ -103,9 +103,10 @@ namespace DSmithGameCs
 		public void Dispose()
 		{
 			if (!disposed) {
-				foreach (Entity e in entities) {
+				foreach (Entity e in entities)
 					e.Dispose ();
-				}
+				foreach (ILight light in lights)
+					light.Dispose ();
 				disposed = true;
 				undisposed--;
 				Console.Out.WriteLine ("Scene disposed. New total undisposed: " + undisposed);
