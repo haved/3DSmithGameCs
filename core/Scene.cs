@@ -76,7 +76,7 @@ namespace DSmithGameCs
 
 			foreach (ILight light in lights)
 			{
-				INormalShader shader = light.GetUseShader(eyePos);
+				INormalShader shader = light.GetUseShader(this, eyePos);
 				foreach (Entity e in entities)
 					e.Render (this, VP, shader);
 			}
@@ -87,6 +87,12 @@ namespace DSmithGameCs
 
 			foreach (Entity e in entities)
 				e.PostRender (this, VP);
+		}
+
+		public void RenderWithShader(Matrix4 VP, INormalShader shader)
+		{
+			foreach (Entity e in entities)
+				e.Render (this, VP, shader);
 		}
 
 		public List<Entity> GetEntities()

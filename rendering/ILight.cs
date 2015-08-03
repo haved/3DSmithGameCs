@@ -4,7 +4,7 @@ namespace DSmithGameCs
 {
 	public interface ILight
 	{
-		INormalShader GetUseShader(Vector3 eyePos);
+		INormalShader GetUseShader(Scene s, Vector3 eyePos);
 	}
 }
 

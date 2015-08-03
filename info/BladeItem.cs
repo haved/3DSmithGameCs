@@ -49,11 +49,13 @@ namespace DSmithGameCs
 			GL.BindTexture  (TextureTarget.Texture1D, sharpnessMap);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 			GL.BindTexture  (TextureTarget.Texture1D, heatMap);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 			Console.Out.WriteLine("Assigned texture: " + sharpnessMap);
 		}
 
