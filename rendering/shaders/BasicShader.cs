@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BasicShader : Shader, INormalShader, ISimpleShader
+	public class BasicShader : Shader, INormalShader
 	{
 		public static BasicShader Instance { get; private set; }
 

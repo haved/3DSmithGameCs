@@ -70,20 +70,21 @@ namespace DSmithGameCs
 			foreach (Entity e in entities)
 				e.Render (this, VP, ForAmbientShader.Instance);
 
-			GL.DepthFunc (DepthFunction.Equal);
-			GL.DepthMask (false);
-			GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
-
 			foreach (ILight light in lights)
 			{
 				INormalShader shader = light.GetUseShader(this, eyePos);
+
+				GL.DepthFunc (DepthFunction.Equal);
+				GL.DepthMask (false);
+				GL.BlendFunc (BlendingFactorSrc.One, BlendingFactorDest.One);
+
 				foreach (Entity e in entities)
 					e.Render (this, VP, shader);
-			}
 
-			GL.DepthFunc (DepthFunction.Lequal);
-			GL.DepthMask (true);
-			GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+				GL.DepthFunc (DepthFunction.Lequal);
+				GL.DepthMask (true);
+				GL.BlendFunc (BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+			}
 
 			foreach (Entity e in entities)
 				e.PostRender (this, VP);
