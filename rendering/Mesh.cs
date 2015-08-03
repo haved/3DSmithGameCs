@@ -137,13 +137,17 @@ namespace DSmithGameCs
 
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
 			GL.BufferData (BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(uint)), indices, BufferUsageHint.StaticDraw);
+
+			GL.EnableVertexAttribArray (0);
+			GL.EnableVertexAttribArray (1);
+			GL.EnableVertexAttribArray (2);
 		}
 
 		public void Draw()
 		{
-			GL.EnableVertexAttribArray( 0 );
-			GL.EnableVertexAttribArray( 1 );
-			GL.EnableVertexAttribArray( 2 );
+			//GL.EnableVertexAttribArray( 0 );
+			//GL.EnableVertexAttribArray( 1 );
+			//GL.EnableVertexAttribArray( 2 );
 
 			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
 
@@ -154,9 +158,9 @@ namespace DSmithGameCs
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
 			GL.DrawElements (PrimitiveType.Triangles, indicesCount, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
-			GL.DisableVertexAttribArray( 0 );
-			GL.DisableVertexAttribArray( 1 );
-			GL.DisableVertexAttribArray( 2 );
+			//GL.DisableVertexAttribArray( 0 );
+			//GL.DisableVertexAttribArray( 1 );
+			//GL.DisableVertexAttribArray( 2 );
 		}
 
 		static void CalcNormals(Vertex[] vertices, uint[] indices)

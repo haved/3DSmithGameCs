@@ -46,11 +46,11 @@ namespace DSmithGameCs
 		public BladeItem(){
 			sharpnessMap = GL.GenTexture ();
 			heatMap = GL.GenTexture ();
-			GL.BindTexture (TextureTarget.Texture1D, sharpnessMap);
+			GL.BindTexture  (TextureTarget.Texture1D, sharpnessMap);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);
-			GL.BindTexture 	(TextureTarget.Texture1D, heatMap);
+			GL.BindTexture  (TextureTarget.Texture1D, heatMap);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 			GL.TexParameter	(TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 			GL.TexParameter (TextureTarget.Texture1D, TextureParameterName.ClampToEdge, 1);

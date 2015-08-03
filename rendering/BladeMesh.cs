@@ -246,15 +246,18 @@ namespace DSmithGameCs
 
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
 			GL.BufferData (BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(uint)), indices, BufferUsageHint.StaticDraw);
+
+			GL.EnableVertexAttribArray( 3 );
+			GL.EnableVertexAttribArray( 4 );
 		}
 
 		public void Draw()
 		{
-			GL.EnableVertexAttribArray( 0 );
-			GL.EnableVertexAttribArray( 1 );
-			GL.EnableVertexAttribArray( 2 );
-			GL.EnableVertexAttribArray( 3 );
-			GL.EnableVertexAttribArray( 4 );
+			//GL.EnableVertexAttribArray( 0 );
+			//GL.EnableVertexAttribArray( 1 );
+			//GL.EnableVertexAttribArray( 2 );
+			//GL.EnableVertexAttribArray( 3 );
+			//GL.EnableVertexAttribArray( 4 );
 
 			GL.BindBuffer (BufferTarget.ArrayBuffer, vbo);
 
@@ -267,11 +270,11 @@ namespace DSmithGameCs
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ibo);
 			GL.DrawElements (PrimitiveType.Triangles, indicesCount, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
-			GL.DisableVertexAttribArray( 0 );
-			GL.DisableVertexAttribArray( 1 );
-			GL.DisableVertexAttribArray( 2 );
-			GL.DisableVertexAttribArray( 3 );
-			GL.DisableVertexAttribArray( 4 );
+			//GL.DisableVertexAttribArray( 0 );
+			//GL.DisableVertexAttribArray( 1 );
+			//GL.DisableVertexAttribArray( 2 );
+			//GL.DisableVertexAttribArray( 3 );
+			//GL.DisableVertexAttribArray( 4 );
 		}
 
 		static void CalcFlatNormals(BladeVertex[] vertices, uint[] indices)
