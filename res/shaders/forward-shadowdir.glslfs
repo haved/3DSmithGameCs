@@ -1,0 +1,29 @@
+﻿#version 330 core
+
+in vec4 vertexColor0;
+in vec3 vertexNormal0;
+
+in vec4 shadowMapPos0;
+
+uniform vec3 lightColor;
+uniform float lightIntensity;
+uniform vec3 lightDirection;
+
+uniform sampler2D shadowMap;
+
+out vec4 fragColor;
+
+float sampleShadowMap(sampler2D shadowMap, vec2 coords, float compare)
+{	
+	return step(compare-0.01, texture2D(shadowMap, coords.xy).r);
+}
+
+void main(){
+	
+	vec3 light = lightColor * lightIntensity * dot(normalize(vertexNormal0), -lightDirection);
+	
+	vec3 shadowPos = (shadowMapPos0.xyz / shadowMapPos0.w) * 0.5 + 0.5;
+	light *= sampleShadowMap(shadowMap, shadowPos.xy, shadowPos.z);
+	
+    fragColor = vec4(vertexColor0.xyz * light, vertexColor0.w);
+}

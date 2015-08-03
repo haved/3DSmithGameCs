@@ -11,8 +11,8 @@ namespace DSmithGameCs
 
 		public ForShadowDirShader ()
 		{
-			AddVertexShaderFromFile ("../../res/shaders/forward-directional.glslvs");
-			AddFragmentShaderFromFile ("../../res/shaders/forward-directional.glslfs");
+			AddVertexShaderFromFile ("../../res/shaders/forward-shadowdir.glslvs");
+			AddFragmentShaderFromFile ("../../res/shaders/forward-shadowdir.glslfs");
 			Compile ();
 			modelspaceId = AddUniform ("modelspaceMatrix");
 			MVP_id = AddUniform ("MVP");

@@ -99,11 +99,12 @@ namespace DSmithGameCs
 			GL.DrawBuffer (DrawBufferMode.Back);
 			GL.Viewport (viewportBounds[0], viewportBounds[1], viewportBounds[2], viewportBounds[3]);
 
-			GL.DepthFunc (DepthFunction.Always);
+			/*GL.DepthFunc (DepthFunction.Always);
 			OrthoRenderEngine.DrawColoredTextureOnEntireScreen (Util.White, shadowMap);
-			GL.DepthFunc (DepthFunction.Never);
+			GL.DepthFunc (DepthFunction.Never);*/
 
 			GL.Enable (EnableCap.DepthTest);
+			GL.Enable (EnableCap.Blend);
 
 			ForShadowDirShader shader = ForShadowDirShader.Instance;
 			shader.Bind ();
