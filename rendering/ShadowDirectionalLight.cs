@@ -93,7 +93,9 @@ namespace DSmithGameCs
 			ShadowGenShader Instance = ShadowGenShader.Instance;
 			Instance.Bind ();
 
+			//GL.Disable (EnableCap.CullFace);
 			s.RenderWithShader (VP, Instance);
+			GL.Enable (EnableCap.CullFace);
 
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 			GL.DrawBuffer (DrawBufferMode.Back);

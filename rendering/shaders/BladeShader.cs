@@ -26,7 +26,7 @@ namespace DSmithGameCs
 			SetInteger (heatMapId, 1);
 			GL.Enable (EnableCap.Texture1D);
 		}
-
+			
 		public void SetModelspaceMatrix(Matrix4 modelspace)
 		{
 			SetMatrix4 (modelspaceID, modelspace);

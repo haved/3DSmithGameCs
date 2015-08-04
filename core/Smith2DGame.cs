@@ -133,7 +133,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
 			smithScene.AddEntity (new MailboxEntity (this, new Mesh ("../../res/mesh/mailboxBox.ply"), new Mesh ("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
 
-			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 1024));
+			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 2048));
 			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
 
 			return smithScene;
