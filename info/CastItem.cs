@@ -83,7 +83,7 @@ namespace DSmithGameCs
 
 		public override void DrawTooltip (TextWriter writer)
 		{
-			DrawStandardTooltip (writer, new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.volume:") }, 
+			writer.DrawStandardTooltip (new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.volume:") }, 
 				new []{ Util.GetColorFromVector (info.Color) }, new []{null, info.Volume + " " + Localization.GetLocalization("ui.item.ingot")});
 		}
 

@@ -60,9 +60,9 @@ namespace DSmithGameCs
 		public override void DrawTooltip (TextWriter writer)
 		{
 			if(Metal.Subtitle==null)
-				DrawStandardTooltip (writer, new []{GetTooltipName(), Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, (int)(purity*100+0.5f)+"%"});
+				writer.DrawStandardTooltip (new []{GetTooltipName(), Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, (int)(purity*100+0.5f)+"%"});
 			else
-				DrawStandardTooltip (writer, new []{GetTooltipName(), null, Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, Metal.Subtitle, (int)(purity*100+0.5f)+"%"});
+				writer.DrawStandardTooltip (new []{GetTooltipName(), null, Localization.GetLocalization("ui.tooltip.purity:")}, new []{Util.GetColorFromVector(Metal.Color)}, new []{null, Metal.Subtitle, (int)(purity*100+0.5f)+"%"});
 		}
 
 		/*public override void DrawTooltip(TextWriter writer)

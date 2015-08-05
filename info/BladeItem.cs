@@ -134,11 +134,11 @@ namespace DSmithGameCs
 		{
 			string subtitle = KnownMetal.Metals [Metal].Subtitle;
 			if (subtitle != null)
-				DrawStandardTooltip (writer, new []{ GetTooltipName (), null, Localization.GetLocalization ("ui.tooltip.purity:") }, 
+				writer.DrawStandardTooltip (new []{ GetTooltipName (), null, Localization.GetLocalization ("ui.tooltip.purity:") }, 
 					new [] { Util.GetColorFromVector (GetTooltipColor ()) },
 					new [] { null, subtitle, (int)(Purity * 100 + 0.5f) + "%" });
 			else
-				DrawStandardTooltip (writer, new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.purity:") }, 
+				writer.DrawStandardTooltip (new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.purity:") }, 
 					new [] { Util.GetColorFromVector (GetTooltipColor ()) },
 					new [] { null, (int)(Purity * 100 + 0.5f) + "%" });
 		}

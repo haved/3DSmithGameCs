@@ -113,13 +113,13 @@ namespace DSmithGameCs
 				ISimpleShader shader;
 				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 					shader = LiquidShader.Instance;
-					shader.Bind ();
 					LiquidShader.Instance.UseTexture ();
 					LiquidShader.Instance.AutoPan ();
 					LiquidShader.Instance.SetEmission (Util.DefaultEmission);
 				} else
 					shader = BasicShader.Instance;
 
+				shader.Bind ();
 				shader.SetModelspaceMatrix (m);
 				shader.SetMVP (m * VP);
 				shader.SetColor (game.GameStats.FoundryAlloy.GetColor ());
@@ -137,7 +137,7 @@ namespace DSmithGameCs
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var ingotItem = game.GameStats.PlayerInventory.GetSelectedItem () as IngotItem;
 				if(ingotItem != null)
-				if (game.GameStats.FoundryIngots.Count+game.GameStats.FoundryAlloy.Amount + 1 <= game.GameStats.FoundryIngots.Capacity) {
+				if (game.GameStats.FoundryIngots.Count+game.GameStats.FoundryAlloy.Amount + ingotItem.GetSize() <= game.GameStats.FoundryIngots.Capacity+0.01f) {
 					game.GameStats.FoundryIngots.Add(ingotItem);
 					game.GameStats.PlayerInventory.RemoveItem (game.GameStats.PlayerInventory.GetSelectedItemIndex ());
 				}

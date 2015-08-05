@@ -33,13 +33,9 @@ namespace DSmithGameCs
 				bellowSpeed += Time.Delta () * 4;
 
 			if (game.Player.IsLookingAt (this)) {
-				if (game.TooltipHelper.ClaimIfPossible (this)) {
-					game.TooltipHelper.Writer.Resize (200, 30);
+				if (game.TooltipHelper.ClaimIfPossible (this) || (game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)game.GameStats.AirQuality))) {
+					game.TooltipHelper.Writer.DrawStandardTooltip (new []{ Localization.GetLocalization( "ui.tooltip.oxygen:" ) }, new []{ Color.Aqua }, new []{prevAirQuality + "%" });
 					prevAirQuality = -1;
-				}
-				if (game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)game.GameStats.AirQuality)) {
-					game.TooltipHelper.Writer.Clear ();
-					game.TooltipHelper.Writer.DrawString (Localization.GetLocalization("ui.tooltip.oxygen:") + prevAirQuality + "%", 0, 0, Color.Aqua);
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.UnClaim ();

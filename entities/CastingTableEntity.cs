@@ -179,6 +179,7 @@ namespace DSmithGameCs
 					fall.Draw ();
 				}
 			}
+
 			if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}

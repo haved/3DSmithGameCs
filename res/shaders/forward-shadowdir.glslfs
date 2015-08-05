@@ -13,9 +13,11 @@ uniform sampler2D shadowMap;
 
 out vec4 fragColor;
 
+const float bias = 0.01;
+
 float sampleShadowMap(sampler2D shadowMap, vec2 coords, float compare)
 {	
-	return step(compare-0.01, texture2D(shadowMap, coords.xy).r);
+	return step(compare, texture2D(shadowMap, coords.xy).r + bias);
 }
 
 void main(){

@@ -53,8 +53,8 @@ namespace DSmithGameCs
 
 			impurity += (1-purity) * amount;
 
-			if (m.MeltingPoint > highestMeltingPoint)
-				highestMeltingPoint = m.MeltingPoint;
+			if (m.MeltingPoint-15 > highestMeltingPoint)
+				highestMeltingPoint = m.MeltingPoint-15;
 
 			for (int i = 0; i < metals.Count; i++) {
 				if (metals [i].Metal == metal) {

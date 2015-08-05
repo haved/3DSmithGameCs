@@ -34,6 +34,37 @@ namespace DSmithGameCs
 			bitmap.Dispose ();
 		}
 
+		public void DrawStandardTooltip(string[] lines, Color[] colors, string[] values)
+		{
+			int lineCount = Math.Max (lines.Length, values.Length);
+
+			var widths = new float[lineCount, 2];
+			float width = 0;
+			float height = GetLineHeight () * lineCount;
+
+			for (int i = 0; i < lineCount; i++) {
+				if (i < lines.Length && lines[i]!=null)
+					widths [i,0] = GetLineWidth (lines[i]);
+				if (i < values.Length && values [i] != null)
+					widths [i,1] = GetLineWidth (values [i]);
+				if (widths [i,0] + widths [i,1] > width)
+					width = widths [i,0] + widths [i,1];
+			}
+
+			Clear ();
+			Resize ((int)width, (int)height);
+
+			Color current = Color.Black;
+			for (int i = 0; i < lineCount; i++) {
+				if (i < colors.Length && colors [i] != default(Color))
+					current = colors [i];
+				if (widths [i,0] > 0)
+					DrawString (lines [i], 0, i * GetLineHeight (), current);
+				if (widths[i,1]>0)
+					DrawString (values [i], width-widths[i,1], i * GetLineHeight (), Color.White);
+			}
+		}
+
 		public void Resize(int width, int height)
 		{
 			bitmap.Dispose ();
@@ -73,7 +104,7 @@ namespace DSmithGameCs
 		public int GetTextureID()
 		{
 			if (textureChanged) {
-				Console.Out.WriteLine ("Texture changed!");
+				//Console.Out.WriteLine ("Texture changed!");
 				BitmapData data = bitmap.LockBits (new Rectangle (0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				GL.BindTexture (TextureTarget.Texture2D, textureID);
 				GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0,
