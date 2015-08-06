@@ -7,12 +7,12 @@ namespace DSmithGameCs
 		static float orthoWidth, orthoHeight;
 
 		static Matrix4 orthoMatrix;
-		static Mesh flat;
+		public static Mesh Flat;
 		static Matrix4 allScreen;
 
 		public static void Init()
 		{
-			flat = new Mesh(new Vertex[]{new Vertex(0, 0, 0, 0, 1, 0, 1, 1, 1), new Vertex(1, 0, 0, 1, 1, 0, 1, 1, 1), new Vertex(1, 1, 0, 1, 0, 0, 1, 1, 1), new Vertex(0, 1, 0, 0, 0, 0, 1, 1, 1)}, new uint[]{0,1,2, 0,2,3}, false);
+			Flat = new Mesh(new Vertex[]{new Vertex(0, 0, 0, 0, 1, 0, 1, 1, 1), new Vertex(1, 0, 0, 1, 1, 0, 1, 1, 1), new Vertex(1, 1, 0, 1, 0, 0, 1, 1, 1), new Vertex(0, 1, 0, 0, 0, 0, 1, 1, 1)}, new uint[]{0,1,2, 0,2,3}, false);
 		}
 
 		public static void OnResize(int width, int height)
@@ -38,7 +38,7 @@ namespace DSmithGameCs
 			ColorShader.Instance.Bind ();
 			ColorShader.Instance.SetMVP (allScreen*orthoMatrix);
 			ColorShader.Instance.SetColor (color);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 
 		public static void DrawColoredTextureOnEntireScreen(Vector4 color, int texture)
@@ -49,7 +49,7 @@ namespace DSmithGameCs
 			TextureShader.Instance.SetTexture (texture);
 			TextureShader.Instance.SetSampleUV (Vector2.Zero);
 			TextureShader.Instance.SetSampleSize (Util.X1Y1);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 
 		public static void DrawColoredBox(Vector4 color, float x, float y, float width, float height)
@@ -57,7 +57,7 @@ namespace DSmithGameCs
 			ColorShader.Instance.Bind ();
 			ColorShader.Instance.SetMVP (Matrix4.CreateScale(width, height, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
 			ColorShader.Instance.SetColor (color);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 
 		public static void DrawTexturedBox(int texture, float x, float y, float width, float height)
@@ -73,7 +73,7 @@ namespace DSmithGameCs
 			TextureShader.Instance.SetTexture (texture);
 			TextureShader.Instance.SetSampleUV (Vector2.Zero);
 			TextureShader.Instance.SetSampleSize (Util.X1Y1);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 
 		public static void DrawTexturedBox(int texture, float x, float y, float width, float height, float texX, float texY, float texXSize, float texYSize)
@@ -89,7 +89,7 @@ namespace DSmithGameCs
 			TextureShader.Instance.SetTexture (texture);
 			TextureShader.Instance.SetSampleUV (texX, texY);
 			TextureShader.Instance.SetSampleSize (texXSize, texYSize);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 
 		public static void DrawColoredMesh(Mesh mesh, Vector4 color, float x, float y, float width, float height)
@@ -124,55 +124,55 @@ namespace DSmithGameCs
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(width-barSize*2, height-barSize*2, 1)*Matrix4.CreateTranslation(x+barSize, y+barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (1/3f, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, 1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//LeftSide
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, height-barSize*2, 1)*Matrix4.CreateTranslation(x, y+barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (0, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, 1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//RightSide
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, height-barSize*2, 1)*Matrix4.CreateTranslation(x+width-barSize, y+barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (2/3f, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, 1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//Bottom
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(width-barSize*2, barSize, 1)*Matrix4.CreateTranslation(x+barSize, y, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (1/3f, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//Top
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(width-barSize*2, barSize, 1)*Matrix4.CreateTranslation(x+barSize, y+height-barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (1/3f, 1);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//BottomLeftCorner
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, barSize, 1)*Matrix4.CreateTranslation(x, y, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (0, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//BottomRightCorner
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, barSize, 1)*Matrix4.CreateTranslation(x+width-barSize, y, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (2/3f, 1/3f);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//TopLeftCorner
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, barSize, 1)*Matrix4.CreateTranslation(x, y+height-barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (0, 1);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 
 			//TopRightCorner
 			TextureShader.Instance.SetMVP (Matrix4.CreateScale(barSize, barSize, 1)*Matrix4.CreateTranslation(x+width-barSize, y+height-barSize, 0)*orthoMatrix);
 			TextureShader.Instance.SetSampleUV (2/3f, 1);
 			TextureShader.Instance.SetSampleSize (1/3f, -1/3f);
-			flat.Draw ();
+			Flat.Draw ();
 		}
 	}
 }

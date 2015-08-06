@@ -1,13 +1,14 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
 
 namespace DSmithGameCs
 {
-	public class Texture
+	public class Texture : IDisposable
 	{
-		int textureID;
+		readonly int textureID;
 
 		public Texture (string path)
 		{
@@ -29,6 +30,15 @@ namespace DSmithGameCs
 
 		~Texture()
 		{
+			Dispose ();
+		}
+
+		bool disposed;
+		public void Dispose()
+		{
+			if (disposed)
+				return;
+			disposed = true;
 			if (GraphicsContext.CurrentContext != null)
 				GL.DeleteTexture (textureID);
 		}

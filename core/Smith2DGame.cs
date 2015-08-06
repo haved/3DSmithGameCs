@@ -132,6 +132,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/mesh/coalTableSmall.ply"), new Mesh ("../../res/mesh/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
 			smithScene.AddEntity (new MailboxEntity (this, new Mesh ("../../res/mesh/mailboxBox.ply"), new Mesh ("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
+			smithScene.AddEntity (new FloorEntity(new Texture("../../res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 
 			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 2048));
 			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
