@@ -36,6 +36,8 @@ namespace DSmithGameCs
 				Interact (s);
 		}
 
+		const float PI = (float) Math.PI;
+		const float TAU = 2 * PI;
 		Vector2 accel = new Vector2 (0, 0);
 		void Move(Scene s)
 		{
@@ -70,8 +72,19 @@ namespace DSmithGameCs
 				speed.X = 0;
 				speed.Y = 0;
 			}
+				
+			float wantedRot = (float)Math.Atan2 (Input.RelativeMouseY, -Input.RelativeMouseX) + PI;
 
-			Rot.Z = (float)Math.Atan2 (-Input.RelativeMouseY,Input.RelativeMouseX);
+			/*if (Math.Abs(Rot.Z - wantedRot) > Math.Abs(TAU - wantedRot - Rot.Z))
+				wantedRot = TAU - wantedRot;
+
+			Rot.Z -= (Rot.Z-wantedRot)*10*Time.Delta();*
+
+			//Rot.Z += Time.Delta (); */
+
+			Rot.Z = wantedRot;
+
+			Rot.Z = (Rot.Z + TAU) % TAU;
 
 			UpdateModelspaceMatrix ();
 		}
