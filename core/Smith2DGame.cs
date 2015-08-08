@@ -111,17 +111,20 @@ namespace DSmithGameCs
 				return smithScene;
 			Console.Out.WriteLine ("SmithScene made");
 			smithScene = new Scene ();
+
 			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/meshes/house/floor.ply")));
 			smithScene.AddEntity (new HatchEntity (this, new Mesh ("../../res/mesh/hatchHole.ply"), new Mesh ("../../res/mesh/hatch.ply"), new Vector3 (-2.85f, 0, 0), 0, 1, 0, 4, 4));
 			Player = new PlayerEntity (4, 0, new Mesh ("../../res/mesh/player.ply"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
 			smithScene.AddEntity (Player);
-			//Mesh wallMesh = new Mesh ("../../res/mesh/wall.ply");
-			//smithScene.AddEntity (new MeshEntity (wallMesh, 0, 10, 0, -0.2f, 0, 0, 30, 1));
-			//smithScene.AddEntity (new MeshEntity (wallMesh, 0, -10, 0, -0.2f, 0, PI, 30, 1));
-			//smithScene.AddEntity (new MeshEntity (wallMesh, 15, 0, 0, -0.2f, 0, -PI / 2, 1, 20));
-			//smithScene.AddEntity (new MeshEntity (wallMesh, -15, 0, 0, -0.2f, 0, PI / 2, 1, 20));
-			AnvilEntity anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 8.7f, 0, 8, 3, 3f);
-			CoalStripTable table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 3.5f);
+
+			var longWallMesh = new Mesh ("../../res/meshes/house/longWall.ply");
+			smithScene.AddEntity (new MeshEntity (longWallMesh, -16f, 0, 0, -0.2f, 0, PI / 2, 1, 24)); //Left
+			smithScene.AddEntity (new MeshEntity (longWallMesh, 0, 12f, 0, -0.2f, 0, 0, 32, 1)); //Top
+			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/meshes/house/shortWall12.ply"), 20, 0, 0, 0, 0, 0, 8, 24));
+			smithScene.AddEntity (new MeshEntity (new Mesh("../../res/meshes/house/extraLongWall.ply"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 1)); //Bottom
+
+			var anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 8.7f, 0, 8, 3, 3f);
+			var table = new CoalStripTable(this, new Mesh("../../res/mesh/coalStripTable.ply"),new Mesh("../../res/mesh/coalStrip.ply"), -12, 6.5f, 0, 3, 6, 3.5f);
 			anvil.SetCoalStripTable(table);
 			table.SetAnvil(anvil);
 			smithScene.AddEntity(anvil);
