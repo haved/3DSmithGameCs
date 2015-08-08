@@ -112,7 +112,7 @@ namespace DSmithGameCs
 			Console.Out.WriteLine ("SmithScene made");
 			smithScene = new Scene ();
 			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/meshes/house/floor.ply")));
-			smithScene.AddEntity (new HatchEntity (this, new Mesh ("../../res/mesh/hatchHole.ply"), new Mesh ("../../res/mesh/hatch.ply"), new Vector3 (-2.85f, 0, 0), -1, 0, 0, 4, 4));
+			smithScene.AddEntity (new HatchEntity (this, new Mesh ("../../res/mesh/hatchHole.ply"), new Mesh ("../../res/mesh/hatch.ply"), new Vector3 (-2.85f, 0, 0), 0, 1, 0, 4, 4));
 			Player = new PlayerEntity (4, 0, new Mesh ("../../res/mesh/player.ply"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
 			smithScene.AddEntity (Player);
 			//Mesh wallMesh = new Mesh ("../../res/mesh/wall.ply");

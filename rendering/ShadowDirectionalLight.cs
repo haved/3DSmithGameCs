@@ -40,8 +40,8 @@ namespace DSmithGameCs
 			shadowMap.Dispose();
 		}
 
-		static readonly Vector3 stdPos=new Vector3(0, 0, 20);
-		static readonly Matrix4 orthoMatrix = Matrix4.CreateOrthographic(30, 30, 0.1f, 22);
+		static readonly Vector3 stdPos=new Vector3(20-16.5f, 0, 20);
+		static readonly Matrix4 orthoMatrix = Matrix4.CreateOrthographic(40, 23, 0.1f, 22);
 		public INormalShader GetUseShader(Scene s, Vector3 eyePos)
 		{
 			VP = Matrix4.LookAt (stdPos, stdPos+LightDirection, Vector3.UnitY) * orthoMatrix;
