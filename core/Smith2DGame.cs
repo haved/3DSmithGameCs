@@ -120,7 +120,7 @@ namespace DSmithGameCs
 			var longWallMesh = new Mesh ("../../res/meshes/house/longWall.ply");
 			smithScene.AddEntity (new MeshEntity (longWallMesh, -16f, 0, 0, -0.2f, 0, PI / 2, 1, 24)); //Left
 			smithScene.AddEntity (new MeshEntity (longWallMesh, 0, 12f, 0, -0.2f, 0, 0, 32, 1)); //Top
-			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/meshes/house/shortWall12.ply"), 20, 0, 0, 0, 0, 0, 8, 24));
+			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/meshes/house/shortWall12.ply"), 20, 0, 0, 0, 0, 0, 0, 0));
 			smithScene.AddEntity (new MeshEntity (new Mesh("../../res/meshes/house/extraLongWall.ply"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 1)); //Bottom
 
 			var anvil = new AnvilEntity (this, new Mesh ("../../res/mesh/anvil.ply"), -15 + 9, 8.7f, 0, 8, 3, 3f);

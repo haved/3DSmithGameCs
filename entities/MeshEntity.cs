@@ -13,9 +13,12 @@ namespace DSmithGameCs
 
 		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ, float xSize, float ySize) : this(m, x, y, z, rotX, rotY, rotZ)
 		{
-			XSize = xSize / 2;
-			YSize = ySize / 2;
-			Solid = true;
+			if (xSize > 0 & ySize > 0) {
+				XSize = xSize / 2;
+				YSize = ySize / 2;
+				Solid = true;
+			} else
+				Solid = false;
 		}
 
 		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ)

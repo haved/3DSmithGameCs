@@ -2,8 +2,10 @@
 *.swp
 *.csproj
 *.dll
-*.exe
-bin/
+*.blend1
+*.blend2
+*.pdb
+*.xml
 obj/
 Properties/
 optimizing/
