@@ -4,21 +4,28 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BellowEntity : MeshEntity, IInteractiveEntity
+	public class BigBellowEntity : ColliderEntity, IInteractiveEntity
 	{
+		readonly Smith2DGame game;
+		readonly Mesh bellow;
+		readonly Matrix4 bellowTransform;
+
+		public BigBellowEntity (Smith2DGame game, Mesh bellow, Matrix4 bellowTransform, float x, float y, float z, float xSize, float ySize) : base(x, y, z, xSize, ySize)
+		{
+			this.game = game;
+			this.bellow = bellow;
+			this.bellowTransform = bellowTransform;
+		}
+
+		public override void DisposeEntity()
+		{
+			bellow.Dispose ();
+		}
+
 		const float maxBellowSize = 1;
 		const float minBellowSize = 0.4f;
 		float bellowSize = maxBellowSize;
 		float bellowSpeed = 0;
-
-		readonly Smith2DGame game;
-		readonly Matrix4 tip;
-
-		public BellowEntity (Smith2DGame game, Mesh m, Matrix4 tip, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, xSize, ySize)
-		{
-			this.game = game;
-			this.tip = tip;
-		}
 
 		int prevAirQuality;
 		public override void Update(Scene s)
@@ -40,18 +47,18 @@ namespace DSmithGameCs
 				game.TooltipHelper.UnClaim ();
 		}
 
-		Matrix4 newModelspace;
+		Matrix4 bellowModelspace;
 		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
+			bellowModelspace = Matrix4.CreateScale (1, 1, bellowSize) * bellowTransform * Modelspace;
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
 			shader.ResetColor ();
-			shader.SetModelspaceMatrix (newModelspace);
-			shader.SetMVP (newModelspace*VP);
-			Draw (s);
+			shader.SetModelspaceMatrix (bellowModelspace);
+			shader.SetMVP (bellowModelspace*VP);
+			bellow.Draw ();
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)

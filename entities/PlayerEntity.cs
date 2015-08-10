@@ -97,18 +97,18 @@ namespace DSmithGameCs
 		void Interact(Scene s)
 		{
 			foreach (Entity e in s.GetEntities()) {
-				var interactiveEntity = e as InteractiveEntity;
+				var interactiveEntity = e as IInteractiveEntity;
 				if(interactiveEntity != null)
 				{
 					if (IsLookingAt (interactiveEntity)) {
-						interactiveEntity.Interact (this);
+						interactiveEntity.InteractionPerformed (this);
 						break;
 					}
 				}
 			}
 		}
 
-		public bool IsLookingAt(InteractiveEntity e)
+		public bool IsLookingAt(IInteractiveEntity e)
 		{
 			return e.IsInField (Pos.Xy + new Vector2 ((float)Math.Cos (Rot.Z), (float)Math.Sin (Rot.Z)) * 3.5f);
 		}

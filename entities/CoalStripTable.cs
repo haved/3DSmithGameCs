@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class CoalStripTable : InteractiveEntity, IEntityEventListener, IView
+	public class CoalStripTable : MeshEntity, IInteractiveEntity, IView
 	{
 		readonly Smith2DGame game;
 		readonly PointLight light = new PointLight (new Vector3(1,0,0), Vector3.Zero, 8, 12, 0.1f, 0.3f, 1.2f);
@@ -15,7 +15,6 @@ namespace DSmithGameCs
 		{
 			this.game = game;
 			Coal = coal;
-			EventHandler = this;
 			this.height = height;
 		}
 
@@ -59,7 +58,7 @@ namespace DSmithGameCs
 
 		#region IEntityEventListener implementation
 
-		public void InteractionPerformed (InteractiveEntity entity, object source)
+		public void InteractionPerformed (object source)
 		{
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var bladeItem = game.GameStats.PlayerInventory.GetSelectedItem () as BladeItem;

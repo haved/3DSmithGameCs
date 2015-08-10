@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace DSmithGameCs
 {
-	public class HatchEntity : InteractiveEntity, IEntityEventListener, IView
+	public class HatchEntity : MeshEntity, IInteractiveEntity, IView
 	{
 		private readonly Smith2DGame game;
 		readonly Mesh hatchHole;
@@ -12,14 +12,13 @@ namespace DSmithGameCs
 		readonly Matrix4 hatchTranslation;
 		float hatchRotation = 0;
 		float hatchSpeed = 0;
-		public HatchEntity (Smith2DGame game, Mesh hatchHole, Mesh hatch, Vector3 hatchTranslation, float x, float y, float z, float xSize, float ySize) : base(null, hatchHole, x, y, z, xSize, ySize)
+		public HatchEntity (Smith2DGame game, Mesh hatchHole, Mesh hatch, Vector3 hatchTranslation, float x, float y, float z, float xSize, float ySize) : base(hatchHole, x, y, z, xSize, ySize)
 		{
 			this.game = game;
 			this.hatchHole = hatchHole;
 			this.hatch = hatch;
 			this.hatchTranslation = Matrix4.CreateTranslation(hatchTranslation);
 			Solid = false;
-			EventHandler = this;
 		}
 
 		public override void DisposeEntity()
@@ -58,7 +57,7 @@ namespace DSmithGameCs
 			hatch.Draw ();
 		}
 
-		public void InteractionPerformed(InteractiveEntity entity, object source)
+		public void InteractionPerformed(object source)
 		{
 			game.GameStats.PlayerInventory.Deselect ();
 			game.SetView (this);

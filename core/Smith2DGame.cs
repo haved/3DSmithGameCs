@@ -133,7 +133,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new FoundryEntity (this, new Mesh ("../../res/mesh/foundry.ply"), new Mesh("../../res/mesh/foundryMoltenMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.99f), -11.5f, -6.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BellowEntity(this, new Mesh("../../res/mesh/bellow.ply"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new CoalTableEntity (new Mesh ("../../res/mesh/coalTableSmall.ply"), new Mesh ("../../res/mesh/coalSmall.ply"), 1, -8.5f, 0, 6, 3));
-			smithScene.AddEntity (new InteractiveEntity (null, new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
+			smithScene.AddEntity (new MeshEntity (new Mesh ("../../res/mesh/table.ply"), 11.5f, -8, 0, 7, 4));
 			smithScene.AddEntity (new MailboxEntity (this, new Mesh ("../../res/mesh/mailboxBox.ply"), new Mesh ("../../res/mesh/mailboxLid.ply"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
 			smithScene.AddEntity (new FloorEntity(new Texture("../../res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 

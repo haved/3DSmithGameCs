@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class MailboxEntity : InteractiveEntity, IEntityEventListener
+	public class MailboxEntity : MeshEntity, IInteractiveEntity
 	{
 		readonly Smith2DGame game;
 		readonly Mesh box, lid;
@@ -17,7 +17,6 @@ namespace DSmithGameCs
 			this.box = box;
 			this.lid = lid;
 			this.lidOffset = lidOffset;
-			EventHandler = this;
 		}
 
 		public override void DisposeEntity()
@@ -57,7 +56,7 @@ namespace DSmithGameCs
 
 		#region EntityEventListener implementation
 
-		public void InteractionPerformed (InteractiveEntity entity, object source)
+		public void InteractionPerformed (object source)
 		{
 			if (lidRotation >= 0)
 				lidSpeed = -1.6f;

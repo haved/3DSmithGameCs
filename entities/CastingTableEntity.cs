@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class CastingTableEntity : InteractiveEntity, IEntityEventListener
+	public class CastingTableEntity : MeshEntity, IInteractiveEntity
 	{
 		readonly Smith2DGame game;
 		readonly Matrix4 castModelspace;
@@ -18,7 +18,6 @@ namespace DSmithGameCs
 			this.game = game;
 			this.fill = fill;
 			this.fall = fall;
-			EventHandler = this;
 			castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (0, 0, height);
 			fillMatrix = Matrix4.CreateTranslation (0, 0, height-0.08f);
 		}
@@ -186,7 +185,7 @@ namespace DSmithGameCs
 
 		#region EntityEventListener implementation
 
-		public void InteractionPerformed (InteractiveEntity entity, object source)
+		public void InteractionPerformed (object source)
 		{
 			Inventory playerInv = game.GameStats.PlayerInventory;
 			if (game.GameStats.CastFilling > 0) {

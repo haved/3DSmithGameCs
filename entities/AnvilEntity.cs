@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class AnvilEntity : InteractiveEntity, IEntityEventListener, IView
+	public class AnvilEntity : MeshEntity, IInteractiveEntity, IView
 	{
 		readonly Smith2DGame game;
 		readonly float height;
@@ -12,12 +12,11 @@ namespace DSmithGameCs
 		public AnvilEntity(Smith2DGame game, Mesh m, float x, float y, float z, float xSize, float ySize, float height) : base(m, x, y, z, xSize, ySize){
 			this.game = game;
 			this.height = height;
-			EventHandler = this;
 		}
 
-		public void InteractionPerformed(InteractiveEntity entity, object source)
+		public void InteractionPerformed(object source)
 		{
-			table.InteractionPerformed (entity, source);
+			table.InteractionPerformed (source);
 		}
 
 		//Stuff related to the view

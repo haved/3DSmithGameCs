@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class FoundryEntity : InteractiveEntity, IEntityEventListener
+	public class FoundryEntity : MeshEntity, IInteractiveEntity
 	{
 		readonly Smith2DGame game;
 		readonly Matrix4[] IngotMatrices;
@@ -15,7 +15,6 @@ namespace DSmithGameCs
 			this.game = game;
 			this.molten = molten;
 			this.liquidTransform = liquidTransform;
-			EventHandler = this;
 			IngotMatrices = ingotMatrices;
 		}
 
@@ -132,7 +131,7 @@ namespace DSmithGameCs
 
 		#region EntityEventListener implementation
 
-		public void InteractionPerformed (InteractiveEntity entity, object source)
+		public void InteractionPerformed (object source)
 		{
 			if (game.GameStats.PlayerInventory.HasSelectedItem ()) {
 				var ingotItem = game.GameStats.PlayerInventory.GetSelectedItem () as IngotItem;

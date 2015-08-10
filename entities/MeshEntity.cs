@@ -2,26 +2,16 @@
 
 namespace DSmithGameCs
 {
-	public class MeshEntity : Entity
+	public class MeshEntity : ColliderEntity
 	{
 		public readonly Mesh Mesh;
-		protected bool Solid;
-		protected float XSize, YSize;
-		public MeshEntity(Mesh mesh) : this(mesh, 0, 0, 0, 0, 0, 0){}
+		public MeshEntity(Mesh mesh) : this(mesh, 0, 0, 0, 0, 0, 0, 0, 0){}
 
-		public MeshEntity(Mesh m, float x, float y, float z) : this(m, x, y, z, 0, 0, 0){}
+		public MeshEntity(Mesh m, float x, float y, float z) : this(m, x, y, z, 0, 0, 0, 0, 0){}
 
-		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ, float xSize, float ySize) : this(m, x, y, z, rotX, rotY, rotZ)
-		{
-			if (xSize > 0 & ySize > 0) {
-				XSize = xSize / 2;
-				YSize = ySize / 2;
-				Solid = true;
-			} else
-				Solid = false;
-		}
+		public MeshEntity (Mesh m, float x, float y, float z, float xSize, float ySize) : this (m, x, y, z, 0, 0, 0, xSize, ySize) {}
 
-		public MeshEntity(Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ)
+		public MeshEntity (Mesh m, float x, float y, float z, float rotX, float rotY, float rotZ, float xSize, float ySize) : base (xSize, ySize)
 		{
 			Mesh = m;
 			Pos.X = x;
@@ -38,31 +28,6 @@ namespace DSmithGameCs
 		public override void Draw(Scene s)
 		{
 			Mesh.Draw ();
-		}
-
-		public override bool IsSolid()
-		{
-			return Solid;
-		}
-
-		public override float GetSolidX1()
-		{
-			return Pos.X - XSize;
-		}
-
-		public override float GetSolidY1()
-		{
-			return Pos.Y - YSize;
-		}
-
-		public override float GetSolidX2()
-		{
-			return Pos.X + XSize;
-		}
-
-		public override float GetSolidY2()
-		{
-			return Pos.Y + YSize;
 		}
 
 		public override void DisposeEntity()

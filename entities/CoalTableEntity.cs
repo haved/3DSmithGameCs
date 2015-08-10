@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class CoalTableEntity : InteractiveEntity
+	public class CoalTableEntity : MeshEntity
 	{
 		PointLight light = new PointLight(Vector3.Zero, new Vector3(1, -7.5f, 2.2f), 5, 6, 0.1f, 1f, 1.5f);
 
