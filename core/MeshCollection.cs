@@ -8,16 +8,14 @@
 		public static Mesh IngotCast{ get; private set;}
 		public static Mesh Ingot{ get; private set;}
 		public static Mesh Diamond{ get; private set;}
-		public static Mesh Hammer{ get; private set;}
 
 		public static void Load()
 		{
-			GreatswordCast = new Mesh (Util.PATH+"res/mesh/GreatswordCast.ply");
-			Ingot = new Mesh (Util.PATH+"res/mesh/ingot.ply");
-			IngotCast = new Mesh (Util.PATH+"res/mesh/IngotCast.ply");
-			GreatswordBlade = new BladeMesh (Util.PATH+"res/mesh/GreatswordBlade.ply", Util.PATH+"res/mesh/GreatswordBladeSharp.ply");
-			Diamond = new Mesh (Util.PATH+"res/mesh/Diamond.ply");
-			Hammer = new Mesh (Util.PATH+"res/mesh/hammer.ply");
+			GreatswordCast = new Mesh (Util.PATH+"res/meshes/collection/GreatswordCast.ply");
+			Ingot = new Mesh (Util.PATH+"res/meshes/collection/ingot.ply");
+			IngotCast = new Mesh (Util.PATH+"res/meshes/collection/IngotCast.ply");
+			GreatswordBlade = new BladeMesh (Util.PATH+"res/meshes/collection/GreatswordBlade.ply", Util.PATH+"res/meshes/collection/GreatswordBladeSharp.ply");
+			Diamond = new Mesh (Util.PATH+"res/meshes/collection/Diamond.ply");
 		}
 	}
 }

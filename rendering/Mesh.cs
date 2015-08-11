@@ -96,7 +96,7 @@ namespace DSmithGameCs
 			}
 			catch(Exception e)
 			{
-				Console.Error.WriteLine ("Failed to load mesh!");
+				Console.Error.WriteLine ("Failed to load mesh! File: " + filename);
 				Console.Error.WriteLine(e.StackTrace);
 			}
 		}

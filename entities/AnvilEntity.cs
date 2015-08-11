@@ -6,12 +6,20 @@ namespace DSmithGameCs
 	public class AnvilEntity : MeshEntity, IInteractiveEntity, IView
 	{
 		readonly Smith2DGame game;
+		readonly Mesh hammer;
 		readonly float height;
 		CoalStripTable table;
 
-		public AnvilEntity(Smith2DGame game, Mesh m, float x, float y, float z, float xSize, float ySize, float height) : base(m, x, y, z, xSize, ySize){
+		public AnvilEntity(Smith2DGame game, Mesh m, Mesh hammer, float x, float y, float z, float xSize, float ySize, float height) : base(m, x, y, z, xSize, ySize){
 			this.game = game;
+			this.hammer = hammer;
 			this.height = height;
+		}
+
+		public override void DisposeEntity()
+		{
+			base.DisposeEntity ();
+			hammer.Dispose ();
 		}
 
 		public void InteractionPerformed(object source)
@@ -131,7 +139,7 @@ namespace DSmithGameCs
 			BasicShader.Instance.SetMVP (modelspace*VP);
 			BasicShader.Instance.SetModelspaceMatrix (modelspace);
 			BasicShader.Instance.ResetColor ();
-			MeshCollection.Hammer.Draw ();
+			hammer.Draw ();
 
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, 50, 50, 250, 250);
 			OrthoRenderEngine.DrawColoredMesh (table.Mesh, projection, Util.White, 50, 50, 250, 250);
