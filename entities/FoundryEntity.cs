@@ -152,12 +152,12 @@ namespace DSmithGameCs
 
 		public static Matrix4[] CreateIngotMatrices()
 		{
-			Matrix4 ingotMatrix = Matrix4.CreateRotationZ((float)Math.PI/2)*Matrix4.CreateScale (1.4f);
-			Matrix4[] output = new Matrix4[IngotAmount];
-			output [0] = ingotMatrix*Matrix4.CreateTranslation (2.45f, 1.26f, 3);
-			output [1] = ingotMatrix*Matrix4.CreateTranslation (1.65f, -1.65f, 3);
-			output [2] = ingotMatrix*Matrix4.CreateTranslation (0.44f, 1.26f, 3);
-			output [3] = ingotMatrix*Matrix4.CreateTranslation (-0.83f, -1.65f, 3);
+			Matrix4 ingotMatrix = Matrix4.CreateScale (1.4f);
+			var output = new Matrix4[IngotAmount];
+			output [0] = ingotMatrix*Matrix4.CreateScale(0.98f)*Matrix4.CreateRotationZ(0.02f)*Matrix4.CreateTranslation (-1.5f, 2.25f, 2.5f);
+			output [1] = ingotMatrix*Matrix4.CreateScale(1.02f)*Matrix4.CreateRotationZ(-0.01f)*Matrix4.CreateTranslation (-1.5f, 0.76f, 2.5f);
+			output [2] = ingotMatrix*Matrix4.CreateScale(0.98f)*Matrix4.CreateRotationZ(0.03f)*Matrix4.CreateTranslation (-1.5f, -0.74f, 2.5f);
+			output [3] = ingotMatrix*Matrix4.CreateScale(1.01f)*Matrix4.CreateRotationZ(-0.02f)*Matrix4.CreateTranslation (-1.5f, -2.26f, 2.5f);
 			return output;
 		}
 	}

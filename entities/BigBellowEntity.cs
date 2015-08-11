@@ -8,21 +8,21 @@ namespace DSmithGameCs
 	{
 		readonly Smith2DGame game;
 		readonly Mesh bellow;
-		readonly Mesh tip;
+		readonly Mesh rig;
 		readonly Matrix4 bellowTransform;
 
-		public BigBellowEntity (Smith2DGame game, Mesh bellow, Matrix4 bellowTransform, Mesh tip, float x, float y, float z, float xSize, float ySize) : base(x, y, z, xSize, ySize)
+		public BigBellowEntity (Smith2DGame game, Mesh bellow, Matrix4 bellowTransform, Mesh rig, float x, float y, float z, float xSize, float ySize) : base(x, y, z, xSize, ySize)
 		{
 			this.game = game;
 			this.bellow = bellow;
 			this.bellowTransform = bellowTransform;
-			this.tip = tip;
+			this.rig = rig;
 		}
 
 		public override void DisposeEntity()
 		{
 			bellow.Dispose ();
-			tip.Dispose ();
+			rig.Dispose ();
 		}
 
 		const float maxBellowSize = 1;
@@ -64,7 +64,7 @@ namespace DSmithGameCs
 			bellow.Draw ();
 			shader.SetModelspaceMatrix (Modelspace);
 			shader.SetMVP (Modelspace * VP);
-			tip.Draw ();
+			rig.Draw ();
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)
