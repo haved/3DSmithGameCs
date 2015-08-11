@@ -112,13 +112,15 @@ namespace DSmithGameCs
 				ISimpleShader shader;
 				if (game.GameStats.FoundryTemprature > game.GameStats.FoundryAlloy.GetMeltingPoint ()) {
 					shader = LiquidShader.Instance;
+					shader.Bind ();
 					LiquidShader.Instance.UseTexture ();
 					LiquidShader.Instance.AutoPan ();
 					LiquidShader.Instance.SetEmission (Util.DefaultEmission);
-				} else
+				} else {
 					shader = BasicShader.Instance;
+					shader.Bind ();
+				}
 
-				shader.Bind ();
 				shader.SetModelspaceMatrix (m);
 				shader.SetMVP (m * VP);
 				shader.SetColor (game.GameStats.FoundryAlloy.GetColor ());
