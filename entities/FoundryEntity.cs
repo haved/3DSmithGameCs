@@ -6,15 +6,19 @@ namespace DSmithGameCs
 {
 	public class FoundryEntity : MeshEntity, IInteractiveEntity
 	{
+		readonly PointLight light = new PointLight(new Vector3(1, 0.4f, 0), Vector3.Zero, 200, 12, 0.1f, 4, 2);
+
 		readonly Smith2DGame game;
 		readonly Matrix4[] IngotMatrices;
 		readonly Mesh molten;
 		readonly Matrix4 liquidTransform;
-		public FoundryEntity (Smith2DGame game, Mesh m, Mesh molten, Matrix4 liquidTransform, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
+		readonly Vector3 lightPos;
+		public FoundryEntity (Smith2DGame game, Mesh m, Mesh molten, Matrix4 liquidTransform, Vector3 lightPos, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
 			this.molten = molten;
 			this.liquidTransform = liquidTransform;
+			this.lightPos = lightPos;
 			IngotMatrices = ingotMatrices;
 		}
 
@@ -22,6 +26,25 @@ namespace DSmithGameCs
 		{
 			base.DisposeEntity ();
 			molten.Dispose ();
+			light.Dispose ();
+		}
+
+		public override void UpdateModelspaceMatrix ()
+		{
+			base.UpdateModelspaceMatrix ();
+			light.Position = Pos + lightPos;
+		}
+
+		public override void OnAddedToScene (Scene s)
+		{
+			base.OnAddedToScene (s);
+			s.AddLight (light);
+		}
+
+		public override void OnRemovedFromScene (Scene s)
+		{
+			base.OnRemovedFromScene (s);
+			s.RemoveLight (light);
 		}
 
 		const float foundryHeatingSpeed = 1f;//0.4f;

@@ -20,7 +20,6 @@ namespace DSmithGameCs
 			Rot.X = rotX;
 			Rot.Y = rotY;
 			Rot.Z = rotZ;
-			UpdateModelspaceMatrix ();
 		}
 
 		public override void Update(Scene s){}

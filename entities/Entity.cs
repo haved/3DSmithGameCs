@@ -16,12 +16,16 @@ namespace DSmithGameCs
 			Dispose ();
 		}
 
-		public virtual void OnAddedToScene(Scene s) {}
+		public virtual void OnAddedToScene(Scene s)
+		{
+			UpdateModelspaceMatrix ();
+		}
 
 		public virtual void OnRemovedFromScene(Scene s) {}
 
 		public abstract void Update(Scene s);
 
+		public bool TransformChanged;
 		public virtual void UpdateModelspaceMatrix()
 		{
 			Modelspace = Matrix4.CreateRotationX (Rot.X) * Matrix4.CreateRotationY (Rot.Y) * Matrix4.CreateRotationZ (Rot.Z) * Matrix4.CreateTranslation (Pos);

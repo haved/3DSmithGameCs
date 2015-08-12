@@ -20,15 +20,13 @@ namespace DSmithGameCs
 			Pos.Z = z;
 			this.xSize = xSize;
 			this.ySize = ySize;
-
-			UpdateModelspaceMatrix ();
 		}
 
 		public override void DisposeEntity()
 		{
 			texture.Dispose ();
 		}
-			
+
 		static readonly Matrix4 bias = Matrix4.CreateTranslation(-0.5f, -0.5f, 0);
 		public override void UpdateModelspaceMatrix()
 		{

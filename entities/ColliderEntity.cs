@@ -13,7 +13,6 @@ namespace DSmithGameCs
 			Pos.X = x;
 			Pos.Y = y;
 			Pos.Z = z;
-			UpdateModelspaceMatrix ();
 		}
 
 		protected ColliderEntity(float xSize, float ySize)
