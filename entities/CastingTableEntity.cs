@@ -7,26 +7,40 @@ namespace DSmithGameCs
 	public class CastingTableEntity : MeshEntity, IInteractiveEntity
 	{
 		readonly Smith2DGame game;
-		readonly Matrix4 castModelspace;
+
+		readonly float tableWidth;
+		readonly float tableHeight;
 
 		readonly Mesh fill;
-		readonly Mesh fall;
-		readonly Matrix4 fillMatrix;
 
-		public CastingTableEntity (Smith2DGame game, Mesh m, Mesh fill, Mesh fall, float x, float y, float height, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
+		Matrix4 castModelspace;
+		Matrix4 fillMatrix;
+
+		public CastingTableEntity (Smith2DGame game, Mesh m, Mesh fill, float x, float y, float tableWidth, float tableHeight, float xSize, float ySize) : base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
+			this.tableWidth = tableWidth;
+			this.tableHeight = tableHeight;
 			this.fill = fill;
-			this.fall = fall;
-			castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (0, 0, height);
-			fillMatrix = Matrix4.CreateTranslation (0, 0, height-0.08f);
 		}
 
 		public override void DisposeEntity()
 		{
 			base.DisposeEntity ();
 			fill.Dispose ();
-			fall.Dispose ();
+		}
+
+		byte prevCastItem;
+		public void UpdateCastMatrix()
+		{
+			if (game.GameStats.CurrentCast.CastInfoID != prevCastItem) {
+				prevCastItem = game.GameStats.CurrentCast.CastInfoID;
+				Console.Out.WriteLine ("Updated cast matrix");
+				float width = game.GameStats.CurrentCast.Info.Width;
+				float pos = (tableWidth - width) / 2;
+				castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (pos, 0, tableHeight);
+				fillMatrix = Matrix4.CreateScale(width, 1, 1) * Matrix4.CreateTranslation (pos, 0, tableHeight - 0.08f);
+			}
 		}
 
 		public override void Update(Scene s)
@@ -138,6 +152,7 @@ namespace DSmithGameCs
 			shader.SetMVP(Modelspace * VP);
 			Draw (s);
 			if (game.GameStats.CurrentCast != null) {
+				UpdateCastMatrix ();
 				shader.SetModelspaceMatrix(castModelspace*Modelspace);
 				shader.SetMVP(castModelspace * Modelspace * VP);
 				shader.SetColor (game.GameStats.CurrentCast.GetColor());
@@ -147,9 +162,9 @@ namespace DSmithGameCs
 
 		public override void PostRender(Scene s, Matrix4 VP)
 		{
-			if (game.GameStats.CastFilling > 0) {
-				Matrix4 fallModelspace = fillMatrix*Modelspace;
-				Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fallModelspace;
+			if (game.GameStats.CastFilling > 0 && game.GameStats.CurrentCast != null && game.GameStats.CastMetal > -1) {
+				UpdateCastMatrix ();
+				Matrix4 fillModelspace = Matrix4.CreateScale (1, 1, game.GameStats.CastFilling * game.GameStats.CurrentCast.FillHeight)*fillMatrix*Modelspace;
 
 				ISimpleShader shader;
 				if (game.GameStats.CastingTemprature > 25) {
@@ -158,25 +173,15 @@ namespace DSmithGameCs
 					LiquidShader.Instance.UseTexture ();
 					LiquidShader.Instance.AutoPan ();
 					LiquidShader.Instance.SetEmission (Util.DefaultEmission);
-				} else
+				} else {
 					shader = BasicShader.Instance;
+					shader.Bind ();
+				}
 
 				shader.SetModelspaceMatrix(fillModelspace);
 				shader.SetMVP (fillModelspace*VP);
 				shader.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
 				fill.Draw ();
-				if (game.GameStats.CastFilling < 1) {
-					LiquidShader.Instance.SetModelspaceMatrix(fallModelspace);
-					LiquidShader.Instance.SetMVP (fallModelspace*VP);
-					if (!(shader is LiquidShader)) {
-						LiquidShader.Instance.Bind ();
-						LiquidShader.Instance.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
-						LiquidShader.Instance.UseTexture ();
-						LiquidShader.Instance.AutoPan ();
-						LiquidShader.Instance.SetEmission (Util.DefaultEmission);
-					}
-					fall.Draw ();
-				}
 			}
 
 			if (game.TooltipHelper.GetOwner () == this)
@@ -207,6 +212,7 @@ namespace DSmithGameCs
 					CastItem cast = playerInv.GetSelectedItem () as CastItem;
 					if (cast != null) {
 						game.GameStats.CurrentCast = cast;
+						UpdateCastMatrix ();
 						playerInv.RemoveItem (playerInv.GetSelectedItemIndex ());
 					}
 				} else if (game.GameStats.CurrentCast != null && !playerInv.HasSelectedItem ()) {

@@ -11,13 +11,15 @@ namespace DSmithGameCs
 		readonly Smith2DGame game;
 		readonly Matrix4[] IngotMatrices;
 		readonly Mesh molten;
+		readonly Mesh fall;
 		readonly Matrix4 liquidTransform;
 		readonly Vector3 lightPos;
-		public FoundryEntity (Smith2DGame game, Mesh m, Mesh molten, Matrix4 liquidTransform, Vector3 lightPos, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
+		public FoundryEntity (Smith2DGame game, Mesh m, Mesh molten, Matrix4 liquidTransform, Mesh fall, Vector3 lightPos, float x, float y, Matrix4[] ingotMatrices, float xSize, float ySize): base(m, x, y, 0, xSize, ySize)
 		{
 			this.game = game;
 			this.molten = molten;
 			this.liquidTransform = liquidTransform;
+			this.fall = fall;
 			this.lightPos = lightPos;
 			IngotMatrices = ingotMatrices;
 		}
@@ -26,6 +28,7 @@ namespace DSmithGameCs
 		{
 			base.DisposeEntity ();
 			molten.Dispose ();
+			fall.Dispose ();
 			light.Dispose ();
 		}
 
@@ -148,6 +151,18 @@ namespace DSmithGameCs
 				shader.SetMVP (m * VP);
 				shader.SetColor (game.GameStats.FoundryAlloy.GetColor ());
 				molten.Draw ();
+			}
+
+			if (game.GameStats.CastFilling > 0 & game.GameStats.CastFilling < 1 & game.GameStats.CastMetal > -1) {
+				LiquidShader shader = LiquidShader.Instance;
+				shader.Bind ();
+				shader.SetModelspaceMatrix(Modelspace);
+				shader.SetMVP (Modelspace*VP);
+				shader.SetColor (KnownMetal.GetColor(game.GameStats.CastMetal));
+				shader.UseTexture ();
+				shader.AutoPan ();
+				shader.SetEmission (Util.DefaultEmission);
+				fall.Draw ();
 			}
 
 			if (game.TooltipHelper.GetOwner () == this)
