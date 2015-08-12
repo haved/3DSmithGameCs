@@ -123,7 +123,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (new Mesh (Util.PATH+"res/meshes/house/floorWalls/shortWall12.ply"), 20, 0, 0, 0, 0, 0, 0, 0));
 			smithScene.AddEntity (new MeshEntity (new Mesh(Util.PATH+"res/meshes/house/floorWalls/extraLongWall.ply"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 1)); //Bottom
 
-			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.PATH+"res/meshes/house/foundry/foundry.ply"), new Mesh(Util.PATH+"res/meshes/house/foundry/foundryMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.49f), new Vector3(1.5f, 3, 1.5f), 13.5f, -8.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
+			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.PATH+"res/meshes/house/foundry/foundry.ply"), new Mesh(Util.PATH+"res/meshes/house/foundry/foundryMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.49f), new Vector3(1.5f, 2, 1.5f), 13.5f, -8.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.PATH+"res/meshes/house/bellow/bigBellow.ply"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.PATH+"res/meshes/house/bellow/bigBellowRig.ply"), 20.5f, -6, 0, 7, 12));
 			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.PATH+"res/mesh/castingTable.ply"), new Mesh (Util.PATH+"res/mesh/castFill.ply"), new Mesh (Util.PATH+"res/mesh/moltenMetalFall.ply"), -11.5f, -1f, 1.55f, 6.25f, 3.3f));
 

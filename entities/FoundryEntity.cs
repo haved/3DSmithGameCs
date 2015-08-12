@@ -6,7 +6,7 @@ namespace DSmithGameCs
 {
 	public class FoundryEntity : MeshEntity, IInteractiveEntity
 	{
-		readonly PointLight light = new PointLight(new Vector3(1, 0.4f, 0), Vector3.Zero, 200, 12, 0.1f, 4, 2);
+		readonly PointLight light = new PointLight(new Vector3(1.2f, 0.4f, 0), Vector3.Zero, 8, 20, 0.1f, 0.5f, 1.4f);
 
 		readonly Smith2DGame game;
 		readonly Matrix4[] IngotMatrices;
