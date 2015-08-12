@@ -30,12 +30,11 @@ namespace DSmithGameCs
 			fill.Dispose ();
 		}
 
-		byte prevCastItem;
+		short prevCastItem = -1;
 		public void UpdateCastMatrix()
 		{
 			if (game.GameStats.CurrentCast.CastInfoID != prevCastItem) {
 				prevCastItem = game.GameStats.CurrentCast.CastInfoID;
-				Console.Out.WriteLine ("Updated cast matrix");
 				float width = game.GameStats.CurrentCast.Info.Width;
 				float pos = (tableWidth - width) / 2;
 				castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (pos, 0, tableHeight);

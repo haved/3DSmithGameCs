@@ -23,6 +23,8 @@ void main()
     vertexColor0 = vec4(vertexColor, 1) * color;
 	vertexNormal0 = normalize((  modelspaceMatrix*vec4(vertexNormal, 0)  ).xyz);
 	
-	texCoord0 = vertexPosition_modelspace.xy * 0.5 + pan0;
-	texCoord1 = vertexPosition_modelspace.xy * 0.3 + pan1;
+	vec2 texCoord = (modelspaceMatrix * vec4(vertexPosition_modelspace, 1)).xy;
+	
+	texCoord0 = texCoord * 0.5 + pan0;
+	texCoord1 = texCoord * 0.3 + pan1;
 }
