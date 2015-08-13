@@ -1,63 +1,79 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using OpenTK;
 
 namespace DSmithGameCs
 {
-	public class BellowEntity : MeshEntity, IInteractiveEntity
+	public abstract class BellowEntity : ColliderEntity, IInteractiveEntity
 	{
+		protected readonly Smith2DGame Game;
+		readonly Mesh bellow;
+		readonly Mesh rig;
+		readonly Matrix4 bellowTransform;
+
+		protected BellowEntity (Smith2DGame game, Mesh bellow, Matrix4 bellowTransform, Mesh rig, float x, float y, float z, float xSize, float ySize) : base(x, y, z, xSize, ySize)
+		{
+			Game = game;
+			this.bellow = bellow;
+			this.bellowTransform = bellowTransform;
+			this.rig = rig;
+		}
+
+		public override void DisposeEntity()
+		{
+			bellow.Dispose ();
+			rig.Dispose ();
+		}
+
 		const float maxBellowSize = 1;
 		const float minBellowSize = 0.4f;
 		float bellowSize = maxBellowSize;
 		float bellowSpeed = 0;
-
-		readonly Smith2DGame game;
-		readonly Matrix4 tip;
-
-		public BellowEntity (Smith2DGame game, Mesh m, Matrix4 tip, float x, float y, float z, float xSize, float ySize) : base(m, x, y, z, xSize, ySize)
-		{
-			this.game = game;
-			this.tip = tip;
-		}
 
 		int prevAirQuality;
 		public override void Update(Scene s)
 		{
 			bellowSize += bellowSpeed * Time.Delta ();
 			if(bellowSpeed < 0)
-				game.GameStats.AirQuality += Time.Delta () * 20;
+				ImproveOxygen(Time.Delta () * 20);
 			if (bellowSize > maxBellowSize & bellowSpeed > 0)
 				bellowSpeed -= bellowSpeed * Time.Delta () * 6;
 			if (bellowSize < minBellowSize)
 				bellowSpeed += Time.Delta () * 4;
 
-			if (game.Player.IsLookingAt (this)) {
-				if (game.TooltipHelper.ClaimIfPossible (this) || (game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)game.GameStats.AirQuality))) {
-					game.TooltipHelper.Writer.DrawStandardTooltip (new []{ Localization.GetLocalization( "ui.tooltip.oxygen:" ) }, new []{ Color.Aqua }, new []{prevAirQuality + "%" });
+			if (Game.Player.IsLookingAt (this)) {
+				if (Game.TooltipHelper.ClaimIfPossible (this) || (Game.TooltipHelper.GetOwner () == this & prevAirQuality != (prevAirQuality=(int)GetOxygenPrecent()))) {
+					Game.TooltipHelper.Writer.DrawStandardTooltip (new []{ Localization.GetLocalization( "ui.tooltip.oxygen:" ) }, new []{ Color.Aqua }, new []{prevAirQuality + "%" });
 					prevAirQuality = -1;
 				}
-			} else if (game.TooltipHelper.GetOwner () == this)
-				game.TooltipHelper.UnClaim ();
+			} else if (Game.TooltipHelper.GetOwner () == this)
+				Game.TooltipHelper.UnClaim ();
 		}
 
-		Matrix4 newModelspace;
+		public abstract void ImproveOxygen(float f);
+
+		public abstract float GetOxygenPrecent();
+
+		Matrix4 bellowModelspace;
 		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			newModelspace = Matrix4.CreateScale (1, 1, bellowSize) * tip * Modelspace;
+			bellowModelspace = Matrix4.CreateScale (1, 1, bellowSize) * bellowTransform * Modelspace;
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
 			shader.ResetColor ();
-			shader.SetModelspaceMatrix (newModelspace);
-			shader.SetMVP (newModelspace*VP);
-			Draw (s);
+			shader.SetModelspaceMatrix (bellowModelspace);
+			shader.SetMVP (bellowModelspace*VP);
+			bellow.Draw ();
+			shader.SetModelspaceMatrix (Modelspace);
+			shader.SetMVP (Modelspace * VP);
+			rig.Draw ();
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)
 		{
-			if (game.TooltipHelper.GetOwner () == this)
-				game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
+			if (Game.TooltipHelper.GetOwner () == this)
+				Game.TooltipHelper.RenderNormalDialog (Input.OrthoMouseX, Input.OrthoMouseY, Util.White60);
 		}
 
 		#region EntityEventListener implementation

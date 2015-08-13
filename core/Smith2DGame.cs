@@ -126,6 +126,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.PATH+"res/meshes/house/foundry/foundry.ply"), new Mesh(Util.PATH+"res/meshes/house/foundry/foundryMetal.ply"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.PATH+"res/meshes/house/foundry/foundryFall.ply"), new Vector3(1.5f, 2, 1.5f), 13.5f, -8.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.PATH+"res/meshes/house/bellow/bigBellow.ply"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.PATH+"res/meshes/house/bellow/bigBellowRig.ply"), 20.5f, -6, 0, 7, 12));
 			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.PATH+"res/meshes/house/castingTable/castingTable.ply"), new Mesh (Util.PATH+"res/meshes/house/castingTable/castingTableFill.ply"), 5, -9.5f, 8, 1.55f, 8.26f, 3.3f));
+			smithScene.AddEntity (new CoalBellowEntity(this, new Mesh(Util.PATH+"res/meshes/house/bellow/coalBellow.ply"), Matrix4.CreateTranslation(0, 2.41f, 2.85f), new Mesh(Util.PATH+"res/meshes/house/bellow/coalBellowRig.ply"), -12.5f, .5f, 0, 5, 9));
 
 			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 
