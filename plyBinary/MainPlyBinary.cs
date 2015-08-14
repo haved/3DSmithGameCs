@@ -10,9 +10,9 @@ namespace DSmithGameCs
 			try {
 				if (args.Length > 0) {
 					if (args [0].Equals ("-h") | args [0].Equals ("-?") | args [0].Equals ("--help"))
-						Console.Out.WriteLine (@"convert -plyin <file> -plybinout <directory>
-convert -plybinin <file> - plyout <directory>
-bladeconvert -plybladein <flatFile> <sharpFile> -plybinbladeout <directory>
+						Console.Out.WriteLine (@"convert -plyin <file> -plybinout <file>
+convert -plybinin <file> - plyout <file>
+bladeconvert -plybladein <flatFile> <sharpFile> -plybinbladeout <file>
 bladeconvert -plybinbladein <file> - plyout <directory>");
 					else if (args [0].Equals ("convert") & args.Length == 5) {
 						MeshLoader loader = null;
@@ -34,17 +34,13 @@ bladeconvert -plybinbladein <file> - plyout <directory>");
 							return;
 						}
 
-						string filename = args[i+1];
-						filename = filename.Substring(Math.Max(filename.LastIndexOf("/", StringComparison.InvariantCulture), filename.LastIndexOf(@"\", StringComparison.InvariantCulture))+1, filename.Length);
-						filename = filename.Substring(0, filename.IndexOf(".", StringComparison.InvariantCulture));
-
 						for (i = 1; i < args.Length - 1; i++) {
 							if (args [i].Equals ("-plyout")) {
-								loader.WriteTo(args[i+1]+filename+".ply");
+								loader.WriteTo(args[i+1]);
 								break;
 							}
 							if (args [i].Equals ("-plybinout")) {
-								using(var stream = new FileStream(args[i+1]+filename+".plybin", FileMode.CreateNew))
+								using(var stream = new FileStream(args[i+1], FileMode.CreateNew))
 									loader.WriteTo(stream);
 								break;
 							}
@@ -57,7 +53,8 @@ bladeconvert -plybinbladein <file> - plyout <directory>");
 					}
 				} else
 					Console.WriteLine ("-h for help");
-			} catch {
+			} catch(Exception e) {
+				Console.Out.WriteLine (e);
 				Console.WriteLine ("-h for help");
 			}
 		}
