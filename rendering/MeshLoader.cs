@@ -124,7 +124,7 @@ namespace DSmithGameCs
 					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*8);
 				}
 
-				var indices = new uint[faceAmount];
+				var indices = new uint[faceAmount*3];
 
 				for(uint j = 0; j < faceAmount; j++)
 				{
