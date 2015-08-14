@@ -22,7 +22,8 @@ namespace DSmithGameCs
 								break;
 							}
 							if (args [i].Equals ("-plybinin")) {
-								loader = new MeshLoader (new FileStream (args [i + 1], FileMode.Open));
+								using(var stream = new FileStream(args [i + 1], FileMode.Open))
+									loader = new MeshLoader (stream);
 								break;
 							}
 						}

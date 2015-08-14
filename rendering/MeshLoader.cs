@@ -105,34 +105,35 @@ namespace DSmithGameCs
 		{
 			try
 			{
-				var reader = new BinaryReader(file);
+				using(var reader = new BinaryReader(file)){
 
-				UInt32 vertexAmount = reader.ReadUInt32();
-				UInt32 faceAmount = reader.ReadUInt32();
+					UInt32 vertexAmount = reader.ReadUInt32();
+					UInt32 faceAmount = reader.ReadUInt32();
 
-				var vertices = new Vertex[vertexAmount];
+					var vertices = new Vertex[vertexAmount];
 
-				for(uint j = 0; j < vertexAmount; j++)
-				{
-					vertices [j] = new Vertex(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-					vertices [j].Normal.X = reader.ReadSingle();
-					vertices [j].Normal.Y = reader.ReadSingle();
-					vertices [j].Normal.Z = reader.ReadSingle();
-					vertices [j].Red = reader.ReadSingle();
-					vertices [j].Green = reader.ReadSingle();
-					vertices [j].Blue = reader.ReadSingle();
+					for(uint j = 0; j < vertexAmount; j++)
+					{
+						vertices [j] = new Vertex(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+						vertices [j].Normal.X = reader.ReadSingle();
+						vertices [j].Normal.Y = reader.ReadSingle();
+						vertices [j].Normal.Z = reader.ReadSingle();
+						vertices [j].Red = reader.ReadSingle();
+						vertices [j].Green = reader.ReadSingle();
+						vertices [j].Blue = reader.ReadSingle();
+					}
+
+					var indices = new uint[faceAmount*3];
+
+					for(uint j = 0; j < faceAmount; j++)
+					{
+						indices[j*3] = reader.ReadUInt32();
+						indices[j*3+1] = reader.ReadUInt32();
+						indices[j*3+2] = reader.ReadUInt32();
+					}
+
+					MeshDataLoaded(vertices, indices);
 				}
-
-				var indices = new uint[faceAmount*3];
-
-				for(uint j = 0; j < faceAmount; j++)
-				{
-					indices[j*3] = reader.ReadUInt32();
-					indices[j*3+1] = reader.ReadUInt32();
-					indices[j*3+2] = reader.ReadUInt32();
-				}
-
-				MeshDataLoaded(vertices, indices);
 			}
 			catch(Exception e)
 			{
@@ -151,9 +152,32 @@ namespace DSmithGameCs
 
 		public void WriteTo(string filename)
 		{
-			var writer = new StreamWriter (filename, false);
+			using (var writer = new StreamWriter (filename, false)) {
+				writer.WriteLine (@"ply
+				format ascii 1.0
+				comment Created by MeshLoader.WriteTo({0})'
+				element vertex {1}
+				property float x
+				property float y
+				property float z
+				property float nx
+				property float ny
+				property float nz
+				property uchar red
+				property uchar green
+				property uchar blue
+				element face {2}
+				property list uchar uint vertex_indices
+				end_header", filename, Vertices.Length, Indices.Length / 3);
 
-			writer.WriteLine ();
+				foreach (Vertex v in Vertices)
+					writer.WriteLine ("{0} {1} {2} {3} {4} {5} {6} {7} {8}", v.X, v.Y, v.Z, v.Normal.X, v.Normal.Y, v.Normal.Z, (byte)(v.Red * 255), (byte)(v.Green * 255), (byte)(v.Blue * 255));
+			
+				for (int i = 0; i < Indices.Length; i += 3)
+					writer.WriteLine ("3 {0} {1} {2}", Indices [i], Indices [i + 1], Indices [i + 2]);
+
+				writer.Flush ();
+			}
 		}
 
 		public void WriteTo(Stream stream)
