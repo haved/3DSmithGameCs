@@ -105,34 +105,31 @@ namespace DSmithGameCs
 		{
 			try
 			{
-				var buffer = new byte[fSize*9];
-				file.Read(buffer, 0, sizeof(uint)*2);
-				uint vertexAmount = BitConverter.ToUInt32(buffer, 0);
-				UInt32 faceAmount = BitConverter.ToUInt32(buffer, sizeof(UInt32));
+				var reader = new BinaryReader(file);
+
+				UInt32 vertexAmount = reader.ReadUInt32();
+				UInt32 faceAmount = reader.ReadUInt32();
 
 				var vertices = new Vertex[vertexAmount];
 
 				for(uint j = 0; j < vertexAmount; j++)
 				{
-					file.Read(buffer, 0, fSize*9);
-					vertices [j] = new Vertex(BitConverter.ToSingle(buffer, 0), BitConverter.ToSingle(buffer, fSize), BitConverter.ToSingle(buffer, fSize*2));
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*3);
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*4);
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*5);
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*6);
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*7);
-					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*8);
+					vertices [j] = new Vertex(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+					vertices [j].Normal.X = reader.ReadSingle();
+					vertices [j].Normal.Y = reader.ReadSingle();
+					vertices [j].Normal.Z = reader.ReadSingle();
+					vertices [j].Red = reader.ReadSingle();
+					vertices [j].Green = reader.ReadSingle();
+					vertices [j].Blue = reader.ReadSingle();
 				}
 
 				var indices = new uint[faceAmount*3];
 
 				for(uint j = 0; j < faceAmount; j++)
 				{
-					file.Read(buffer, 0, sizeof(UInt32)*3);
-
-					indices[j*3] = BitConverter.ToUInt32(buffer, 0);
-					indices[j*3+1] = BitConverter.ToUInt32(buffer, sizeof(UInt32));
-					indices[j*3+2] = BitConverter.ToUInt32(buffer, sizeof(UInt32)*2);
+					indices[j*3] = reader.ReadUInt32();
+					indices[j*3+1] = reader.ReadUInt32();
+					indices[j*3+2] = reader.ReadUInt32();
 				}
 
 				MeshDataLoaded(vertices, indices);
@@ -150,6 +147,18 @@ namespace DSmithGameCs
 		{
 			Vertices = vertices;
 			Indices = indices;
+		}
+
+		public void WriteTo(string filename)
+		{
+			var writer = new StreamWriter (filename, false);
+
+			writer.WriteLine ();
+		}
+
+		public void WriteTo(Stream stream)
+		{
+
 		}
 	}
 }

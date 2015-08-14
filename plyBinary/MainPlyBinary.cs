@@ -32,7 +32,16 @@ namespace DSmithGameCs
 							return;
 						}
 
-
+						for (int i = 1; i < args.Length - 1; i++) {
+							if (args [i].Equals ("-plyout")) {
+								loader.WriteTo(args[i+1]);
+								break;
+							}
+							if (args [i].Equals ("-plybinout")) {
+								loader.WriteTo(new FileStream(args[i+1], FileMode.CreateNew));
+								break;
+							}
+						}
 
 					} else if (args [0].Equals ("bladeconvert") & args.Length >= 5) {
 
