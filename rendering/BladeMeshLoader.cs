@@ -143,6 +143,8 @@ namespace DSmithGameCs
 			{
 				Console.Error.WriteLine ("Failed to load mesh!");
 				Console.Error.WriteLine(e.StackTrace);
+
+				throw e; //I'm neither handeling this shit
 			}
 		}
 

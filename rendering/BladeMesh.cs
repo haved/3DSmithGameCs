@@ -13,8 +13,13 @@ namespace DSmithGameCs
 
 		public BladeMesh(string flatSword, string sharpSword)
 		{
+			try {
 			var loader = new BladeMeshLoader (flatSword, sharpSword);
 			LoadMeshData (loader.Vertices, loader.Indices);
+			}
+			catch(Exception e) {
+				Console.Error.WriteLine ("The blade mesh will not contain any data");
+			}
 		}
 
 		~BladeMesh()

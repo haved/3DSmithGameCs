@@ -95,6 +95,54 @@ namespace DSmithGameCs
 			{
 				Console.Error.WriteLine ("Failed to load mesh! File: " + filename);
 				Console.Error.WriteLine(e.StackTrace);
+
+				throw e; //I'm not handeling this shit
+			}
+		}
+
+		const int fSize = sizeof(float);
+		public MeshLoader(Stream file)
+		{
+			try
+			{
+				var buffer = new byte[fSize*9];
+				file.Read(buffer, 0, sizeof(uint)*2);
+				uint vertexAmount = BitConverter.ToUInt32(buffer, 0);
+				UInt32 faceAmount = BitConverter.ToUInt32(buffer, sizeof(UInt32));
+
+				var vertices = new Vertex[vertexAmount];
+
+				for(uint j = 0; j < vertexAmount; j++)
+				{
+					file.Read(buffer, 0, fSize*9);
+					vertices [j] = new Vertex(BitConverter.ToSingle(buffer, 0), BitConverter.ToSingle(buffer, fSize), BitConverter.ToSingle(buffer, fSize*2));
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*3);
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*4);
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*5);
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*6);
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*7);
+					vertices [j].Normal.X = BitConverter.ToSingle(buffer, fSize*8);
+				}
+
+				var indices = new uint[faceAmount];
+
+				for(uint j = 0; j < faceAmount; j++)
+				{
+					file.Read(buffer, 0, sizeof(UInt32)*3);
+
+					indices[j*3] = BitConverter.ToUInt32(buffer, 0);
+					indices[j*3+1] = BitConverter.ToUInt32(buffer, sizeof(UInt32));
+					indices[j*3+2] = BitConverter.ToUInt32(buffer, sizeof(UInt32)*2);
+				}
+
+				MeshDataLoaded(vertices, indices);
+			}
+			catch(Exception e)
+			{
+				Console.Error.WriteLine ("Failed to load mesh! Stream: " + file);
+				Console.Error.WriteLine(e.StackTrace);
+
+				throw e; //I'm not handeling this shit
 			}
 		}
 

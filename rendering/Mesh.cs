@@ -16,8 +16,13 @@ namespace DSmithGameCs
 
 		public Mesh(string filename)
 		{
+			try {
 			var loader = new MeshLoader (filename);
 			LoadMeshData (loader.Vertices, loader.Indices);
+			}
+			catch(Exception e) {
+				Console.Error.WriteLine ("The mesh will not contain any data");
+			}
 		}
 
 		public Mesh (Vertex[] vertices, uint[] indices) : this(vertices, indices, true){}
