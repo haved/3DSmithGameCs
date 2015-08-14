@@ -231,6 +231,11 @@ namespace DSmithGameCs
 
 		public static void Main (string[] args)
 		{
+			if (args.Length > 0) {
+				MainPlyBinary.Main (args);
+				return;
+			}
+
 			using (var gw = new SmithGameWindow (new Smith2DGame ())) {
 				gw.Run (1, 60.00);
 			}
