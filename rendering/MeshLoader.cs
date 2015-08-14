@@ -154,21 +154,21 @@ namespace DSmithGameCs
 		{
 			using (var writer = new StreamWriter (filename, false)) {
 				writer.WriteLine (@"ply
-				format ascii 1.0
-				comment Created by MeshLoader.WriteTo({0})'
-				element vertex {1}
-				property float x
-				property float y
-				property float z
-				property float nx
-				property float ny
-				property float nz
-				property uchar red
-				property uchar green
-				property uchar blue
-				element face {2}
-				property list uchar uint vertex_indices
-				end_header", filename, Vertices.Length, Indices.Length / 3);
+format ascii 1.0
+comment Created by MeshLoader.WriteTo({0})'
+element vertex {1}
+property float x
+property float y
+property float z
+property float nx
+property float ny
+property float nz
+property uchar red
+property uchar green
+property uchar blue
+element face {2}
+property list uchar uint vertex_indices
+end_header", filename, Vertices.Length, Indices.Length / 3);
 
 				foreach (Vertex v in Vertices)
 					writer.WriteLine ("{0} {1} {2} {3} {4} {5} {6} {7} {8}", v.X, v.Y, v.Z, v.Normal.X, v.Normal.Y, v.Normal.Z, (byte)(v.Red * 255), (byte)(v.Green * 255), (byte)(v.Blue * 255));
@@ -182,7 +182,23 @@ namespace DSmithGameCs
 
 		public void WriteTo(Stream stream)
 		{
-
+			using (var writer = new BinaryWriter (stream)) {
+				writer.Write ((UInt32)Vertices.Length);
+				writer.Write ((UInt32)(Indices.Length/3));
+				foreach (Vertex v in Vertices) {
+					writer.Write (v.X);
+					writer.Write (v.Y);
+					writer.Write (v.Z);
+					writer.Write (v.Normal.X);
+					writer.Write (v.Normal.Y);
+					writer.Write (v.Normal.Z);
+					writer.Write (v.Red);
+					writer.Write (v.Green);
+					writer.Write (v.Blue);
+				}
+				foreach (UInt32 index in Indices)
+					writer.Write (index);
+			}
 		}
 	}
 }
