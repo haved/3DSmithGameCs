@@ -14,7 +14,8 @@ namespace DSmithGameCs
 						@"Help file for ply binary converter
 plyToBinary <ply file> <target file> (loads the ply file and saves the mesh to the target file as a plybin)
 binaryToPly <plybin file> <target file> (loads the plybin file and saves the mesh to the target file as a ply)
-plyDirToBinary <ply directory> <target directory> (converts all the .ply files in ply directory into .plybin in the target directory)");
+plyDirToBinary <ply directory> <target directory> (recursivly converts all .ply in the ply directory to .plybin in the target directory)
+binaryDirToPly <plybin directory> <target directory> (recursivly converts all .plybin the in plybin directory to .ply in the target directory)");
 					return;
 				} else if (args [0].Equals ("plyToBinary")) {
 					if (args.Length != 3)
@@ -28,15 +29,7 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 					if (args.Length != 3)
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
-						string infile = args [1];
-						string outfile = args [2];
-
-						using(var stream = new FileStream(infile, FileMode.Open)){
-							var loader = new MeshLoader(stream);
-							loader.WriteTo(outfile);
-						}
-					
-						Console.Out.WriteLine("wrote ply to '{0}'", outfile);
+						BinaryToPly(args[1], args[2]);
 
 						return;
 					}
@@ -45,6 +38,12 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
 						PlyDirToBinaryDir(args[1], args[2], true);
+					}
+				} else if (args [0].Equals ("binaryDirToPly")) {
+					if (args.Length != 3)
+						Console.Out.WriteLine ("Wrong amount of arguments supplied");
+					else {
+						BinaryDirToPlyDir(args[1], args[2], true);
 					}
 				}
 
@@ -62,8 +61,6 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 			var loader = new MeshLoader(infile);
 			using(var stream = new FileStream(outfile, FileMode.Create))
 				loader.WriteTo(stream);
-
-			Console.Out.WriteLine("wrote binary to '{0}'", outfile);
 		}
 
 		static void PlyDirToBinaryDir(string indir, string outdir, bool recursive)
@@ -77,7 +74,7 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 				if (recursive) {
 					string[] dirs = Directory.GetDirectories (indir);
 					foreach (string dir in dirs) {
-						string name = dir.Substring (indir.Length, dir.Length-indir.Length);
+						string name = dir.Substring (indir.Length, dir.Length-indir.Length); //To get the name from the full path.
 						PlyDirToBinaryDir (indir + name, outdir + "/" + name, true);
 					}
 				}
@@ -86,7 +83,7 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 				{
 					if(file.EndsWith(".ply", StringComparison.InvariantCulture))
 					{
-						string name = file.Substring (indir.Length, file.Length-indir.Length)+"bin";
+						string name = file.Substring (indir.Length, file.Length-indir.Length)+"bin"; //To get the name with a .plybin extension from the full path.
 						PlyToBinary (file, outdir+name);
 					}
 				}
@@ -94,78 +91,44 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 			}
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-		public static void LegacyMain(string[] args)
+		static void BinaryToPly(string infile, string outfile)
 		{
-			try {
-				if (args.Length > 0) {
-					if (args [0].Equals ("-h") | args [0].Equals ("-?") | args [0].Equals ("--help"))
-						Console.Out.WriteLine (@"convert -plyin <file> -plybinout <file>
-convert -plybinin <file> - plyout <file>
-bladeconvert -plybladein <flatFile> <sharpFile> -plybinbladeout <file>
-bladeconvert -plybinbladein <file> - plyout <directory>");
-					else if (args [0].Equals ("convert") & args.Length == 5) {
-						MeshLoader loader = null;
-						int i;
-						for (i = 1; i < args.Length - 1; i++) {
-							if (args [i].Equals ("-plyin")) {
-								loader = new MeshLoader (args [i + 1]);
-								break;
-							}
-							if (args [i].Equals ("-plybinin")) {
-								using(var stream = new FileStream(args [i + 1], FileMode.Open))
-									loader = new MeshLoader (stream);
-								break;
-							}
-						}
+			Console.Out.WriteLine ("infile (plybin): {0}, outfile (ply): {1}", infile, outfile);
 
-						if(loader != null) {
-							for (i = 1; i < args.Length - 1; i++) {
-								if (args [i].Equals ("-plyout")) {
-									loader.WriteTo(args[i+1]);
-									break;
-								}
-								if (args [i].Equals ("-plybinout")) {
-									using(var stream = new FileStream(args[i+1], FileMode.CreateNew))
-										loader.WriteTo(stream);
-									break;
-								}
-							}
-						}
-
-						Console.Out.WriteLine("-h for help");
-
-					} else if (args [0].Equals ("bladeconvert") & args.Length >= 5) {
-
-					} else {
-						Console.WriteLine ("-h for help");
-					}
-				} else
-					Console.WriteLine ("-h for help");
-			} catch(Exception e) {
-				Console.Out.WriteLine (e);
-				Console.WriteLine ("-h for help");
+			using (var stream = new FileStream (infile, FileMode.Open)) {
+				var loader = new MeshLoader (stream);
+				loader.WriteTo (outfile);
 			}
+
 		}
 
-		static string GetFileName(string directory, string file, bool binary)
+		static void BinaryDirToPlyDir(string indir, string outdir, bool recursive)
 		{
-			if (file.EndsWith ("bin", StringComparison.InvariantCulture))
-				file.Substring (0, file.Length - 3);
+			if(!Directory.Exists(indir))
+				Console.Out.WriteLine("The input directory doesn't exist");
+			else {
+				if (!Directory.Exists (outdir))
+					Directory.CreateDirectory (outdir);
 
-			return directory + "/" + file + (binary ? "bin" : "");
+				if (recursive) {
+					string[] dirs = Directory.GetDirectories (indir);
+					foreach (string dir in dirs) {
+						string name = dir.Substring (indir.Length, dir.Length-indir.Length); //To get the name from the full path.
+						BinaryDirToPlyDir (indir + name, outdir + "/" + name, true);
+					}
+				}
+				string[] files = Directory.GetFiles(indir);
+				foreach (string file in files)
+				{
+					if(file.EndsWith(".plybin", StringComparison.InvariantCulture))
+					{
+						string name = file.Substring (indir.Length, file.Length-indir.Length); //To get the name from the full path.
+						name.Substring (0, name.Length - 3); //To remove the bin from .plybin
+						BinaryToPly (file, outdir+name);
+					}
+				}
+				return;
+			}
 		}
 	}
 }
