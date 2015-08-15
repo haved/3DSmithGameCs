@@ -12,7 +12,7 @@
 		public static void Load()
 		{
 			GreatswordCast = new Mesh (Util.PATH+"res/meshes/collection/GreatswordCast.ply");
-			Ingot = new Mesh (Util.PATH+"res/meshes/collection/ingot.ply");
+			Ingot = new Mesh (Util.PATH+"res/meshes/collection/ingot.plybin", true);
 			IngotCast = new Mesh (Util.PATH+"res/meshes/collection/IngotCast.ply");
 			GreatswordBlade = new BladeMesh (Util.PATH+"res/meshes/collection/GreatswordBlade.ply", Util.PATH+"res/meshes/collection/GreatswordBladeSharp.ply");
 			Diamond = new Mesh (Util.PATH+"res/meshes/collection/Diamond.ply");

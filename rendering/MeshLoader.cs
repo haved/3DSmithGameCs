@@ -100,7 +100,6 @@ namespace DSmithGameCs
 			}
 		}
 
-		const int fSize = sizeof(float);
 		public MeshLoader(Stream file)
 		{
 			try

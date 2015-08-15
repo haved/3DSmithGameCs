@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Globalization;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -14,11 +12,19 @@ namespace DSmithGameCs
 		int ibo;
 		int indicesCount;
 
-		public Mesh(string filename)
+		public Mesh(string filename) : this(filename, false) {}
+
+		public Mesh(string filename, bool binary)
 		{
 			try {
-			var loader = new MeshLoader (filename);
-			LoadMeshData (loader.Vertices, loader.Indices);
+				MeshLoader loader = null;
+				if(binary){
+					using(var reader = new FileStream(filename, FileMode.Open))
+						loader = new MeshLoader (reader);
+				}
+				else
+					loader = new MeshLoader (filename);
+				LoadMeshData (loader.Vertices, loader.Indices);
 			}
 			catch{
 				Console.Error.WriteLine ("The mesh will not contain any data");
