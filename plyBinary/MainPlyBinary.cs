@@ -8,8 +8,7 @@ namespace DSmithGameCs
 		public static void Main(string[] args)
 		{
 			try {
-				if (args.Length == 0)
-					Console.Out.WriteLine ("-h for help");
+				if (args.Length == 0) {}
 				else if (args [0].Equals ("-h") | args [0].Equals ("--help") | args [0].Equals ("-?")) {
 					Console.Out.WriteLine (
 						@"Help file for ply binary converter
@@ -21,14 +20,7 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 					if (args.Length != 3)
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
-						string infile = args [1];
-						string outfile = args [2];
-
-						var loader = new MeshLoader(infile);
-						using(var stream = new FileStream(outfile, FileMode.Create))
-							loader.WriteTo(stream);
-
-						Console.Out.WriteLine("wrote binary to '{0}'", outfile);
+						PlyToBinary(args[1], args[2]);
 
 						return;
 					}
@@ -48,22 +40,11 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 
 						return;
 					}
-				} else if (args [0].Equals ("binaryToPly")) {
+				} else if (args [0].Equals ("plyDirToBinary")) {
 					if (args.Length != 3)
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
-						if(!Directory.Exists(args[1]))
-							Console.Out.WriteLine("The input directory doesn't exist");
-						else {
-							string[] files = Directory.GetFiles(args[1]);
-							for(int i = 0; i < files.Length; i++)
-							{
-								if(files[i].EndsWith(".ply", StringComparison.InvariantCulture))
-								{
-									Console.Out.WriteLine(files[i]);
-								}
-							}
-						}
+						PlyDirToBinaryDir(args[1], args[2], true);
 					}
 				}
 
@@ -74,7 +55,44 @@ plyDirToBinary <ply directory> <target directory> (converts all the .ply files i
 			}
 		}
 
+		static void PlyToBinary(string infile, string outfile)
+		{
+			Console.Out.WriteLine ("infile (ply): {0}, outfile (plybin): {1}", infile, outfile);
 
+			var loader = new MeshLoader(infile);
+			using(var stream = new FileStream(outfile, FileMode.Create))
+				loader.WriteTo(stream);
+
+			Console.Out.WriteLine("wrote binary to '{0}'", outfile);
+		}
+
+		static void PlyDirToBinaryDir(string indir, string outdir, bool recursive)
+		{
+			if(!Directory.Exists(indir))
+				Console.Out.WriteLine("The input directory doesn't exist");
+			else {
+				if (!Directory.Exists (outdir))
+					Directory.CreateDirectory (outdir);
+
+				if (recursive) {
+					string[] dirs = Directory.GetDirectories (indir);
+					foreach (string dir in dirs) {
+						string name = dir.Substring (indir.Length, dir.Length-indir.Length);
+						PlyDirToBinaryDir (indir + name, outdir + "/" + name, true);
+					}
+				}
+				string[] files = Directory.GetFiles(indir);
+				foreach (string file in files)
+				{
+					if(file.EndsWith(".ply", StringComparison.InvariantCulture))
+					{
+						string name = file.Substring (indir.Length, file.Length-indir.Length)+"bin";
+						PlyToBinary (file, outdir+name);
+					}
+				}
+				return;
+			}
+		}
 
 
 
@@ -100,7 +118,6 @@ bladeconvert -plybladein <flatFile> <sharpFile> -plybinbladeout <file>
 bladeconvert -plybinbladein <file> - plyout <directory>");
 					else if (args [0].Equals ("convert") & args.Length == 5) {
 						MeshLoader loader = null;
-						string inputdirectory = null;
 						int i;
 						for (i = 1; i < args.Length - 1; i++) {
 							if (args [i].Equals ("-plyin")) {
@@ -152,4 +169,3 @@ bladeconvert -plybinbladein <file> - plyout <directory>");
 		}
 	}
 }
-
