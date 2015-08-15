@@ -12,15 +12,15 @@ namespace DSmithGameCs
 		int ibo;
 		int indicesCount;
 
-		public Mesh(string filename) : this(filename, false) {}
+		public Mesh(string filename) : this(filename, filename.EndsWith("bin", StringComparison.InvariantCulture)) {}
 
 		public Mesh(string filename, bool binary)
 		{
 			try {
 				MeshLoader loader = null;
 				if(binary){
-					using(var reader = new FileStream(filename, FileMode.Open))
-						loader = new MeshLoader (reader);
+					using(var stream = new FileStream(filename, FileMode.Open))
+						loader = new MeshLoader (stream);
 				}
 				else
 					loader = new MeshLoader (filename);
