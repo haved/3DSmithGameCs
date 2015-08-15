@@ -99,7 +99,7 @@ namespace DSmithGameCs
 				return menuScene;
 			Console.WriteLine ("MenuScene made");
 			menuScene = new Scene ();
-			menuScene.AddEntity(new MeshEntity(new Mesh(Util.PATH+"res/meshes/menuBG.ply")));
+			menuScene.AddEntity(new MeshEntity(new Mesh(Util.PATH+"res/meshes/menuBG.plybin")));
 			menuScene.AddLight(new DirectionalLight(Util.White3, 1f, -Vector3.UnitZ));
 			menuScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
 			return menuScene;

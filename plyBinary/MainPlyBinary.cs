@@ -14,7 +14,8 @@ namespace DSmithGameCs
 					Console.Out.WriteLine (
 						@"Help file for ply binary converter
 plyToBinary <ply file> <target file> (loads the ply file and saves the mesh to the target file as a plybin)
-binaryToPly <plybin file> <target file> (loads the plybin file and saves the mesh to the target file as a ply)");
+binaryToPly <plybin file> <target file> (loads the plybin file and saves the mesh to the target file as a ply)
+plyDirToBinary <ply directory> <target directory> (converts all the .ply files in ply directory into .plybin in the target directory)");
 					return;
 				} else if (args [0].Equals ("plyToBinary")) {
 					if (args.Length != 3)
@@ -45,9 +46,26 @@ binaryToPly <plybin file> <target file> (loads the plybin file and saves the mes
 					
 						Console.Out.WriteLine("wrote ply to '{0}'", outfile);
 
-					return;
+						return;
+					}
+				} else if (args [0].Equals ("binaryToPly")) {
+					if (args.Length != 3)
+						Console.Out.WriteLine ("Wrong amount of arguments supplied");
+					else {
+						if(!Directory.Exists(args[1]))
+							Console.Out.WriteLine("The input directory doesn't exist");
+						else {
+							string[] files = Directory.GetFiles(args[1]);
+							for(int i = 0; i < files.Length; i++)
+							{
+								if(files[i].EndsWith(".ply", StringComparison.InvariantCulture))
+								{
+									Console.Out.WriteLine(files[i]);
+								}
+							}
+						}
+					}
 				}
-			}
 
 				Console.Out.WriteLine ("-h for help");
 			} catch (Exception e) {
