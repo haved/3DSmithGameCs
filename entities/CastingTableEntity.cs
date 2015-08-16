@@ -36,8 +36,8 @@ namespace DSmithGameCs
 			if (game.GameStats.CurrentCast.CastInfoID != prevCastItem) {
 				prevCastItem = game.GameStats.CurrentCast.CastInfoID;
 				float width = game.GameStats.CurrentCast.Info.Width;
-				float pos = (tableWidth - (width*1.5f)) / 2;
-				castModelspace = Matrix4.CreateScale (1.5f) * Matrix4.CreateTranslation (pos, 0, tableHeight);
+				float pos = (tableWidth - width) / 2;
+				castModelspace = Matrix4.CreateTranslation (pos, 0, tableHeight);
 				fillMatrix = Matrix4.CreateScale(width, 1, 1) * Matrix4.CreateTranslation (pos, 0, tableHeight - 0.08f);
 			}
 		}

@@ -67,7 +67,7 @@ namespace DSmithGameCs
 
 		public void LoadGame()
 		{
-			GameInfo loadedGame = new GameInfo ();
+			var loadedGame = new GameInfo ();
 			if (!loadedGame.LoadGame ()) {
 				ErrortipHelper.ShowError (Localization.GetLocalization("ui.error.savecorruption"), Input.OrthoMouseX, Input.OrthoMouseY, 2, false);
 				return;
@@ -83,11 +83,14 @@ namespace DSmithGameCs
 
 		public void ShowMainMenu()
 		{
-			if (GameStats != null)
+			if (GameStats != null) {
 				GameStats.Dispose ();
-			GameStats = null;
-			smithScene.Dispose ();
-			smithScene = null;
+				GameStats = null;
+			}
+			if (smithScene != null) {
+				smithScene.Dispose ();
+				smithScene = null;
+			}
 			CurrentView = null;
 			SetView (MainMenu);
 			CurrentScene = MakeMenuScene ();
