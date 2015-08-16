@@ -12,6 +12,11 @@ namespace DSmithGameCs
 		int ibo;
 		int indicesCount;
 
+		/**<summary> A constructor that takes the path of a file.
+		 If the file name ends with "bin", it will be loaded as a plybin.
+		 Otherwise it will be loaded as a ply
+		 </summary>
+		<param name="filename">The path of the file. Either a *bin (binary file) or a ply file</param>*/
 		public Mesh(string filename) : this(filename, filename.EndsWith("bin", StringComparison.InvariantCulture)) {}
 
 		public Mesh(string filename, bool binary)

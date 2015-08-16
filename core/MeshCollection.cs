@@ -11,11 +11,11 @@
 
 		public static void Load()
 		{
-			GreatswordCast = new Mesh (Util.PATH+"res/meshes/collection/GreatswordCast.plybin");
-			Ingot = new Mesh (Util.PATH+"res/meshes/collection/ingot.plybin");
-			IngotCast = new Mesh (Util.PATH+"res/meshes/collection/IngotCast.plybin");
-			GreatswordBlade = new BladeMesh (Util.PATH+"res/meshes/collection/GreatswordBlade.ply", Util.PATH+"res/meshes/collection/GreatswordBladeSharp.ply");
-			Diamond = new Mesh (Util.PATH+"res/meshes/collection/Diamond.plybin");
+			GreatswordCast = new Mesh (Util.MESHPATH+"collection/GreatswordCast.plybin");
+			Ingot = new Mesh (Util.MESHPATH+"collection/ingot.plybin");
+			IngotCast = new Mesh (Util.MESHPATH+"collection/IngotCast.plybin");
+			GreatswordBlade = new BladeMesh (Util.MESHPATH+"collection/GreatswordBlade.ply", Util.MESHPATH+"collection/GreatswordBladeSharp.ply");
+			Diamond = new Mesh (Util.MESHPATH+"collection/Diamond.plybin");
 		}
 	}
 }
