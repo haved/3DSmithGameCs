@@ -4,8 +4,11 @@ ui.button.savegame===Lagre Spill
 ui.button.loadgame===Last Inn Spill
 ui.button.exittomainmenu===Gå til hovedmenyen
 ui.button.exit===Avslutt
-ui.tooltip.oxygen:===Oksygen:       
-ui.tooltip.purity:===Renhet:        
+ui.tooltip.heat:===Tempratur:   
+ui.tooltip.coal:===Kull:   
+ui.tooltip.oxygen:===Oksygen:   
+ui.tooltip.ingots:===Barrer:   
+ui.tooltip.purity:===Renhet:   
 ui.tooltip.nocast===Ingen støpeform på bordet
 ui.tooltip.volume:===Volum: 
 ui.tooltip.unit.ingot===Barre

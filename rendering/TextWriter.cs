@@ -67,6 +67,8 @@ namespace DSmithGameCs
 
 		public void Resize(int width, int height)
 		{
+			if (width == bitmap.Width / 2 & height == bitmap.Height / 2)
+				return;
 			bitmap.Dispose ();
 			bitmap = new Bitmap (width*2, height*2);
 			gfx = Graphics.FromImage (bitmap);
@@ -99,6 +101,12 @@ namespace DSmithGameCs
 			brush.Color = color;
 			gfx.DrawString (text, UsedFont, brush, x*2, y*2);
 			textureChanged = true;
+		}
+
+		public float GetWidthDrawString(string text, float x, float y, Color color)
+		{
+			DrawString (text, x, y, color);
+			return GetLineWidth (text);
 		}
 
 		public int GetTextureID()

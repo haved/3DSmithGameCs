@@ -44,7 +44,7 @@ namespace DSmithGameCs
 		static readonly Matrix4 orthoMatrix = Matrix4.CreateOrthographicOffCenter(-16-1, 24+1, -12-1, 12+1, 0.1f, 22);
 		public INormalShader GetUseShader(Scene s, Vector3 eyePos)
 		{
-			VP = Matrix4.LookAt (stdPos, stdPos+LightDirection, Vector3.UnitY) * orthoMatrix;
+			VP = Matrix4.LookAt (stdPos, stdPos + LightDirection, Vector3.UnitY) * orthoMatrix;
 
 			shadowMap.UpdateShadowMap (s, VP);
 

@@ -10,11 +10,13 @@ namespace DSmithGameCs
 		public readonly TextWriter Writer;
 
 		const int tooltipWidth=150;
-		const int tooltipHeight = 35;
+		const int tooltipHeight=35;
+
+		readonly static Font defaultFont = new Font(FontFamily.GenericSansSerif, 18*2);
 
 		public TooltipHelper()
 		{
-			Writer = new TextWriter(new Font(FontFamily.GenericSansSerif, 18*2), tooltipWidth, tooltipHeight);
+			Writer = new TextWriter(defaultFont, tooltipWidth, tooltipHeight);
 		}
 
 		object Owner;

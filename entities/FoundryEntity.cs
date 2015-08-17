@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace DSmithGameCs
 {
 	public class FoundryEntity : MeshEntity, IInteractiveEntity
 	{
+		const float heatupSpeed = 1;
+		const float cooldownSpeed = 0.1f;
+		const float maxTemp = 1927;
+		const float neutralSpace = 15; //Hopw much higher than the wanted temperature the actual temperature has to be for the temperature to change
+
 		readonly PointLight light = new PointLight(new Vector3(1.2f, 0.4f, 0), Vector3.Zero, 8, 20, 0.1f, 0.5f, 1.4f);
 
 		readonly Smith2DGame game;
@@ -50,8 +56,6 @@ namespace DSmithGameCs
 			s.RemoveLight (light);
 		}
 
-		const float foundryHeatingSpeed = 1f;//0.4f;
-		const float maxTemp = 1927; //The temprature of coal under perfect air conditions
 		public override void Update(Scene s)
 		{
 			float wantedTemprature = game.GameStats.AirQuality / 100 * maxTemp;
@@ -62,11 +66,13 @@ namespace DSmithGameCs
 			game.GameStats.AirQuality -= game.GameStats.AirQuality /10 * Time.Delta ();
 				game.GameStats.AirQuality = game.GameStats.AirQuality < lowestPossibleAirQuality ? lowestPossibleAirQuality : game.GameStats.AirQuality;
 
-			if (game.GameStats.FoundryTemprature < wantedTemprature) {
-				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * foundryHeatingSpeed;
+			/*if (game.GameStats.FoundryTemprature < wantedTemprature) {
+				game.GameStats.FoundryTemprature += Time.Delta () * game.GameStats.CoalPercent * heatupSpeed;
 				game.GameStats.FoundryTemprature = game.GameStats.FoundryTemprature > wantedTemprature ? wantedTemprature : game.GameStats.FoundryTemprature;
-			} else if (game.GameStats.FoundryTemprature > wantedTemprature)
-				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ()*0.2f;
+			} else if (game.GameStats.FoundryTemprature > wantedTemprature+neutralSpace)
+				game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature) * Time.Delta ()*cooldownSpeed;*/
+
+			game.GameStats.FoundryTemprature -= (game.GameStats.FoundryTemprature-wantedTemprature) * Time.Delta() * (game.GameStats.FoundryTemprature < wantedTemprature ? heatupSpeed : cooldownSpeed);
 
 			for (int i = 0; i < game.GameStats.FoundryIngots.Capacity; i++) {
 				IngotItem ingot = game.GameStats.FoundryIngots [i];
@@ -79,11 +85,28 @@ namespace DSmithGameCs
 
 			UpdateDialog ();
 		}
-
-		int prevVal;
+			
 		void UpdateDialog()
 		{
 			if (game.Player.IsLookingAt (this)) {
+				game.TooltipHelper.ClaimIfPossible (this);
+				if (game.TooltipHelper.GetOwner () == this) {
+					TextWriter writer = game.TooltipHelper.Writer;
+					int lineCount = 0;
+					var lineHeight = writer.GetLineHeight ();
+					float maxWidth=0;
+
+					writer.Clear ();
+
+					maxWidth = Math.Max(maxWidth, game.TooltipHelper.Writer.GetWidthDrawString (Localization.GetLocalization("ui.tooltip.heat:"), 0, 0, Color.Red));
+					lineCount++;
+
+					writer.Resize ((int) maxWidth, (int)(lineCount*lineHeight));
+				}
+			} else if (game.TooltipHelper.GetOwner () == this)
+				game.TooltipHelper.UnClaim ();
+
+			/*if (game.Player.IsLookingAt (this)) {
 				if (game.TooltipHelper.ClaimIfPossible (this)) {
 					game.TooltipHelper.Writer.Resize (300, 20 * 16 + 10);
 					prevVal = -1;
@@ -120,7 +143,7 @@ namespace DSmithGameCs
 						
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)
-				game.TooltipHelper.UnClaim ();
+				game.TooltipHelper.UnClaim ();*/
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)

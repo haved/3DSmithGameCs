@@ -8,7 +8,7 @@ namespace DSmithGameCs
 	public class ShadowMap : IDisposable
 	{
 		readonly int frameBuffer;
-		int shadowMapSize;
+		public int ShadowMapSize { get; private set; }
 		readonly int shadowMap;
 		public int ShadowMapId { get {return shadowMap;} }
 
@@ -59,7 +59,7 @@ namespace DSmithGameCs
 			GL.BindTexture (TextureTarget.Texture2D, shadowMap);
 			GL.TexImage2D (TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent24, shadowMapSize, shadowMapSize, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, (IntPtr)0);
 
-			this.shadowMapSize = shadowMapSize;
+			ShadowMapSize = shadowMapSize;
 		}
 
 		public void UpdateShadowMap(Scene s, Matrix4 VP)
@@ -75,7 +75,7 @@ namespace DSmithGameCs
 
 			GL.Clear (ClearBufferMask.DepthBufferBit);
 
-			GL.Viewport (0, 0, shadowMapSize, shadowMapSize);
+			GL.Viewport (0, 0, ShadowMapSize, ShadowMapSize);
 
 			ShadowGenShader Instance = ShadowGenShader.Instance;
 			Instance.Bind ();
