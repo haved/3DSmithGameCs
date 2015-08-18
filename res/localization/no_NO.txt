@@ -4,7 +4,7 @@ ui.button.savegame===Lagre Spill
 ui.button.loadgame===Last Inn Spill
 ui.button.exittomainmenu===Gå til hovedmenyen
 ui.button.exit===Avslutt
-ui.tooltip.heat:===Tempratur:   
+ui.tooltip.heat:===Temperatur:   
 ui.tooltip.coal:===Kull:   
 ui.tooltip.oxygen:===Oksygen:   
 ui.tooltip.ingots:===Barrer:   

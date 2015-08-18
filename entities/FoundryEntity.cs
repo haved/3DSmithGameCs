@@ -85,7 +85,8 @@ namespace DSmithGameCs
 
 			UpdateDialog ();
 		}
-			
+
+		float prevWidth=0;
 		void UpdateDialog()
 		{
 			if (game.Player.IsLookingAt (this)) {
@@ -98,10 +99,18 @@ namespace DSmithGameCs
 
 					writer.Clear ();
 
-					maxWidth = Math.Max(maxWidth, game.TooltipHelper.Writer.GetWidthDrawString (Localization.GetLocalization("ui.tooltip.heat:"), 0, 0, Color.Red));
-					lineCount++;
+					maxWidth = Math.Max(maxWidth, game.TooltipHelper.Writer.GetWidthDrawString (Localization.GetLocalization("ui.tooltip.heat:"), 0, 0, Color.Red) + 
+						game.TooltipHelper.Writer.GetWidthDrawStringEnd ((int)game.GameStats.FoundryTemprature + "*C", prevWidth, 0, Color.White));
+					maxWidth = Math.Max(maxWidth, game.TooltipHelper.Writer.GetWidthDrawString (Localization.GetLocalization("ui.tooltip.coal:"), 0, lineHeight, Color.Black) + 
+						game.TooltipHelper.Writer.GetWidthDrawStringEnd ((int)game.GameStats.CoalPercent + "%", prevWidth, lineHeight, Color.White));
+					maxWidth = Math.Max(maxWidth, game.TooltipHelper.Writer.GetWidthDrawString (Localization.GetLocalization("ui.tooltip.oxygen:"), 0, lineHeight*2, Color.Aqua) + 
+						game.TooltipHelper.Writer.GetWidthDrawStringEnd ((int)game.GameStats.AirQuality + "%", prevWidth, lineHeight*2, Color.White));
+
+					lineCount += 3;
 
 					writer.Resize ((int) maxWidth, (int)(lineCount*lineHeight));
+
+					prevWidth = maxWidth;
 				}
 			} else if (game.TooltipHelper.GetOwner () == this)
 				game.TooltipHelper.UnClaim ();

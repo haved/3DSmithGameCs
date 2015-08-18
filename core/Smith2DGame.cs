@@ -240,7 +240,7 @@ namespace DSmithGameCs
 			}
 
 			using (var gw = new SmithGameWindow (new Smith2DGame ())) {
-				gw.Run (1, 60.00);
+				gw.Run ();
 			}
 		}
 	}

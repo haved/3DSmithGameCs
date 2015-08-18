@@ -109,6 +109,13 @@ namespace DSmithGameCs
 			return GetLineWidth (text);
 		}
 
+		public float GetWidthDrawStringEnd (string text, float x, float y, Color color)
+		{
+			float width = GetLineWidth (text);
+			DrawString (text, x-width, y, color);
+			return width;
+		}
+
 		public int GetTextureID()
 		{
 			if (textureChanged) {
