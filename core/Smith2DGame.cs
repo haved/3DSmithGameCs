@@ -115,7 +115,13 @@ namespace DSmithGameCs
 			Console.Out.WriteLine ("SmithScene made");
 			smithScene = new Scene ();
 
-			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/floor.plybin")));
+			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 2048));
+			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
+
+			Player = new PlayerEntity (4, 0, new Mesh (Util.MESHPATH+"player.plybin"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
+			smithScene.AddEntity (Player);
+
+			/*smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/floor.plybin")));
 			smithScene.AddEntity (new HatchEntity (this, new Mesh (Util.MESHPATH+"house/hatch/hatchHole.plybin"), new Mesh (Util.MESHPATH+"house/hatch/hatch.plybin"), new Vector3 (-2.85f, 0, 0), 0, 1, 0, 4, 4));
 			Player = new PlayerEntity (4, 0, new Mesh (Util.MESHPATH+"player.plybin"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
 			smithScene.AddEntity (Player);
@@ -129,24 +135,20 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 13.5f, -8.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 20.5f, -6, 0, 7, 12));
 			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.MESHPATH+"house/castingTable/castingTable.plybin"), new Mesh (Util.MESHPATH+"house/castingTable/castingTableFill.plybin"), 5, -9.5f, 8, 1.55f, 8.26f, 3.3f));
-			smithScene.AddEntity (new CoalBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/coalBellow.plybin"), Matrix4.CreateTranslation(0, 2.41f, 2.85f), new Mesh(Util.MESHPATH+"house/bellow/coalBellowRig.plybin"), -12.5f, .5f, 0, 5, 9));
 
-			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
+			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));*/
 
-			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 2048));
-			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
-
-			//var anvil = new AnvilEntity (this, new Mesh (Util.PATH+"res/mesh/anvil.plybin"), -15 + 9, 8.7f, 0, 8, 3, 3f);
-			//var table = new CoalStripTable(this, new Mesh(Util.PATH+"res/mesh/coalStripTable.plybin"),new Mesh(Util.PATH+"res/mesh/coalStrip.plybin"), -12, 6.5f, 0, 3, 6, 3.5f);
-			//anvil.SetCoalStripTable(table);
-			//table.SetAnvil(anvil);
-			//smithScene.AddEntity(anvil);
-			//smithScene.AddEntity(table);
-			//smithScene.AddEntity (new BellowEntity(this, new Mesh(Util.PATH+"res/mesh/bellow.plybin"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
-			//smithScene.AddEntity (new CoalTableEntity (new Mesh (Util.PATH+"res/mesh/coalTableSmall.plybin"), new Mesh (Util.PATH+"res/mesh/coalSmall.plybin"), 1, -8.5f, 0, 6, 3));
-			//smithScene.AddEntity (new MeshEntity (new Mesh (Util.PATH+"res/mesh/table.plybin"), 11.5f, -8, 0, 7, 4));
-			//smithScene.AddEntity (new MailboxEntity (this, new Mesh (Util.PATH+"res/mesh/mailboxBox.plybin"), new Mesh (Util.PATH+"res/mesh/mailboxLid.plybin"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
-
+			/*var anvil = new AnvilEntity (this, new Mesh (Util.PATH+"res/mesh/anvil.plybin"), -15 + 9, 8.7f, 0, 8, 3, 3f);
+			var table = new CoalStripTable(this, new Mesh(Util.PATH+"res/mesh/coalStripTable.plybin"),new Mesh(Util.PATH+"res/mesh/coalStrip.plybin"), -12, 6.5f, 0, 3, 6, 3.5f);
+			anvil.SetCoalStripTable(table);
+			table.SetAnvil(anvil);
+			smithScene.AddEntity(anvil);
+			smithScene.AddEntity(table);
+			smithScene.AddEntity (new BellowEntity(this, new Mesh(Util.PATH+"res/mesh/bellow.plybin"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
+			smithScene.AddEntity (new CoalTableEntity (new Mesh (Util.PATH+"res/mesh/coalTableSmall.plybin"), new Mesh (Util.PATH+"res/mesh/coalSmall.plybin"), 1, -8.5f, 0, 6, 3));
+			smithScene.AddEntity (new MeshEntity (new Mesh (Util.PATH+"res/mesh/table.plybin"), 11.5f, -8, 0, 7, 4));
+			smithScene.AddEntity (new MailboxEntity (this, new Mesh (Util.PATH+"res/mesh/mailboxBox.plybin"), new Mesh (Util.PATH+"res/mesh/mailboxLid.plybin"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
+			*/
 			return smithScene;
 		}
 
