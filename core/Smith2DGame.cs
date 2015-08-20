@@ -118,25 +118,31 @@ namespace DSmithGameCs
 			smithScene.AddLight (new ShadowDirectionalLight(Util.White3, 1f, -Vector3.UnitZ, 2048));
 			smithScene.AddLight (new DirectionalLight(Util.White3, 0.4f, Vector3.UnitZ));
 
-			Player = new PlayerEntity (4, 0, new Mesh (Util.MESHPATH+"player.plybin"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
-			smithScene.AddEntity (Player);
-
-			/*smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/floor.plybin")));
+			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/floor.plybin")));
 			smithScene.AddEntity (new HatchEntity (this, new Mesh (Util.MESHPATH+"house/hatch/hatchHole.plybin"), new Mesh (Util.MESHPATH+"house/hatch/hatch.plybin"), new Vector3 (-2.85f, 0, 0), 0, 1, 0, 4, 4));
 			Player = new PlayerEntity (4, 0, new Mesh (Util.MESHPATH+"player.plybin"), new Vector4 (1, 1, 1, 0.5f), 4, 3);
 			smithScene.AddEntity (Player);
 
 			var longWallMesh = new Mesh (Util.MESHPATH+"house/floorWalls/longWall.plybin");
-			smithScene.AddEntity (new MeshEntity (longWallMesh, -16f, 0, 0, -0.2f, 0, PI / 2, 1, 24)); //Left
-			smithScene.AddEntity (new MeshEntity (longWallMesh, 0, 12f, 0, -0.2f, 0, 0, 32, 1)); //Top
-			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/shortWall12.plybin"), 20, 0, 0, 0, 0, 0, 0, 0));
-			smithScene.AddEntity (new MeshEntity (new Mesh(Util.MESHPATH+"house/floorWalls/extraLongWall.plybin"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 1)); //Bottom
+			smithScene.AddEntity (new MeshEntity (longWallMesh, -16f, 0, 0, -0.2f, 0, PI / 2, 1, 24));
+			smithScene.AddEntity (new MeshEntity (longWallMesh, 0, 12f, 0, -0.2f, 0, 0, 32, 1));
+			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/cornerWall.plybin"), 16, 0, 0, 0, 0, 0, 1, 32));
+			smithScene.AddEntity (new MeshEntity (new Mesh(Util.MESHPATH+"house/floorWalls/extraLongWall.plybin"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 0.2f));
 
-			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 13.5f, -8.5f, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
-			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 20.5f, -6, 0, 7, 12));
-			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.MESHPATH+"house/castingTable/castingTable.plybin"), new Mesh (Util.MESHPATH+"house/castingTable/castingTableFill.plybin"), 5, -9.5f, 8, 1.55f, 8.26f, 3.3f));
+			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 11, -8, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
+			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 18, -5.5f, 0, 7, 12));
+			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.MESHPATH+"house/castingTable/castingTable.plybin"), new Mesh (Util.MESHPATH+"house/castingTable/castingTableFill.plybin"), 2, -9, 8, 1.55f, 8.26f, 3.3f));
 
-			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));*/
+			smithScene.AddEntity (new MeshEntity(new Mesh(Util.MESHPATH+"house/table.plybin"), -13.8f, -7.8f, 0, 4, 7));
+
+			var anvil = new AnvilEntity (this, new Mesh (Util.MESHPATH+"house/anvil/anvil.plybin"), new Mesh (Util.PATH+"res/meshes/house/anvil/hammer.plybin"), -8, 9.7f, 0, 8, 3, 3f);
+			var table = new CoalStripTable(this, new Mesh(Util.MESHPATH+"house/coalStripTable/coalstriptable.plybin"), new Mesh(Util.PATH+"res/meshes/house/coalStripTable/coalStrip.plybin"), -14, 7.5f, 0, 3, 6, 3.5f);
+			anvil.SetCoalStripTable(table);
+			table.SetAnvil(anvil);
+			smithScene.AddEntity(anvil);
+			smithScene.AddEntity(table);
+
+			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 
 			/*var anvil = new AnvilEntity (this, new Mesh (Util.PATH+"res/mesh/anvil.plybin"), -15 + 9, 8.7f, 0, 8, 3, 3f);
 			var table = new CoalStripTable(this, new Mesh(Util.PATH+"res/mesh/coalStripTable.plybin"),new Mesh(Util.PATH+"res/mesh/coalStrip.plybin"), -12, 6.5f, 0, 3, 6, 3.5f);

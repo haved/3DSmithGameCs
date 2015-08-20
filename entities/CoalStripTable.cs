@@ -11,7 +11,7 @@ namespace DSmithGameCs
 		public readonly Mesh Coal;
 		Vector4 coalColor = new Vector4(1,1,1,1);
 		readonly float height;
-		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize, float height) : base(table, x,y,z,xSize,ySize)
+		public CoalStripTable (Smith2DGame game, Mesh table, Mesh coal, float x, float y, float z, float xSize, float ySize, float height) : base(table, x, y, z, xSize,ySize)
 		{
 			this.game = game;
 			Coal = coal;
@@ -26,18 +26,20 @@ namespace DSmithGameCs
 
 		public override void OnAddedToScene(Scene s)
 		{
+			base.OnAddedToScene (s);
 			s.AddLight (light);
 		}
 
 		public override void OnRemovedFromScene(Scene s)
 		{
+			base.OnRemovedFromScene (s);
 			s.RemoveLight (light);
 		}
 
 		public override void UpdateModelspaceMatrix()
 		{
 			base.UpdateModelspaceMatrix ();
-			light.Position = Pos+new Vector3(0, height, 0);
+			light.Position = Pos + new Vector3(0, 0, height);
 		}
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)

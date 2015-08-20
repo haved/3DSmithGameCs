@@ -38,12 +38,16 @@ binaryDirToPly <plybin directory> <target directory> (recursivly converts all .p
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
 						PlyDirToBinaryDir(args[1], args[2], true);
+
+						return;
 					}
 				} else if (args [0].Equals ("binaryDirToPly")) {
 					if (args.Length != 3)
 						Console.Out.WriteLine ("Wrong amount of arguments supplied");
 					else {
 						BinaryDirToPlyDir(args[1], args[2], true);
+
+						return;
 					}
 				}
 
