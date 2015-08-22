@@ -15,7 +15,9 @@ namespace DSmithGameCs
 plyToBinary <ply file> <target file> (loads the ply file and saves the mesh to the target file as a plybin)
 binaryToPly <plybin file> <target file> (loads the plybin file and saves the mesh to the target file as a ply)
 plyDirToBinary <ply directory> <target directory> (recursivly converts all .ply in the ply directory to .plybin in the target directory)
-binaryDirToPly <plybin directory> <target directory> (recursivly converts all .plybin the in plybin directory to .ply in the target directory)");
+binaryDirToPly <plybin directory> <target directory> (recursivly converts all .plybin the in plybin directory to .ply in the target directory)
+plysToBladebin <flat blade ply mesh> <sharp blade ply mesh> <target> (turns two ply files with the same amount of vertices/faces into one bladebin file)
+bladebinToPlys <bladebin file> <flat ply target> <sharp ply target> (turns a bladebin file into two ply's, one for the flat and one for the sharp mesh)");
 					return;
 				} else if (args [0].Equals ("plyToBinary")) {
 					if (args.Length != 3)
@@ -49,7 +51,24 @@ binaryDirToPly <plybin directory> <target directory> (recursivly converts all .p
 
 						return;
 					}
+				} else if (args [0].Equals ("plysToBladebin")) {
+					if (args.Length != 4)
+						Console.Out.WriteLine ("Wrong amount of arguments supplied");
+					else {
+						PlysToBladebin(args[1], args[2], args[3]);
+
+						return;
+					}
+				} else if (args [0].Equals ("bladebinToPlys")) {
+					if (args.Length != 3)
+						Console.Out.WriteLine ("Wrong amount of arguments supplied");
+					else {
+						BladebinToPlys(args[1], args[2], args[3]);
+
+						return;
+					}
 				}
+
 
 				Console.Out.WriteLine ("-h for help");
 			} catch (Exception e) {
@@ -133,6 +152,28 @@ binaryDirToPly <plybin directory> <target directory> (recursivly converts all .p
 				}
 				return;
 			}
+		}
+
+		static void PlysToBladebin(string flatfile, string sharpfile, string outfile)
+		{
+			Console.Out.WriteLine ("flatfile (ply): {0}, sharpfile (ply): {1}, outfile (bladebin): {2}", flatfile, sharpfile, outfile);
+
+			using (Stream stream = new FileStream(outfile, FileMode.Create)) {
+				var loader = new BladeMeshLoader (flatfile, sharpfile);
+				loader.WriteTo (stream);
+			}
+
+		}
+
+		static void BladebinToPlys(string bladebin, string outflatfile, string outsharpfile)
+		{
+			Console.Out.WriteLine ("inputfile (bladebi): {0}, outflatfile (ply): {1}, outsharpfile (ply): {2}", bladebin, outflatfile, outsharpfile);
+
+			using (Stream stream = new FileStream(bladebin, FileMode.Open)) {
+				var loader = new BladeMeshLoader (stream);
+				loader.WriteTo (outflatfile, outsharpfile);
+			}
+
 		}
 	}
 }

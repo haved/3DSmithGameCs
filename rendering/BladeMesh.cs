@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -10,6 +11,19 @@ namespace DSmithGameCs
 		int vbo;
 		int ibo;
 		int indicesCount;
+
+		public BladeMesh(string filename)
+		{
+			try {
+				using(Stream stream = new FileStream(filename, FileMode.Open)){
+					var loader = new BladeMeshLoader (stream);
+					LoadMeshData (loader.Vertices, loader.Indices);
+				}
+			}
+			catch {
+				Console.Error.WriteLine ("The blade mesh will not contain any data");
+			}
+		}
 
 		public BladeMesh(string flatSword, string sharpSword)
 		{

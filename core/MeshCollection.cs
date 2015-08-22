@@ -15,8 +15,8 @@
 			GreatswordCast = new Mesh (Util.MESHPATH+"collection/GreatswordCast.plybin");
 			Ingot = new Mesh (Util.MESHPATH+"collection/ingot.plybin");
 			IngotCast = new Mesh (Util.MESHPATH+"collection/IngotCast.plybin");
-			GreatswordBlade = new BladeMesh (Util.MESHPATH+"collection/GreatswordBlade.ply", Util.MESHPATH+"collection/GreatswordBladeSharp.ply");
-			BroadswordBlade = new BladeMesh (Util.MESHPATH+"collection/BroadswordBlade.ply", Util.MESHPATH+"collection/BroadswordBladeSharp.ply");
+			GreatswordBlade = new BladeMesh (Util.MESHPATH+"blades/GreatswordBlade.bladebin");
+			BroadswordBlade = new BladeMesh (Util.MESHPATH+"blades/BroadswordBlade.bladebin");
 			Diamond = new Mesh (Util.MESHPATH+"collection/Diamond.plybin");
 		}
 	}
