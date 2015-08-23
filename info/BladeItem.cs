@@ -9,8 +9,8 @@ namespace DSmithGameCs
 	public class BladeItem : Item
 	{
 		public static BladeType[] BladeTypes = new BladeType[1];
-		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 2, new []{0.2f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
-		public static BladeType BroadswordBlade = new BladeType(0, "Broadsword", MeshCollection.BroadswordBlade, 3.5f, 2, new []{0.11195f, 0.15f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
+		public static BladeType GreatswordBlade = new BladeType(0, "Greatsword", MeshCollection.GreatswordBlade, 3.5f, 3, new []{0.2f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
+		public static BladeType BroadswordBlade = new BladeType(0, "Broadsword", MeshCollection.BroadswordBlade, 3.5f, 2, new []{/*0.11195f,*/ 0.15f, 0.3f, 0.5f, 0.7f, 0.9f, 1f});
 
 		public class BladeType
 		{

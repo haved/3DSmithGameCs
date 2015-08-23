@@ -55,6 +55,7 @@ namespace DSmithGameCs
 			HatchInv = new HatchInventory ();
 			PlayerInventory.AddItem (new IngotItem(KnownMetal.Iron, 1));
 			HatchInv.AddItem (new CastItem (CastItem.GreatsowordCast));
+			HatchInv.AddItem (new CastItem (CastItem.BroadswordCast));
 			HatchInv.AddItem (new CastItem (CastItem.IngotCast));
 			HatchInv.AddItem (new IngotItem(KnownMetal.Gold, 0.8f));
 			HatchInv.AddItem (new IngotItem(KnownMetal.Iron, 0.7f));

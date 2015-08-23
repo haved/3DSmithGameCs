@@ -18,7 +18,7 @@ ui.error.inventoryfull===Beholdningen har ikke nok plass
 ui.error.notanalloy===Smelteovnens innhold er ikke en ren legering
 ui.error.nobladeselected===Ingen sverdblad valgt i beholdningen
 ui.error.savecorruption===Lagringsfila er korrupt og kan ikke leses inn
-ui.item.ingot===ingot
+ui.item.ingot===barre
 ui.item.blade===blad
 ui.item.cast===støpeform
 ui.metal.Copper===Kobber
@@ -33,4 +33,6 @@ ui.metal.subtitle.HiTinBronze===Ekstra tinnholdig
 ui.metal.subtitle.LowTinBronze===Mindre tinn
 ui.cast.Ingot===Barre
 ui.cast.Greatsword===Storsverd
+ui.cast.Broadsword===Bredsverd
 ui.blade.Greatsword===Storsverd
+ui.blade.Broadsword===Bredsverd

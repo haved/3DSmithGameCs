@@ -9,7 +9,8 @@ namespace DSmithGameCs
 			Matrix4.CreateTranslation (0, 0, -2.8f) * Matrix4.CreatePerspectiveFieldOfView (0.85f, 1, 0.1f, 4);//*Matrix4.CreateScale(1, 0.5f, 1);
 
 		public static CastItemInfo IngotCast = new CastItemInfo (0, MeshCollection.IngotCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Ingot", 1, 1, 3, 0.63f, new IngotItemCreator());
-		public static CastItemInfo GreatsowordCast = new CastItemInfo (1, MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Greatsword", 2, BladeItem.BroadswordBlade.Volume, 6, .4f, new BladeCreator(BladeItem.BroadswordBlade));
+		public static CastItemInfo GreatsowordCast = new CastItemInfo (1, MeshCollection.GreatswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Greatsword", 2, BladeItem.GreatswordBlade.Volume, 6, .4f, new BladeCreator(BladeItem.GreatswordBlade));
+		public static CastItemInfo BroadswordCast = new CastItemInfo (2, MeshCollection.BroadswordCast, new Vector4 (205 / 255f, 165 / 255f, 68 / 255f, 1), "Broadsword", 2, BladeItem.BroadswordBlade.Volume, 6, .4f, new BladeCreator(BladeItem.BroadswordBlade));
 
 		public class CastItemInfo
 		{
@@ -92,7 +93,7 @@ namespace DSmithGameCs
 		public override void DrawTooltip (TextWriter writer)
 		{
 			writer.DrawStandardTooltip (new []{ GetTooltipName (), Localization.GetLocalization ("ui.tooltip.volume:") }, 
-				new []{ Util.GetColorFromVector (Info.Color) }, new []{null, Info.Volume + " " + Localization.GetLocalization("ui.item.ingot")});
+				new []{ Util.GetColorFromVector (Info.Color) }, new []{null, Info.Volume + " " + Localization.GetLocalization(Info.Volume==1?"ui.tooltip.unit.ingot":"ui.tooltip.unit.ingot.plural")});
 		}
 
 		public float GetVolume()
