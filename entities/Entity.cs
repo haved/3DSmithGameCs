@@ -36,7 +36,6 @@ namespace DSmithGameCs
 
 		public virtual void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			shader.ResetColor ();
 			shader.SetModelspaceMatrix(Modelspace);
 			shader.SetMVP(Modelspace * VP);
 			Draw (s);

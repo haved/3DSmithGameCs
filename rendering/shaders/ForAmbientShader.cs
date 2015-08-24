@@ -8,6 +8,10 @@ namespace DSmithGameCs
 
 		int MVP_id, colorId, ambientLightId;
 
+		#if TEST_COLOR_RESET
+		bool colorReset;
+		#endif
+
 		public ForAmbientShader ()
 		{
 			AddVertexShaderFromFile ("../../res/shaders/forward-ambient.glslvs");
@@ -16,7 +20,6 @@ namespace DSmithGameCs
 			MVP_id = AddUniform ("MVP");
 			colorId = AddUniform ("color");
 			ambientLightId = AddUniform ("ambientLight");
-			SetColor (Util.White);
 		}
 
 		public void SetModelspaceMatrix(Matrix4 modelspace){}
@@ -28,6 +31,9 @@ namespace DSmithGameCs
 
 		public void SetColor(Vector4 color)
 		{
+			#if TEST_COLOR_RESET
+			colorReset = false;
+			#endif
 			SetVector4 (colorId, color);
 		}
 
@@ -38,8 +44,18 @@ namespace DSmithGameCs
 
 		public void ResetColor()
 		{
+			#if TEST_COLOR_RESET
+			colorReset = true;
+			#endif
 			SetVector4 (colorId, Util.White);
 		}
+
+		#if TEST_COLOR_RESET
+		public bool IsColorReset()
+		{
+			return colorReset;
+		}
+		#endif
 
 		public static void MakeInstance()
 		{

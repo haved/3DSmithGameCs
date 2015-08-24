@@ -133,12 +133,14 @@ namespace DSmithGameCs
 		{
 			blade.RenderBlade (VP, Pos.X, Pos.Y- (diamond<0?-0.6f:blade.Type.Points[diamond]*blade.Type.MeshScale), height, Util.PI/2, heat, GetEyePos());
 
-			BasicShader.Instance.Bind ();
+			BasicShader shader = BasicShader.Instance;
+
+			shader.Bind ();
 			Matrix4 modelspace = Matrix4.CreateTranslation(0, 1, 0) * Matrix4.CreateRotationX(-hammerMove) * Matrix4.CreateTranslation(0, 2.5f+hammerY*hammerMove/4, 0) * Matrix4.CreateRotationX(0.9f-hammerMove) *
 				Matrix4.CreateRotationZ(0.7f+hammerX*hammerMove/4) * Matrix4.CreateTranslation (1.9f, -2.4f, height+1) * Modelspace;
-			BasicShader.Instance.SetMVP (modelspace*VP);
-			BasicShader.Instance.SetModelspaceMatrix (modelspace);
-			BasicShader.Instance.ResetColor ();
+			shader.SetMVP (modelspace*VP);
+			shader.SetModelspaceMatrix (modelspace);
+			shader.ResetColor ();
 			hammer.Draw ();
 
 			OrthoRenderEngine.DrawExtendedColoredTexturedBox (TextureCollection.DialogBG, Util.White, 50, 50, 250, 250);

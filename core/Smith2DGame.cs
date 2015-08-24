@@ -127,7 +127,7 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (longWallMesh, -16f, 0, 0, -0.2f, 0, PI / 2, 1, 24));
 			smithScene.AddEntity (new MeshEntity (longWallMesh, 0, 12f, 0, -0.2f, 0, 0, 32, 1));
 			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/cornerWall.plybin"), 16, 0, 0, 0, 0, 0, 1, 32));
-			smithScene.AddEntity (new MeshEntity (new Mesh(Util.MESHPATH+"house/floorWalls/extraLongWall.plybin"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 0.2f));
+			smithScene.AddEntity (new MeshEntity (new Mesh(Util.MESHPATH+"house/floorWalls/extraLongWall.plybin"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 0.2f)); //bottom
 
 			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 11, -8, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
 			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 18, -5.5f, 0, 7, 12));

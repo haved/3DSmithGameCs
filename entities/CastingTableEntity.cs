@@ -146,7 +146,6 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			shader.ResetColor ();
 			shader.SetModelspaceMatrix(Modelspace);
 			shader.SetMVP(Modelspace * VP);
 			Draw (s);
@@ -156,6 +155,7 @@ namespace DSmithGameCs
 				shader.SetMVP(castModelspace * Modelspace * VP);
 				shader.SetColor (game.GameStats.CurrentCast.GetColor());
 				game.GameStats.CurrentCast.GetMesh ().Draw ();
+				shader.ResetColor ();
 			}
 		}
 

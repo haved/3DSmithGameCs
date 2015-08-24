@@ -45,7 +45,6 @@ namespace DSmithGameCs
 
 		public override void Render(Scene s, Matrix4 VP, INormalShader shader)
 		{
-			shader.ResetColor ();
 			shader.SetModelspaceMatrix (Modelspace);
 			shader.SetMVP (Modelspace * VP);
 			box.Draw ();

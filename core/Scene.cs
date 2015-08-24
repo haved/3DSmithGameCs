@@ -67,12 +67,22 @@ namespace DSmithGameCs
 			
 			ForAmbientShader.Instance.Bind ();
 			ForAmbientShader.Instance.SetAmbientLight (AmbientLight);
-			foreach (Entity e in entities)
+			ForAmbientShader.Instance.ResetColor ();
+			foreach (Entity e in entities) {
 				e.Render (this, VP, ForAmbientShader.Instance);
+				#if TEST_COLOR_RESET
+				if(!ForAmbientShader.Instance.IsColorReset ()){
+					Console.Error.WriteLine("The shader's color wasn't reset after calling the render function of entity: " + e.ToString());
+					ForAmbientShader.Instance.ResetColor();
+				}
+				#endif
+			}
+
 
 			foreach (ILight light in lights)
 			{
 				INormalShader shader = light.GetUseShader(this, eyePos);
+				shader.ResetColor ();
 
 				GL.DepthFunc (DepthFunction.Equal);
 				GL.DepthMask (false);
