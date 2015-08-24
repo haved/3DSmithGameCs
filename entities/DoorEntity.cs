@@ -22,9 +22,18 @@ namespace DSmithGameCs
 			door.Dispose ();
 		}
 
+		Matrix4 doorModelspace;
+		public override void PreRender(Scene s, Matrix4 VP)
+		{
+			doorModelspace = doorTranslation * Modelspace;
+		}
+
 		public override void Render (Scene s, Matrix4 VP, INormalShader shader)
 		{
 			base.Render (s, VP, shader);
+
+			shader.SetModelspaceMatrix (doorModelspace);
+			shader.SetMVP (doorModelspace*VP);
 			door.Draw ();
 		}
 

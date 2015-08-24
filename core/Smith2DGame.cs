@@ -142,6 +142,8 @@ namespace DSmithGameCs
 			smithScene.AddEntity(anvil);
 			smithScene.AddEntity(table);
 
+			smithScene.AddEntity (new DoorEntity (this, new Mesh (Util.MESHPATH + "house/door/doorFrame.plybin"), new Mesh (Util.MESHPATH + "house/door/door.plybin"), Matrix4.CreateTranslation (3, .1f, 0), -8, -11.5f, -.05f, .227f, 0, 0, 6, .4f));
+
 			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 
 			/*var anvil = new AnvilEntity (this, new Mesh (Util.PATH+"res/mesh/anvil.plybin"), -15 + 9, 8.7f, 0, 8, 3, 3f);
