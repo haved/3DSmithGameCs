@@ -162,7 +162,7 @@ namespace DSmithGameCs
 				if (game.GameStats.FoundryIngots [i] != null && game.GameStats.FoundryIngots [i].GetSolidProgress () > 0.2f)
 					game.GameStats.FoundryIngots [i].RenderMesh (Matrix4.CreateScale (1, 1, game.GameStats.FoundryIngots [i].GetSolidProgress ()) * IngotMatrices [i] * Modelspace, VP, shader);
 			if (game.GameStats.FoundryIngots.Count > 0)
-				;//shader.ResetColor (); //Reset the color afterwards
+				shader.ResetColor (); //Reset the color afterwards
 		}
 
 		public override void PostRender(Scene s, Matrix4 VP)
