@@ -22,10 +22,22 @@ namespace DSmithGameCs
 			door.Dispose ();
 		}
 
+		float doorRotation = 0;
+		float doorSpeed = 0;
+		public override void Update (Scene s)
+		{
+			doorRotation += doorSpeed * Time.Delta ()*3;
+			if (doorRotation >= 0) {
+				doorRotation = 0;
+				doorSpeed = 0;
+			} else
+				doorSpeed += Time.Delta ()*2;
+		}
+
 		Matrix4 doorModelspace;
 		public override void PreRender(Scene s, Matrix4 VP)
 		{
-			doorModelspace = doorTranslation * Modelspace;
+			doorModelspace = Matrix4.CreateRotationZ(doorRotation) * doorTranslation * Modelspace;
 		}
 
 		public override void Render (Scene s, Matrix4 VP, INormalShader shader)
@@ -39,7 +51,8 @@ namespace DSmithGameCs
 
 		public void InteractionPerformed (object source)
 		{
-			//TODO: open door.
+			if (doorRotation >= 0)
+				doorSpeed = -1.6f;
 		}
 	}
 }
