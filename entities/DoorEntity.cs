@@ -1,5 +1,4 @@
-﻿using System;
-using OpenTK;
+﻿using OpenTK;
 
 namespace DSmithGameCs
 {
@@ -53,6 +52,11 @@ namespace DSmithGameCs
 		{
 			if (doorRotation >= 0)
 				doorSpeed = -1.6f;
+		}
+
+		public override bool IsInField(Vector2 point)
+		{
+			return ((point - Pos.Xy) * new Vector2 (1 / XSize, 0.1f / YSize)).Length < 2f;
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace DSmithGameCs
 			return Pos.Y + YSize;
 		}
 
-		public bool IsInField(Vector2 point)
+		public virtual bool IsInField(Vector2 point)
 		{
 			return ((point - Pos.Xy) * new Vector2 (1 / XSize, 1 / YSize)).Length < 1.4f;
 		}
