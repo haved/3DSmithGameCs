@@ -56,7 +56,7 @@ namespace DSmithGameCs
 
 		public override bool IsInField(Vector2 point)
 		{
-			return ((point - Pos.Xy) * new Vector2 (1 / XSize, 0.1f / YSize)).Length < 2f;
+			return ((point - Pos.Xy) * new Vector2 (1 / XSize, 0.1f / YSize)).Length < 1.4f;
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace DSmithGameCs
 
 		float lidRotation = 0;
 		float lidSpeed = 0;
-		public MailboxEntity (Smith2DGame game, Mesh box, Mesh lid, Matrix4 lidOffset, float x, float y, float z, float xSize, float ySize) : base(null,x,y,z,xSize,ySize)
+		public MailboxEntity (Smith2DGame game, Mesh box, Mesh lid, Matrix4 lidOffset, float x, float y, float z, float xRot, float yRot, float zRot, float xSize, float ySize) : base(null,x,y,z,xRot,yRot,zRot,xSize,ySize)
 		{
 			this.game = game;
 			this.box = box;
@@ -58,7 +58,7 @@ namespace DSmithGameCs
 		public void InteractionPerformed (object source)
 		{
 			if (lidRotation >= 0)
-				lidSpeed = -1.6f;
+				lidSpeed = -1.4f;
 		}
 
 		#endregion

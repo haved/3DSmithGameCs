@@ -129,11 +129,20 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new MeshEntity (new Mesh (Util.MESHPATH+"house/floorWalls/cornerWall.plybin"), 16, 0, 0, 0, 0, 0, 1, 32));
 			smithScene.AddEntity (new MeshEntity (new Mesh(Util.MESHPATH+"house/floorWalls/extraLongWall.plybin"), 3.5f, -11.5f, 0, -0.2f, 0, PI, 40, 0.2f)); //bottom
 
-			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f), new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 11, -8, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
-			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 18, -5.5f, 0, 7, 12));
-			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.MESHPATH+"house/castingTable/castingTable.plybin"), new Mesh (Util.MESHPATH+"house/castingTable/castingTableFill.plybin"), 2, -9, 8, 1.55f, 8.26f, 3.3f));
+			smithScene.AddEntity (new FoundryEntity (this, new Mesh (Util.MESHPATH+"house/foundry/foundry.plybin"), new Mesh(Util.MESHPATH+"house/foundry/foundryMetal.plybin"), Matrix4.CreateTranslation(0, 0, 2.49f),
+				new Mesh (Util.MESHPATH+"house/foundry/foundryFall.plybin"), new Vector3(1.5f, 2, 1.5f), 11, -8, FoundryMeshInfo.CreateIngotMatrices(), 7, 7));
+			smithScene.AddEntity (new BigBellowEntity(this, new Mesh(Util.MESHPATH+"house/bellow/bigBellow.plybin"), Matrix4.CreateTranslation(0, -4, 4.32f), new Mesh(Util.MESHPATH+"house/bellow/bigBellowRig.plybin"), 
+				18, -5.5f, 0, 7, 12));
+			smithScene.AddEntity (new CastingTableEntity (this, new Mesh (Util.MESHPATH+"house/castingTable/castingTable.plybin"), new Mesh (Util.MESHPATH+"house/castingTable/castingTableFill.plybin"),
+				2, -9, 8, 1.55f, 8.26f, 3.3f));
 
-			smithScene.AddEntity (new MeshEntity(new Mesh(Util.MESHPATH+"house/table.plybin"), -13.8f, -7.8f, 0, 4, 7));
+			smithScene.AddEntity (new DoorEntity (this, new Mesh (Util.MESHPATH + "house/door/doorFrame.plybin"), new Mesh (Util.MESHPATH + "house/door/door.plybin"), Matrix4.CreateTranslation (3, 0, 0), 
+				-8, -11.5f, -.05f, .227f, 0, 0, 6, .4f));
+
+			smithScene.AddEntity (new MailboxEntity (this, new Mesh (Util.MESHPATH + "house/mailbox/mailbox.plybin"), new Mesh (Util.MESHPATH + "house/mailbox/mailboxLid.plybin"), Matrix4.CreateTranslation (0, .8f, 3.64f), 
+				-14/*12.5f*/, -11/*9.5f*/, 2.4f, -.2f, 0, PI, 3, 2));
+
+			smithScene.AddEntity (new MeshEntity(new Mesh(Util.MESHPATH+"house/table.plybin"), -13.8f, 0.2f, 0, 4, 7));
 
 			var anvil = new AnvilEntity (this, new Mesh (Util.MESHPATH+"house/anvil/anvil.plybin"), new Mesh (Util.PATH+"res/meshes/house/anvil/hammer.plybin"), -8, 9.7f, 0, 8, 3, 3f);
 			var table = new CoalStripTable(this, new Mesh(Util.MESHPATH+"house/coalStripTable/coalstriptable.plybin"), new Mesh(Util.PATH+"res/meshes/house/coalStripTable/coalStrip.plybin"), -14, 7.5f, 0, 3, 6, 3.5f);
@@ -141,8 +150,6 @@ namespace DSmithGameCs
 			table.SetAnvil(anvil);
 			smithScene.AddEntity(anvil);
 			smithScene.AddEntity(table);
-
-			smithScene.AddEntity (new DoorEntity (this, new Mesh (Util.MESHPATH + "house/door/doorFrame.plybin"), new Mesh (Util.MESHPATH + "house/door/door.plybin"), Matrix4.CreateTranslation (3, 0, 0), -8, -11.5f, -.05f, .227f, 0, 0, 6, .4f));
 
 			smithScene.AddEntity (new FloorEntity(new Texture(Util.PATH+"res/textures/brickTiles.png"), 16, 10, 0, 0, -1, 60, 40));
 
@@ -155,7 +162,6 @@ namespace DSmithGameCs
 			smithScene.AddEntity (new BellowEntity(this, new Mesh(Util.PATH+"res/mesh/bellow.plybin"), Matrix4.CreateTranslation(-3, 0, 1.28f), -5, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new CoalTableEntity (new Mesh (Util.PATH+"res/mesh/coalTableSmall.plybin"), new Mesh (Util.PATH+"res/mesh/coalSmall.plybin"), 1, -8.5f, 0, 6, 3));
 			smithScene.AddEntity (new MeshEntity (new Mesh (Util.PATH+"res/mesh/table.plybin"), 11.5f, -8, 0, 7, 4));
-			smithScene.AddEntity (new MailboxEntity (this, new Mesh (Util.PATH+"res/mesh/mailboxBox.plybin"), new Mesh (Util.PATH+"res/mesh/mailboxLid.plybin"), Matrix4.CreateTranslation (0, .8f, 3.64f), 12.5f, 9.5f, 2.4f, 3, 2));
 			*/
 			return smithScene;
 		}
